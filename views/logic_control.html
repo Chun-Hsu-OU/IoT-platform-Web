@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HSNL IoT Platform</title>
+
+  <!-- Bootstrap -->
+  <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- NProgress -->
+  <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+  <!-- iCheck -->
+  <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+  <!-- bootstrap-progressbar -->
+  <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+  <!-- JQVMap -->
+  <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+  <!-- bootstrap-daterangepicker -->
+  <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+  <!-- Custom Theme Style -->
+  <link href="../build/css/custom.min.css" rel="stylesheet">
+  <link href="../build/css/switch.css" rel="stylesheet">
+  <!-- Custom Theme Scripts -->
+  <script src="../vendors/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body class="nav-md" onload="checkCookie()">
+  <div class="container body">
+    <div class="main_container">
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;">
+            <a href="spinach.html" class="site_title"><i class="fa fa-bug"></i> <span> IoT Sensor!</span></a>
+          </div>
+          <script>
+            function del() {
+              document.cookie = "checker=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+
+            function getCookie(cname) {
+              var name = cname + "=";
+              var decodedCookie = decodeURIComponent(document.cookie);
+              var ca = decodedCookie.split(';');
+              for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                  c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                  return c.substring(name.length, c.length);
+                }
+              }
+              return "";
+            }
+
+            function checkCookie() {
+              user = getCookie("checker");
+              if (user == "") {
+                console.log("has no cookie");
+                alert("Please login first");
+                window.location.href = 'login.html';
+                //fs.readFile('login');
+              } else {
+                console.log("has cookie");
+              }
+            }
+          </script>
+          <div class="clearfix"></div>
+
+          <!-- menu profile quick info -->
+          <div class="profile clearfix">
+            <div class="profile_pic">
+              <img src="images/hello.jpg" alt="..." class="img-circle profile_img">
+            </div>
+            <div class="profile_info">
+              <span>Welcome,</span>
+              <h2>Guest</h2>
+            </div>
+          </div>
+          <!-- /menu profile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+              <h3></h3>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-tachometer"></i> 儀錶板 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a> 清大屋頂溫室 <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                        <li><a href="spinach.html">小白菜</a></li>
+                        <li><a href="shallot.html">萵苣</a></li>
+                      </ul>
+                    </li>
+                    <li><a> 植物工廠 <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                        <li><a href="factory_c1.html">C1區 </a></li>
+                        <li><a href="factory_c2.html">C2區 </a></li>
+                        <li><a href="factory_c4.html">C3區 </a></li>
+                      </ul>
+                    </li>
+                    <li><a> 三星農場 <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                        <li><a href="Sansing_AB.html">實驗數據I </a></li>
+                        <li><a href="Sansing_CD.html">實驗數據II </a></li>
+                        <li><a href="Sansing_EF.html">實驗數據III </a></li>
+                      </ul>
+                    </li>
+                    <li><a> 屏東火龍果農場 <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                        <li><a href="DF_M.html">雄株 </a></li>
+                        <li><a href="DF_FM.html">雌株 </a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a href="index2.html">清大屋頂溫室</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+          <!-- /sidebar menu -->
+
+          <!-- /menu footer buttons -->
+          <div class="sidebar-footer hidden-small">
+            <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+            <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+            <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="del()" href="login.html">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+          </div>
+          <!-- /menu footer buttons -->
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="images/hello.jpg" alt="">Guest
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                  <li><a href="javascript:;"> Profile</a></li>
+                  <li>
+                    <a href="javascript:;">
+                        <span class="badge bg-red pull-right"></span>
+                        <span>Settings</span>
+                      </a>
+                  </li>
+                  <li><a href="javascript:;">Help</a></li>
+                  <li><a onclick="del()" href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                </ul>
+              </li>
+
+              <li role="presentation" class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-exclamation-circle"></i>
+                    <!-- <span class="badge bg-red">6</span> -->
+                  </a>
+                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                  <li>
+                    <a>
+                        <span class="image"><img src="images/hello.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span><strong>Temperature</strong></span>
+                          <span class="time">1 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Temperature was too high!.....
+                        </span>
+                      </a>
+                  </li>
+                  <li>
+                    <a>
+                        <span class="image"><img src="images/hello.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span><strong>Humidity</strong></span>
+                          <span class="time">2 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Humidity was too high!.......
+                        </span>
+                      </a>
+                  </li>
+                  <li>
+                    <a>
+                        <span class="image"><img src="images/hello.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span><strong>Battery</strong></span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Battery was too low!.........
+                        </span>
+                      </a>
+                  </li>
+                  <li>
+                    <div class="text-center">
+                      <a>
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+      <div class="right_col" role="main">
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="row x_title">
+                <h2>滴灌手動開關 </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                    </ul>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+
+              </div>
+              <div class="x_content">
+                <p><b> 滴灌 </b></p>
+                <form id="form" method="post">
+                  <label class="switch">
+						  <input type="checkbox" id="check01" name="check01" value="1">
+						  <span class="slider round"></span>
+						</label>
+                </form>
+                <script>
+                  jQuery(function() {
+                    $('#check01').change(function() {
+                      if ($(this).prop('checked')) {
+
+                        $.ajax({
+                          type: 'POST',
+                          url: 'bump_ctrl.php',
+                          data: {
+                            'type': 'on_off',
+                            'check01': 1
+                          },
+                          success: function(data) {
+                            console.log(data);
+                          }
+
+                        });
+                        console.log('有勾選');
+                      } else {
+                        $.ajax({
+                          type: 'POST',
+                          url: 'bump_ctrl.php',
+                          data: {
+                            'type': 'on_off',
+                            'check01': 0
+                          },
+                          success: function(data) {
+                            console.log(data);
+                          }
+
+                        });
+                        console.log('無勾選');
+                      }
+                    });
+                  });
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="row x_title">
+                <h2>滴灌自動開關 </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                    </ul>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+
+              </div>
+              <div class="x_content">
+                <p><b> 滴灌 </b></p>
+                <form id="form" method="post">
+                  <label class="switch">
+						  <input type="checkbox" id="check02" name="check02" value="1">
+						  <span class="slider round"></span>
+						</label>
+                </form>
+                <script>
+                  jQuery(function() {
+                    $('#check02').change(function() {
+                      if ($(this).prop('checked')) {
+
+                        $.ajax({
+                          type: 'POST',
+                          url: 'bump_ctrl.php',
+                          data: {
+                            'type': 'default',
+                            'check02': 1
+                          },
+                          success: function(data) {
+                            console.log(data);
+                            $("#auto_humi").css("visibility", "visible");
+                            $("#auto_time").css("visibility", "visible");
+                          }
+
+                        });
+                        console.log('有勾選');
+                      } else {
+                        $.ajax({
+                          type: 'POST',
+                          url: 'bump_ctrl.php',
+                          data: {
+                            'type': 'default',
+                            'check02': 0
+                          },
+                          success: function(data) {
+                            console.log(data);
+                            $("#auto_humi").css("visibility", "hidden");
+                            $("#auto_time").css("visibility", "hidden");
+                          }
+
+                        });
+                        console.log('無勾選');
+                      }
+                    });
+                  });
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" id="auto_humi" style="visibility:hidden">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="row x_title">
+                <h2>滴灌自動控制(濕度控制) <small>Default by system</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                    </ul>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <form id="humi_form" class="form-horizontal form-label-left" method="post">
+                  <div class="form-group">
+                    <label>當濕度低於:<span class="required"></span>
+                        </label>
+                    <span>
+                          <input id="required_humidity" required="required" type="text" size="3">
+						  <label> 時開始滴灌</label>
+						</span>
+                    <div align="right">
+                      <!-- <button type="submit" id="default_btn" class="btn btn-primary">Default</button> -->
+                      <button type="submit" id="submit_btn" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+                <!-- <script> -->
+                <!-- $(function () { -->
+                <!-- $('submit_btn').on('click', function () { -->
+                <!-- var value = $(this).val(); -->
+                <!-- $.ajax({ -->
+                <!-- url: 'bump_ctrl.php', -->
+                <!-- data: { -->
+                <!-- text: $("textarea[name=Status]").val(), -->
+                <!-- Status: Status -->
+                <!-- }, -->
+                <!-- dataType : 'json' -->
+                <!-- }); -->
+                <!-- }); -->
+                <!-- });						 -->
+                <!-- </script> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" id="auto_time" style="visibility:hidden">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="x_panel">
+              <div class="row x_title">
+                <h2>滴灌自動控制(時間控制) <small>Default by system</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                    </ul>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <form id="form_time" class="form-horizontal form-label-left">
+                  <div class="form-group">
+                    <label>滴灌時間:<span class="required"></span>
+                        </label>
+                    <span>
+                          <input id="required_time" required="required" type="text" size="3">
+						  <label> Minutes</label>
+						</span>
+                    <div align="right">
+                      <!-- <button type="submit" class="btn btn-primary">Default</button> -->
+                      <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- /page content -->
+    </div>
+  </div>
+
+  <!-- Bootstrap -->
+  <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- FastClick -->
+  <script src="../vendors/fastclick/lib/fastclick.js"></script>
+  <!-- NProgress -->
+  <script src="../vendors/nprogress/nprogress.js"></script>
+  <!-- Chart.js -->
+  <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+  <!-- gauge.js -->
+  <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+  <!-- bootstrap-progressbar -->
+  <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+  <!-- iCheck -->
+  <script src="../vendors/iCheck/icheck.min.js"></script>
+  <!-- Skycons -->
+  <script src="../vendors/skycons/skycons.js"></script>
+  <!-- Flot -->
+  <script src="../vendors/Flot/jquery.flot.js"></script>
+  <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+  <script src="../vendors/Flot/jquery.flot.time.js"></script>
+  <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+  <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+  <!-- Flot plugins -->
+  <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+  <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+  <!-- DateJS -->
+  <script src="../vendors/DateJS/build/date.js"></script>
+  <!-- JQVMap -->
+  <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+  <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+  <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+  <!-- bootstrap-daterangepicker -->
+  <script src="../vendors/moment/min/moment.min.js"></script>
+  <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script src="../build/js/custom.js"></script>
+
+</body>
+
+</html>
