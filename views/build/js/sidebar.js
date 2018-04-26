@@ -32,16 +32,47 @@ function make_area(){
   });
 }
 
-function set_area_cookie(Id){
+function set_area_cookie(Id) {
   document.cookie = "area=" + Id;
 }
 
-function add_area(){
+function add_area() {
   var new_area = document.getElementById("area_name").value;
 
-  $.post(api_url + 'api/add/area/',
-  {
-    "ownerId": uuid,
-    "name": new_area
+  if(document.getElementById("area_name").value != null) {
+    $.post(api_url + 'api/add/area/',
+    {
+      "ownerId": uuid,
+      "name": new_area
+    });
+  }
+}
+
+function add_group() {
+  var new_group = document.getElementById("group_name").value;
+
+  if(document.getElementById("group_name").value != null) {
+    $.post(api_url + 'api/add/sensorGroup',
+    {
+      "areaId": getCookie("area"),
+      "name": new_group
+    });
+  }
+}
+
+function load_area_in_modal() {
+  $.get(api_url + 'api/area/' + uuid, function (data) {
+    var body = JSON.parse(data);
+
+    body.Items.forEach(function make(area){
+      $('#group_select').append('<option value="\''+area.areaId+'\'">' + area.name + '</option>');
+    });
   });
+}
+
+function group_select_func() {
+  var selectBox = document.getElementById("group_select");
+  var Id = selectBox.options[selectBox.selectedIndex].value;
+  set_area_cookie(Id);
+  //console.log(getCookie("area"));
 }

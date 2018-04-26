@@ -39,9 +39,11 @@ function get_sensorhubs(){
         $('#sensorhubs').append('<div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12" id="A"></div>');
         $('#A').append('<div class="tile-stats" id="B"></div>');
         $('#B').append('<div class="icon"><i class="fa fa-tasks"></i></div>');
-        $('#B').append('<div class="count">2 Sensors</div>');
+        //$('#B').append('<div class="count"></div>');
+        $('#B').append('<br>');
         $('#B').append('<a onclick="set_g_cookie(\''+sensorgroup.groupId+'\')" href="sensorhub.html"><h3>' + sensorgroup.name + '</h3></a>');
         $('#B').append('<p>查看詳細數據</p>');
+        $('#B').append('<br>');
       }
     });
   });

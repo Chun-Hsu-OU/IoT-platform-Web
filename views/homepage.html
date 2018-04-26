@@ -33,9 +33,9 @@
 
   <!-- Custom Theme Style -->
   <link href="../build/css/custom.min.css" rel="stylesheet">
-
   <script src="../vendors/jquery/dist/jquery.min.js"></script>
   <script src="../build/js/sidebar.js"></script>
+  <script src="../build/js/loading.js"></script>
 </head>
 <style>
   .x_title span {
@@ -49,6 +49,8 @@
 
 <script>
   window.onload = make_area();
+  window.onload = get_username();
+  window.onload = load_area_in_modal();
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -69,7 +71,7 @@
             </div>
             <div class="profile_info">
               <span>Welcome,</span>
-              <h2>CTL</h2>
+              <h2 id="username"></h2>
             </div>
           </div>
           <!-- /menu profile quick info -->
@@ -80,13 +82,17 @@
           <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
               <h3></h3>
-              <ul class="nav side-menu" data-toggle="modal" data-target="#myModal">
-                <li><a><i class="fa fa-plus"></i> 場域 </a>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-plus"></i> 新增項目 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a data-toggle="modal" data-target="#new_area_Modal">新增場域</a></li>
+                    <li><a data-toggle="modal" data-target="#new_group_Modal">新增感應器群組</a></li>
+                  </ul>
                 </li>
                 <!-- <input type="button" id="bbtn" value="addPlace"/> -->
               </ul>
               <ul class="nav side-menu">
-                <li><a><i class="fa fa-tachometer"></i> 儀錶板 <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-area-chart"></i> 場域空間 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" id="showPlace">
                   </ul>
                 </li>
@@ -131,24 +137,6 @@
             </div>
 
             <ul class="nav navbar-nav navbar-right">
-              <li class="">
-                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/Apple_User.png" alt="">Guest
-                    <span class=" fa fa-angle-down"></span>
-                  </a>
-                <ul class="dropdown-menu dropdown-usermenu pull-right">
-                  <li><a href="javascript:;"> Profile</a></li>
-                  <li>
-                    <a href="javascript:;">
-                      <!-- <span class="badge bg-red pull-right">50%</span> -->
-                      <span>Settings</span>
-                    </a>
-                  </li>
-                  <li><a href="javascript:;">Help</a></li>
-                  <li onclick="del()"><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                </ul>
-              </li>
-
               <li role="presentation" class="dropdown">
                 <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-exclamation-circle"></i>
@@ -295,7 +283,7 @@
         </div>
       </div>
       <div class="container">
-        <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal fade" id="new_area_Modal" role="dialog">
           <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -312,6 +300,33 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="add_area()">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="new_group_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">新增感測器群組</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  感測器群組名稱:<br>
+                  <input type="text" id="group_name">
+                  <br><br> 建制於場域:<br>
+                  <select autofocus id="group_select" onchange="group_select_func(value);">
+                  </select>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="add_group()">Add</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -359,12 +374,6 @@
 
       <!-- Custom Theme Scripts -->
       <script src="../build/js/custom.js"></script>
-      <!--For Test use -->
-      <script src="../build/js/spinach_temp.js"></script>
-      <script src="../build/js/spinach_humi.js"></script>
-      <script src="../build/js/spinach_CO2.js"></script>
-      <script src="../build/js/spinach_light.js"></script>
-      <script src="../build/js/spinach_voltage.js"></script>
       <!-- Scripts by CTL -->
       <script src="../build/js/cookie.js"></script>
       <script src="../build/js/draw_homepage.js"></script>

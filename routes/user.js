@@ -28,7 +28,7 @@ users.post('/login', unlencodedParser, function(req, res) {
     console.log('statusCode:', response && response.statusCode);
     console.log('body:', body);
 
-    if (body == false) {
+    if (body == "false") {
         res.render('page_404_sign_in.html');
     } else {
         res.cookie('checker', body);
