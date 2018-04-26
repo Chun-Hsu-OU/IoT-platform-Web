@@ -51,13 +51,4 @@ users.post('/register', unlencodedParser, function(req, res) {
     res.render('login.html');
 });
 
-
-users.get('/logic', function(req, res) {
-    res.render('logic_control.html');
-});
-
-users.get('/test',function(req, res) {
-    res.render('try.html');
-});
-
 module.exports = users;
