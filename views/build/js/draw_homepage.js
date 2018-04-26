@@ -3,7 +3,7 @@ var Work_graph = echarts.init(document.getElementById('Sensor_working'));
 var Data_flow = echarts.init(document.getElementById('Sensor_flow'));
 
 var uuid = getCookie("checker");
-var api_url = 'http://localhost:3000/';
+var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
 var Type = ['LIGHT_INTENSITY', 'CO2', 'AIR_HUMIDITY', 'AIR_TEMPERATURE', 'SOIL_TEMPERATURE'];
 var num = [0, 0, 0, 0, 0];
 
