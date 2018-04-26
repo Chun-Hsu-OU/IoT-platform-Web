@@ -1,6 +1,6 @@
 var uuid = getCookie("checker");
 var area_id = getCookie("area");
-var api_url = 'http://localhost:3000/';
+var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
 
 function getCookie(cname) {
     var name = cname + "=";
