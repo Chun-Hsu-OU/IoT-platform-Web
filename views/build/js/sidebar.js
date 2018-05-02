@@ -76,3 +76,12 @@ function group_select_func() {
   set_area_cookie(Id);
   //console.log(getCookie("area"));
 }
+
+function check_admin() {
+  admin = getCookie("admin");
+  if (admin == "aDmiN") {
+    window.location.replace('homepage_admin.html');
+  } else {
+    window.location.replace('homepage.html');
+  }
+}

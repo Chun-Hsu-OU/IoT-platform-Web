@@ -19,7 +19,7 @@ function getCookie(cname) {
 }
 
 function get_name() {
-  //console.log(typeof area_id);
+  // console.log(typeof area_id);
   $.get(api_url + 'api/area/' + uuid, function (data, status) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(area){
@@ -31,7 +31,7 @@ function get_name() {
 }
 
 function get_sensorhubs(){
-  console.log("I'll get all sensorhubs in an area");
+  // console.log("I'll get all sensorhubs in an area");
   $.get(api_url + 'api/sensorgroup_in_area/' + area_id, function (data, status) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(sensorgroup){
@@ -40,7 +40,7 @@ function get_sensorhubs(){
         console.log('<div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12" id="' + sensorgroup.groupId + '_A"></div>');
         $('#' + sensorgroup.groupId + '_A').append('<div class="tile-stats" id="' + sensorgroup.groupId + '_B"></div>');
         $('#' + sensorgroup.groupId + '_B').append('<div class="icon"><i class="fa fa-tasks"></i></div>');
-        //$('#B').append('<div class="count"></div>');
+        // $('#B').append('<div class="count"></div>');
         $('#' + sensorgroup.groupId + '_B').append('<br>');
         $('#' + sensorgroup.groupId + '_B').append('<a onclick="set_g_cookie(\''+sensorgroup.groupId+'\')" href="sensorhub.html"><h3>' + sensorgroup.name + '</h3></a>');
         $('#' + sensorgroup.groupId + '_B').append('<p>查看詳細數據</p>');
