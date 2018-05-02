@@ -19,7 +19,7 @@ function getCookie(cname) {
 }
 
 function get_username() {
-  $.get(api_url + 'api/account/' + uuid, function(data) {
+  $.get(api_url + 'api/account/single/' + uuid, function(data) {
     console.log(data);
     document.getElementById("username").innerHTML = data;
   });
