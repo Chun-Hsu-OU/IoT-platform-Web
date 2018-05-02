@@ -73,11 +73,14 @@ function draw_sensor_data(data, type) {
   var body = JSON.parse(data);
   var dataset = [];
   var time = [];
+  console.log("data = " + data);
   body.Items.forEach(function make_dataset(set) {
-    dataset.push(Number(set.value.toFixed(1)));
-    var date = new Date(Number(set.timestamp));
-    var formattedDate = ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-    time.push(formattedDate);
+    if (set.value != null) {
+      dataset.push(Number(set.value.toFixed(1)));
+      var date = new Date(Number(set.timestamp));
+      var formattedDate = ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+      time.push(formattedDate);
+    }
   });
   max = Math.max(...dataset);
   min = Math.min(...dataset);
