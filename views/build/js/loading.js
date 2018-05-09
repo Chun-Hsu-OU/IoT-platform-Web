@@ -1,6 +1,7 @@
 // Loads user name
 var uuid = getCookie("checker");
 var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
+//var api_url = 'http://localhost:3000/'
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -20,7 +21,8 @@ function getCookie(cname) {
 
 function get_username() {
   $.get(api_url + 'api/account/single/' + uuid, function(data) {
-    console.log(data);
-    document.getElementById("username").innerHTML = data;
+    //console.log(data);
+    //var body = JSON.parse(data);
+    document.getElementById("username").innerHTML = data.name;
   });
 }

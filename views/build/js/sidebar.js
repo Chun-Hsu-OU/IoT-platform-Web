@@ -1,5 +1,6 @@
 var uuid = getCookie("checker");
 var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
+//var api_url = 'http://localhost:3000/'
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -84,4 +85,31 @@ function check_admin() {
   } else {
     window.location.replace('homepage.html');
   }
+}
+
+function settings() {
+  //var new_password = '';
+  $.get(api_url + 'api/account/single/' + uuid, function(data) {
+    console.log("Data = " + data);
+    var new_username = data.name;
+    var new_password = data.password;
+    console.log(new_password);
+
+    if (document.getElementById("new_username").value) {
+      new_username = document.getElementById("new_username").value;
+    }
+    if (document.getElementById("new_password_confirm").value) {
+      new_password = document.getElementById("new_password_confirm").value;
+      console.log("d");
+    }
+
+    //console.log(new_username);
+    //console.log(new_password);
+
+    $.post(api_url + 'api/account/settings', {
+      "uuid": uuid,
+      "name": new_username,
+      "password": new_password
+    });
+  });
 }
