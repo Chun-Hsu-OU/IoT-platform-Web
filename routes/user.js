@@ -6,8 +6,8 @@ var users = express.Router();
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var unlencodedParser = bodyParser.urlencoded({ extended: false });
-//var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
-var api_url = 'http://localhost:3000/'
+var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
+//var api_url = 'http://localhost:3000/'
 
 var AWS = require("aws-sdk");
 const uuidv1 = require('uuid/v1');
@@ -36,6 +36,7 @@ users.post('/login', unlencodedParser, function(req, res) {
     res.cookie('checker', "blank");
     res.cookie('area', "blank");
     res.cookie('group', "blank");
+    res.cookie('sensor', "blank");
     res.cookie('admin', "aDmiN");
     res.redirect('homepage_admin.html');
   } else {
@@ -51,6 +52,7 @@ users.post('/login', unlencodedParser, function(req, res) {
           res.cookie('area', "blank");
           res.cookie('group', "blank");
           res.cookie('admin', "blank");
+          res.cookie('sensor', "blank");
           res.redirect('homepage.html');
       }
     });

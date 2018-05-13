@@ -62,6 +62,8 @@
   window.onload = import_sensor_data();
   window.onload = get_username();
   window.onload = load_area_in_modal();
+  window.onload = load_group_in_modal();
+  window.onload = load_sensor_in_modal();
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -98,6 +100,7 @@
                   <ul class="nav child_menu">
                     <li><a data-toggle="modal" data-target="#new_area_Modal">新增場域</a></li>
                     <li><a data-toggle="modal" data-target="#new_group_Modal">新增感應器群組</a></li>
+                    <li><a data-toggle="modal" data-target="#del_Modal">刪除項目</a></li>
                   </ul>
                 </li>
               </ul>
@@ -930,7 +933,7 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="add_area()">Add</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -957,7 +960,69 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="add_group()">Add</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="Setting_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">使用者資訊設定</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  新的使用者名稱:<br>
+                  <input type="text" id="new_username">
+                  <br><br>
+                  新的密碼:<br>
+                  <input type="text" id="new_password">
+                  <br><br>
+                  確認新的密碼:<br>
+                  <input type="text" id="new_password_confirm">
+                  <br><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="del_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">刪除項目</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  欲刪除場域:<br>
+                  <select required id="area_del" onchange="area_del_func()">
+                  </select><br>
+                  欲刪除感測器群組:<br>
+                  <select required id="group_del" onchange="group_del_func()">
+                  </select><br>
+                  欲刪除感測器:<br>
+                  <select required id="sensor_del" onchange="sensor_del_func()">
+                  </select><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
