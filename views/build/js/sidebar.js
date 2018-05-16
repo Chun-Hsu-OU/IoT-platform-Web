@@ -169,6 +169,7 @@ function load_area_in_modal() {
     var body = JSON.parse(data);
 
     $('#area_del').append('<option value="None">None</option>');
+    $('#group_select').append('<option value="None">None</option>');
     body.Items.forEach(function make(area) {
       $('#area_del').append('<option value="' + area.areaId + '">' + area.name + '</option>');
       $('#group_select').append('<option value="' + area.areaId + '">' + area.name + '</option>');

@@ -2,6 +2,9 @@ function del() {
     document.cookie = "checker=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "area=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "group=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "sensor=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "cookies=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 function getCookie(cname) {
     var name = cname + "=";
