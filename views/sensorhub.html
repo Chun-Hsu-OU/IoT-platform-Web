@@ -41,6 +41,14 @@
   <script src="../vendors/moment/min/moment.min.js"></script>
   <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 
+  <!-- highcart design -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <script src="https://code.highcharts.com/modules/series-label.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/themes/dark-unica.js"></script>
+
   <!-- Scripts by CTLiu -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/sensorhub.js"></script>
@@ -96,6 +104,10 @@
             <div class="menu_section">
               <h3></h3>
               <ul class="nav side-menu">
+                <li><a href="homepage.html"><i class="fa fa-home"></i> 首頁 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
                 <li><a><i class="fa fa-plus"></i> 新增/刪除項目 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     <li><a data-toggle="modal" data-target="#new_area_Modal">新增場域</a></li>
@@ -115,29 +127,20 @@
               </ul>
               <ul class="nav side-menu">
                 <li><a href="calendar.html"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                </li>
               </ul>
-              </li>
+              <ul class="nav side-menu">
+                <li><a data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a onclick="del()" href="login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
+                </li>
               </ul>
             </div>
           </div>
           <!-- /sidebar menu -->
 
-          <!-- /menu footer buttons -->
-          <div class="sidebar-footer hidden-small">
-            <a data-toggle="modal" data-placement="top" title="Settings" data-target="#Setting_Modal">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="del()" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-          </div>
-          <!-- /menu footer buttons -->
         </div>
       </div>
 
@@ -210,708 +213,192 @@
 
       <!-- page content -->
       <div class="right_col" role="main">
+        <div class="page-title">
+          <div class="title_left" id="sensorhub_page_title">
+          </div>
+          <div class="title_right">
+            <div class="input-prepend input-group">
+              <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+              <input id="daterange_picker" type="text" class="form-control" name="daterange_picker" value="" />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h3>感應器列表</h3>
+              <div class="title_right" id="sensorhub_description">
+              </div>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
+                  <ul class="dropdown-menu" role="menu">
+                  </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <!-- Table row -->
+              <div class="row">
+                <div class="col-xs-12 table">
+                  <table id="homepage_area_table" class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>名稱</th>
+                        <th>種類</th>
+                        <th>目前數值</th>
+                        <th>創建日期</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+
+                    <script>
+                      var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
+                      var group = getCookie("group");
+
+                      $.get(api_url + 'api/sensors_in_group/' + group, function(data) {
+                        var body = JSON.parse(data);
+                        for (let j = 0; j < body.Count; j++) {
+                          String.prototype.capitalize = function() {
+                            return this.replace(/(?:^|\s)\S/g, function(a) {
+                              return a.toUpperCase();
+                            });
+                          };
+
+                          if (body.Items[j].sensorType == "CO2") {
+                            var sensor_type = "CO2";
+                          } else if (body.Items[j].sensorType == "SOIL_EC") {
+                            var sensor_type = "Soil EC";
+                          } else {
+                            var sensor_type = body.Items[j].sensorType.replace("_", " ").toLowerCase();
+                            sensor_type = sensor_type.capitalize();
+                          }
+                          $('tbody').append('<tr>' +
+                            '<td>' + body.Items[j].name + '</td>' +
+                            '<td>' + sensor_type + '</td>' +
+                            '<td>' + body.Items[j].visible + '</td>' +
+                            '<td>' + timeConverter(body.Items[j].createdtime) + '</td>' +
+                            '</tr>');
+                        }
+                      });
+
+
+                      function timeConverter(UNIX_timestamp) {
+                        var a = new Date(UNIX_timestamp);
+                        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        var year = a.getFullYear();
+                        var month = months[a.getMonth()];
+                        var date = a.getDate() < 10 ? '0' + a.getDate() : a.getDate();
+                        var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();
+                        var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
+                        var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+                        var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+                        return time;
+                      }
+                    </script>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+          </div>
+        </div>
+
         <div class="row">
+          <div class="clearfix"></div>
           <div class="col-md-12 col-sm-12 col-xs-12" id="AIR_TEMPERATURE">
             <div class="x_panel">
-              <div class="row x_title">
-                <h3>Air Temperature <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-thermometer-full"></i> Highest Temperature</span>
-                    <div class="count" id="AIR_TEMPERATURE_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-thermometer-half"></i> Average Temperature</span>
-                    <div class="count" id="AIR_TEMPERATURE_avg"></div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-thermometer-empty"></i> Lowest Temperature</span>
-                    <div class="count" id="AIR_TEMPERATURE_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="AIR_TEMPERATURE_daterange" type="text" class="form-control" name="AIR_TEMPERATURE_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="AIR_TEMPERATURE_canvas"></canvas>
-              </div>
+              <div id="AIR_TEMPERATURE_div"></div>
             </div>
           </div>
 
           <div class="col-md-12 col-sm-12 col-xs-12" id="AIR_HUMIDITY">
             <div class="x_panel">
-              <div class="row x_title">
-                <h3>Air Humidity <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-humidity"></i> Highest Humidity</span>
-                    <div class="count" id="AIR_HUMIDITY_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-humidity"></i> Average Humidity</span>
-                    <div class="count" id="AIR_HUMIDITY_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-humidity"></i> Lowest Humidity</span>
-                    <div class="count" id="AIR_HUMIDITY_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="AIR_HUMIDITY_daterange" type="text" class="form-control" name="AIR_HUMIDITY_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="AIR_HUMIDITY_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="CO2">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>CO2 <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-barometer"></i> Highest CO2</span>
-                    <div class="count" id="CO2_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-barometer"></i> Average CO2</span>
-                    <div class="count" id="CO2_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-barometer"></i> Lowest CO2</span>
-                    <div class="count" id="CO2_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="CO2_daterange" type="text" class="form-control" name="CO2_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="CO2_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="AVG_WIND_SPEED">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>Average Wind Speed <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Highest Wind Speed</span>
-                    <div class="count" id="AVG_WIND_SPEED_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Average Wind Speed</span>
-                    <div class="count" id="AVG_WIND_SPEED_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Lowest Wind Speed</span>
-                    <div class="count" id="AVG_WIND_SPEED_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="AVG_WIND_SPEED_daterange" type="text" class="form-control" name="AVG_WIND_SPEED_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="AVG_WIND_SPEED_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="BATTERY_VOLTAGE">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>Battery Voltage <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-barometer"></i> Highest Wind Speed</span>
-                    <div class="count" id="BATTERY_VOLTAGE_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-barometer"></i> Average Wind Speed</span>
-                    <div class="count" id="BATTERY_VOLTAGE_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-barometer"></i> Lowest Wind Speed</span>
-                    <div class="count" id="BATTERY_VOLTAGE_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="BATTERY_VOLTAGE_daterange" type="text" class="form-control" name="BATTERY_VOLTAGE_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="BATTERY_VOLTAGE_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="HIGHEST_WIND_SPEED">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>Highest Wind Speed <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Highest Wind Speed</span>
-                    <div class="count" id="HIGHEST_WIND_SPEED_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Average Wind Speed</span>
-                    <div class="count" id="HIGHEST_WIND_SPEED_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Lowest Wind Speed</span>
-                    <div class="count" id="HIGHEST_WIND_SPEED_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="HIGHEST_WIND_SPEED_daterange" type="text" class="form-control" name="HIGHEST_WIND_SPEED_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="HIGHEST_WIND_SPEED_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="LIGHT_INTENSITY">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>Light Intensity <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-horizon"></i> Highest Wind Speed</span>
-                    <div class="count" id="LIGHT_INTENSITY_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-horizon"></i> Average Wind Speed</span>
-                    <div class="count" id="LIGHT_INTENSITY_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-horizon"></i> Lowest Wind Speed</span>
-                    <div class="count" id="LIGHT_INTENSITY_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="LIGHT_INTENSITY_daterange" type="text" class="form-control" name="LIGHT_INTENSITY_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="LIGHT_INTENSITY_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="RAINFALL_PER_DAY">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>Rainfall Per Day <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-rain"></i> Highest Wind Speed</span>
-                    <div class="count" id="RAINFALL_PER_DAY_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-rain"></i> Average Wind Speed</span>
-                    <div class="count" id="RAINFALL_PER_DAY_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-rain"></i> Lowest Wind Speed</span>
-                    <div class="count" id="RAINFALL_PER_DAY_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="RAINFALL_PER_DAY_daterange" type="text" class="form-control" name="RAINFALL_PER_DAY_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="RAINFALL_PER_DAY_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="RAINFALL_PER_HOUR">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>Rainfall Per Hour <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-rain"></i> Highest Wind Speed</span>
-                    <div class="count" id="RAINFALL_PER_HOUR_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-rain"></i> Average Wind Speed</span>
-                    <div class="count" id="RAINFALL_PER_HOUR_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-rain"></i> Lowest Wind Speed</span>
-                    <div class="count" id="RAINFALL_PER_HOUR_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="RAINFALL_PER_HOUR_daterange" type="text" class="form-control" name="RAINFALL_PER_HOUR_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="RAINFALL_PER_HOUR_canvas"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="REALTIME_WIND_SPEED">
-            <div class="x_panel">
-              <div class="row x_title">
-                <h3>Realtime Wind Speed <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Highest Wind Speed</span>
-                    <div class="count" id="REALTIME_WIND_SPEED_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Average Wind Speed</span>
-                    <div class="count" id="REALTIME_WIND_SPEED_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Lowest Wind Speed</span>
-                    <div class="count" id="REALTIME_WIND_SPEED_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="REALTIME_WIND_SPEED_daterange" type="text" class="form-control" name="REALTIME_WIND_SPEED_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="REALTIME_WIND_SPEED_canvas"></canvas>
-              </div>
+              <div id="AIR_HUMIDITY_div"></div>
             </div>
           </div>
 
           <div class="col-md-12 col-sm-12 col-xs-12" id="SOIL_HUMIDITY">
             <div class="x_panel">
-              <div class="row x_title">
-                <h3>Soil Humidity <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-humidity"></i> Highest Wind Speed</span>
-                    <div class="count" id="SOIL_HUMIDITY_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-humidity"></i> Average Wind Speed</span>
-                    <div class="count" id="SOIL_HUMIDITY_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-humidity"></i> Lowest Wind Speed</span>
-                    <div class="count" id="SOIL_HUMIDITY_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="SOIL_HUMIDITY_daterange" type="text" class="form-control" name="SOIL_HUMIDITY_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="SOIL_HUMIDITY_canvas"></canvas>
-              </div>
+              <div id="SOIL_HUMIDITY_div"></div>
             </div>
           </div>
 
           <div class="col-md-12 col-sm-12 col-xs-12" id="SOIL_TEMPERATURE">
             <div class="x_panel">
-              <div class="row x_title">
-                <h3>Soil Temperature <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-thermometer-full"></i> Highest Wind Speed</span>
-                    <div class="count" id="SOIL_TEMPERATURE_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-thermometer-full"></i> Average Wind Speed</span>
-                    <div class="count" id="SOIL_TEMPERATURE_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-thermometer-full"></i> Lowest Wind Speed</span>
-                    <div class="count" id="SOIL_TEMPERATURE_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="SOIL_TEMPERATURE_daterange" type="text" class="form-control" name="SOIL_TEMPERATURE_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="SOIL_TEMPERATURE_canvas"></canvas>
-              </div>
+              <div id="SOIL_TEMPERATURE_div"></div>
             </div>
           </div>
 
+          <div class="col-md-12 col-sm-12 col-xs-12" id="SOIL_EC">
+            <div class="x_panel">
+              <div id="SOIL_EC_div"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="CO2">
+            <div class="x_panel">
+              <div id="CO2_div"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="BATTERY_VOLTAGE">
+            <div class="x_panel">
+              <div id="BATTERY_VOLTAGE_div"></div>
+            </div>
+          </div>
+
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="LIGHT_INTENSITY">
+            <div class="x_panel">
+              <div id="LIGHT_INTENSITY_div"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="RAINFALL_PER_DAY">
+            <div class="x_panel">
+              <div id="RAINFALL_PER_DAY_div"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="RAINFALL_PER_HOUR">
+            <div class="x_panel">
+              <div id="RAINFALL_PER_HOUR_div"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="REALTIME_WIND_SPEED">
+            <div class="x_panel">
+              <div id="REALTIME_WIND_SPEED_div"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="HIGHEST_WIND_SPEED">
+            <div class="x_panel">
+              <div id="HIGHEST_WIND_SPEED_div"></div>
+            </div>
+          </div>
+
+          <div class="col-md-12 col-sm-12 col-xs-12" id="AVG_WIND_SPEED">
+            <div class="x_panel">
+              <div id="AVG_WIND_SPEED_div"></div>
+            </div>
+          </div>
 
           <div class="col-md-12 col-sm-12 col-xs-12" id="WIND_DIRECTION">
             <div class="x_panel">
-              <div class="row x_title">
-                <h3>Wind Direction <small>Default Display one day</small></h3>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                </ul>
-                <div class="clearfix">
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Highest Wind Speed</span>
-                    <div class="count" id="WIND_DIRECTION_max">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Average Wind Speed</span>
-                    <div class="count" id="WIND_DIRECTION_avg">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span> -->
-                  </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="wi wi-strong-wind"></i> Lowest Wind Speed</span>
-                    <div class="count" id="WIND_DIRECTION_min">
-                    </div>
-                    <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="float:right">
-                <form class="form-horizontal">
-                  <fieldset>
-                    <div class="control-group">
-                      <div class="controls">
-                        <div class="input-prepend input-group">
-                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                          <input id="WIND_DIRECTION_daterange" type="text" class="form-control" name="WIND_DIRECTION_daterange" value="" />
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </form>
-              </div>
-              <div class="x_content">
-                <canvas id="WIND_DIRECTION_canvas"></canvas>
-              </div>
+              <div id="WIND_DIRECTION_div"></div>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -981,11 +468,11 @@
                 <form>
                   新的使用者名稱:<br>
                   <input type="text" id="new_username">
-                  <br><br>
-                  新的密碼:<br>
+                  <br><br> 新的密碼:
+                  <br>
                   <input type="text" id="new_password">
-                  <br><br>
-                  確認新的密碼:<br>
+                  <br><br> 確認新的密碼:
+                  <br>
                   <input type="text" id="new_password_confirm">
                   <br><br>
                 </form>
@@ -1012,11 +499,11 @@
                 <form>
                   欲刪除場域:<br>
                   <select required id="area_del" onchange="area_del_func()">
-                  </select><br>
-                  欲刪除感測器群組:<br>
+                  </select><br> 欲刪除感測器群組:
+                  <br>
                   <select required id="group_del" onchange="group_del_func()">
-                  </select><br>
-                  欲刪除感測器:<br>
+                  </select><br> 欲刪除感測器:
+                  <br>
                   <select required id="sensor_del" onchange="sensor_del_func()">
                   </select><br>
                 </form>
@@ -1043,6 +530,7 @@
         $('#REALTIME_WIND_SPEED').hide();
         $('#SOIL_HUMIDITY').hide();
         $('#SOIL_TEMPERATURE').hide();
+        $('#SOIL_EC').hide();
         $('#WIND_DIRECTION').hide();
       </script>
       <!-- jQuery -->

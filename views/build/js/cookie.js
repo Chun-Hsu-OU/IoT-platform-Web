@@ -25,11 +25,11 @@ function getCookie(cname) {
 function checkCookie() {
     user = getCookie("checker");
     if (user == "") {
-        console.log("has no cookie");
+        //console.log("has no cookie");
         alert("Please login first");
         window.location.href = 'login.html';
         //fs.readFile('login');
     } else {
-        console.log("has cookie");
+        //console.log("has cookie");
     }
 }

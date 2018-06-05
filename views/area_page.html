@@ -93,6 +93,10 @@
             <div class="menu_section">
               <h3></h3>
               <ul class="nav side-menu">
+                <li><a href="homepage.html"><i class="fa fa-home"></i> 首頁 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
                 <li><a><i class="fa fa-plus"></i> 新增/刪除項目 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     <li><a data-toggle="modal" data-target="#new_area_Modal">新增場域</a></li>
@@ -112,29 +116,19 @@
               </ul>
               <ul class="nav side-menu">
                 <li><a href="calendar.html"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                </li>
               </ul>
-              </li>
+              <ul class="nav side-menu">
+                <li><a data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a onclick="del()" href="login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
+                </li>
               </ul>
             </div>
           </div>
           <!-- /sidebar menu -->
-
-          <!-- /menu footer buttons -->
-          <div class="sidebar-footer hidden-small">
-            <a data-toggle="modal" data-placement="top" title="Settings" data-target="#Setting_Modal">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="del()" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-          </div>
-          <!-- /menu footer buttons -->
         </div>
       </div>
 
@@ -296,11 +290,11 @@
                 <form>
                   新的使用者名稱:<br>
                   <input type="text" id="new_username">
-                  <br><br>
-                  新的密碼:<br>
+                  <br><br> 新的密碼:
+                  <br>
                   <input type="text" id="new_password">
-                  <br><br>
-                  確認新的密碼:<br>
+                  <br><br> 確認新的密碼:
+                  <br>
                   <input type="text" id="new_password_confirm">
                   <br><br>
                 </form>
@@ -327,11 +321,11 @@
                 <form>
                   欲刪除場域:<br>
                   <select required id="area_del" onchange="area_del_func()">
-                  </select><br>
-                  欲刪除感測器群組:<br>
+                  </select><br> 欲刪除感測器群組:
+                  <br>
                   <select required id="group_del" onchange="group_del_func()">
-                  </select><br>
-                  欲刪除感測器:<br>
+                  </select><br> 欲刪除感測器:
+                  <br>
                   <select required id="sensor_del" onchange="sensor_del_func()">
                   </select><br>
                 </form>

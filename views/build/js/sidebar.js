@@ -93,7 +93,7 @@ function group_select_func() {
   var selectBox = document.getElementById("group_select");
   var Id = selectBox.options[selectBox.selectedIndex].value;
   set_area_cookie(Id);
-  console.log(getCookie("area"));
+  //console.log(getCookie("area"));
 }
 
 function area_del_func() {
@@ -115,7 +115,7 @@ function group_del_func() {
     document.cookie = "group=blank";
   } else {
     document.cookie = "group=" + Id;
-    console.log("chosen group "+ Id);
+    //console.log("chosen group "+ Id);
     load_sensor_in_modal();
   }
 }
@@ -184,7 +184,7 @@ function load_group_in_modal() {
   console.log(api_url + 'api/sensorgroup_in_area/' + areaId);
   $.get(api_url + 'api/sensorgroup_in_area/' + areaId, function(data) {
     var body = JSON.parse(data);
-    console.log(body);
+    //console.log(body);
 
     $('#group_del').append('<option value="None">None</option>');
     body.Items.forEach(function make(group) {

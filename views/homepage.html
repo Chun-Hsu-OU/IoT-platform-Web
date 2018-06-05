@@ -37,6 +37,9 @@
   <script src="../vendors/jquery/dist/jquery.min.js"></script>
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/loading.js"></script>
+
+  <!-- d3.js -->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
 </head>
 <style>
   .x_title span {
@@ -45,6 +48,26 @@
 
   .count {
     font-size: 20px;
+  }
+
+  .node {
+    cursor: pointer;
+  }
+
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+  }
+
+  .node text {
+    font: 12px sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
   }
 </style>
 
@@ -86,6 +109,10 @@
             <div class="menu_section">
               <h3></h3>
               <ul class="nav side-menu">
+                <li><a href="homepage.html"><i class="fa fa-home"></i> 首頁 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
                 <li><a><i class="fa fa-plus"></i> 新增/刪除項目 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     <li><a data-toggle="modal" data-target="#new_area_Modal">新增場域</a></li>
@@ -103,32 +130,24 @@
               </ul>
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
+                </li>
               </ul>
               <ul class="nav side-menu">
                 <li><a href="calendar.html"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                </li>
               </ul>
-              </li>
+              <ul class="nav side-menu">
+                <li><a data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a onclick="del()" href="login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
+                </li>
               </ul>
             </div>
           </div>
           <!-- /sidebar menu -->
 
-          <!-- /menu footer buttons -->
-          <div class="sidebar-footer hidden-small">
-            <a data-toggle="modal" data-placement="top" title="Settings" data-target="#Setting_Modal">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-            <a data-toggle="tooltip" data-placement="top" title="Logout" onclick="del()" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-          </div>
-          <!-- /menu footer buttons -->
         </div>
       </div>
 
@@ -209,10 +228,89 @@
           </div>
 
           <div class="clearfix"></div>
-          <div class="col-md-6 col-sm-6 col-xs-12">
+
+          <div class="col-md-24 col-sm-24 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>感應器種類分佈</h2>
+                <h2>場域列表</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
+                    <ul class="dropdown-menu" role="menu">
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <!-- Table row -->
+                <div class="row">
+                  <div class="col-xs-12 table">
+                    <table id="homepage_area_table" class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>場域</th>
+                          <th>位置</th>
+                          <th>群組</th>
+                          <th style="width: 39%">描述說明</th>
+                          <th>創建日期</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+
+                      <script>
+                        var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
+                        var uuid = getCookie("checker");
+                        $.get(api_url + 'api/area/' + uuid, function(data) {
+                          var area_body = JSON.parse(data);
+                          for (let i = 0; i < area_body.Count; i++) {
+                            $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[i].areaId, function(data) {
+                              var group_body = JSON.parse(data);
+                              for (let j = 0; j < group_body.Count; j++) {
+                                $('tbody').append('<tr>' +
+                                  '<td>' + area_body.Items[i].name + '</td>' +
+                                  '<td>' + area_body.Items[i].location + '</td>' +
+                                  '<td>' + group_body.Items[j].name + '</td>' +
+                                  '<td>' + group_body.Items[j].description + '</td>' +
+                                  '<td>' + timeConverter(group_body.Items[j].createdtime) + '</td>' +
+                                  '</tr>');
+                              }
+                            });
+                          }
+                        });
+
+                        function timeConverter(UNIX_timestamp) {
+                          var a = new Date(UNIX_timestamp);
+                          var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                          var year = a.getFullYear();
+                          var month = months[a.getMonth()];
+                          var date = a.getDate() < 10 ? '0' + a.getDate() : a.getDate();
+                          var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();
+                          var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
+                          var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+                          var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+                          return time;
+                        }
+                      </script>
+                    </table>
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-24 col-sm-24 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>場域架構圖</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -228,61 +326,13 @@
               </div>
               <div class="x_content">
 
-                <div id="SensorType_graph" style="height:350px;"></div>
+                <div id="Tree_graph" style="text-align:center;"></div>
 
               </div>
             </div>
           </div>
 
-          <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2>感應器正常工作百分比</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
 
-                <div id="Sensor_working" style="height:350px;"></div>
-
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2>資料流量分析</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
-
-                <div id="Sensor_flow" style="height:350px;"></div>
-
-              </div>
-            </div>
-          </div>
           <!-- /page content -->
         </div>
       </div>
@@ -351,11 +401,11 @@
                 <form>
                   新的使用者名稱:<br>
                   <input type="text" id="new_username">
-                  <br><br>
-                  新的密碼:<br>
+                  <br><br> 新的密碼:
+                  <br>
                   <input type="text" id="new_password">
-                  <br><br>
-                  確認新的密碼:<br>
+                  <br><br> 確認新的密碼:
+                  <br>
                   <input type="text" id="new_password_confirm">
                   <br><br>
                 </form>
@@ -382,11 +432,11 @@
                 <form>
                   欲刪除場域:<br>
                   <select required id="area_del" onchange="area_del_func()">
-                  </select><br>
-                  欲刪除感測器群組:<br>
+                  </select><br> 欲刪除感測器群組:
+                  <br>
                   <select required id="group_del" onchange="group_del_func()">
-                  </select><br>
-                  欲刪除感測器:<br>
+                  </select><br> 欲刪除感測器:
+                  <br>
                   <select required id="sensor_del" onchange="sensor_del_func()">
                   </select><br>
                 </form>
@@ -399,6 +449,7 @@
           </div>
         </div>
       </div>
+
       <!-- jQuery -->
       <!-- Bootstrap -->
       <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -438,11 +489,16 @@
       <!-- ECharts -->
       <script src="../vendors/echarts/dist/echarts.min.js"></script>
 
+
       <!-- Custom Theme Scripts -->
       <script src="../build/js/custom.js"></script>
       <!-- Scripts by CTL -->
       <script src="../build/js/cookie.js"></script>
       <script src="../build/js/draw_homepage.js"></script>
+
+      <script>
+        window.onload = draw_tree();
+      </script>
 </body>
 
 </html>
