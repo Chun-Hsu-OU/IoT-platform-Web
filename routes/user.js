@@ -5,7 +5,6 @@ var fs = require('fs');
 var users = express.Router();
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var aesjs = require('aes-js');
 var unlencodedParser = bodyParser.urlencoded({ extended: false });
 var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
 //var api_url = 'http://localhost:3000/'
@@ -39,15 +38,7 @@ users.post('/login', unlencodedParser, function(req, res) {
     res.cookie('group', "blank");
     res.cookie('sensor', "blank");
     res.cookie('admin', "aDmiN");
-/*
-    key = doc.Crypt.KEY;
-    cookie = 'checker=blank; area=blank; group=blank; admin=aDmiN; sensor=blank';
-    var textBytes = aesjs.utils.utf8.toBytes(cookie);
-    var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
-    var encryptedBytes = aesCtr.encrypt(textBytes);
-    var encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
-    res.cookie('cookies', encryptedHex);
-*/
+
     res.redirect('homepage_admin.html');
   } else {
     request.post({url: api_url + 'api/account/login', form: {"email": req.body.username, "password": req.body.pwd}} , function (error, response, body) {
