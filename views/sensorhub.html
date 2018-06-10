@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>HSNL IoT Platform</title>
+  <link rel="Shortcut Icon" type="image/x-icon" href="images/platform-icon.ico">
 
   <!-- Bootstrap -->
   <link href="../vendors/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
@@ -72,6 +73,7 @@
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
   window.onload = load_sensor_in_modal();
+  window.onload = load_sensorhub_descriptions();
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -126,11 +128,11 @@
                 <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
               </ul>
               <ul class="nav side-menu">
-                <li><a href="calendar.html"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                <li><a href="https://agri-log.herokuapp.com/"><i class="fa fa-calendar"></i> 日誌系統 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
+                <li><a data-toggle="modal" data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
@@ -247,16 +249,17 @@
               <!-- Table row -->
               <div class="row">
                 <div class="col-xs-12 table">
-                  <table id="homepage_area_table" class="table table-striped">
+                  <table class="table table-striped">
                     <thead>
                       <tr>
                         <th>名稱</th>
                         <th>種類</th>
                         <th>目前數值</th>
                         <th>創建日期</th>
+                        <th>選項</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="sensor_table">
                     </tbody>
 
                     <script>
@@ -272,20 +275,47 @@
                             });
                           };
 
-                          if (body.Items[j].sensorType == "CO2") {
-                            var sensor_type = "CO2";
-                          } else if (body.Items[j].sensorType == "SOIL_EC") {
-                            var sensor_type = "Soil EC";
-                          } else {
-                            var sensor_type = body.Items[j].sensorType.replace("_", " ").toLowerCase();
-                            sensor_type = sensor_type.capitalize();
-                          }
-                          $('tbody').append('<tr>' +
-                            '<td>' + body.Items[j].name + '</td>' +
-                            '<td>' + sensor_type + '</td>' +
-                            '<td>' + body.Items[j].visible + '</td>' +
-                            '<td>' + timeConverter(body.Items[j].createdtime) + '</td>' +
-                            '</tr>');
+                          $.get(api_url + 'api/sensors/' + body.Items[j].sensorType + '/' + body.Items[j].sensorId, function(data){
+                            if (data != 'No data') {
+                              var value = JSON.parse(data);
+
+                              if (body.Items[j].sensorType == "CO2") {
+                                var sensor_type = "CO2";
+                              } else if (body.Items[j].sensorType == "SOIL_EC") {
+                                var sensor_type = "Soil EC";
+                              } else if (body.Items[j].sensorType == "AVG_WIND_SPEED"){
+                                var sensor_type = "Average Wind Speed"
+                              } else {
+                                var sensor_type = body.Items[j].sensorType.replace("_", " ").toLowerCase();
+                                sensor_type = sensor_type.capitalize();
+                              }
+                              $('#sensor_table').append('<tr>' +
+                                '<td>' + body.Items[j].name + '</td>' +
+                                '<td>' + sensor_type + '</td>' +
+                                '<td>' + value.value + '</td>' +
+                                '<td>' + timeConverter(body.Items[j].createdtime) + '</td>' +
+                                '<td><a href="#" data-toggle="modal" data-target="#new_area_Modal">編輯</a></td>' +
+                                '</tr>');
+                            } else {
+                              if (body.Items[j].sensorType == "CO2") {
+                                var sensor_type = "CO2";
+                              } else if (body.Items[j].sensorType == "SOIL_EC") {
+                                var sensor_type = "Soil EC";
+                              } else if (body.Items[j].sensorType == "AVG_WIND_SPEED"){
+                                var sensor_type = "Average Wind Speed"
+                              } else {
+                                var sensor_type = body.Items[j].sensorType.replace("_", " ").toLowerCase();
+                                sensor_type = sensor_type.capitalize();
+                              }
+                              $('#sensor_table').append('<tr>' +
+                                '<td>' + body.Items[j].name + '</td>' +
+                                '<td>' + sensor_type + '</td>' +
+                                '<td>sensor not in work</td>' +
+                                '<td>' + timeConverter(body.Items[j].createdtime) + '</td>' +
+                                '<td><a href="#" data-toggle="modal" data-target="#new_area_Modal">編輯</a></td>' +
+                                '</tr>');
+                            }
+                          });
                         }
                       });
 
@@ -303,6 +333,51 @@
                         return time;
                       }
                     </script>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h3>專家系統建議</h3>
+              <div class="title_right" id="expert_system_description">
+              </div>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
+                  <ul class="dropdown-menu" role="menu">
+                  </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <!-- Table row -->
+              <div class="row">
+                <div class="col-xs-12 table">
+                  <table id="expert_table" class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>栽種特徵</th>
+                        <th style="width: 10%">建議最小值</th>
+                        <th style="width: 10%">建議最大值</th>
+                        <th style="width: 50%">詳細說明</th>
+                        <th style="width: 15%">專家名稱</th>
+                      </tr>
+                    </thead>
+                    <tbody id="expert_table_identity">
+                    </tbody>
+
                   </table>
                 </div>
                 <!-- /.col -->

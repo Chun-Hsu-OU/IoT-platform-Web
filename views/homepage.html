@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>HSNL IoT Platform</title>
+  <link rel="Shortcut Icon" type="image/x-icon" href="images/platform-icon.ico">
 
   <!-- Bootstrap -->
   <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -133,11 +134,11 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a href="calendar.html"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                <li><a href="https://agri-log.herokuapp.com/"><i class="fa fa-calendar"></i> 日誌系統 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
+                <li><a data-toggle="modal" data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
@@ -332,173 +333,171 @@
             </div>
           </div>
 
-
           <!-- /page content -->
-        </div>
-      </div>
-      <div class="container">
-        <div class="modal fade" id="new_area_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">新增場域</h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  場域名稱:<br>
-                  <input type="text" id="area_name">
-                  <br><br>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+          <div class="container">
+            <div class="modal fade" id="new_area_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">新增場域</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      場域名稱:<br>
+                      <input type="text" id="area_name">
+                      <br><br>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="container">
-        <div class="modal fade" id="new_group_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">新增感測器群組</h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  感測器群組名稱:<br>
-                  <input type="text" id="group_name">
-                  <br><br> 建制於場域:<br>
-                  <select autofocus id="group_select" onchange="group_select_func(value);">
+          <div class="container">
+            <div class="modal fade" id="new_group_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">新增感測器群組</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      感測器群組名稱:<br>
+                      <input type="text" id="group_name">
+                      <br><br> 建制於場域:<br>
+                      <select autofocus id="group_select" onchange="group_select_func(value);">
                   </select>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="modal fade" id="Setting_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">使用者資訊設定</h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  新的使用者名稱:<br>
-                  <input type="text" id="new_username">
-                  <br><br> 新的密碼:
-                  <br>
-                  <input type="text" id="new_password">
-                  <br><br> 確認新的密碼:
-                  <br>
-                  <input type="text" id="new_password_confirm">
-                  <br><br>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="container">
-        <div class="modal fade" id="del_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">刪除項目</h4>
+          <div class="container">
+            <div class="modal fade" id="Setting_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">使用者資訊設定</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      新的使用者名稱:<br>
+                      <input type="text" id="new_username">
+                      <br><br> 新的密碼:
+                      <br>
+                      <input type="text" id="new_password">
+                      <br><br> 確認新的密碼:
+                      <br>
+                      <input type="text" id="new_password_confirm">
+                      <br><br>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
               </div>
-              <div class="modal-body">
-                <form>
-                  欲刪除場域:<br>
-                  <select required id="area_del" onchange="area_del_func()">
+            </div>
+          </div>
+
+          <div class="container">
+            <div class="modal fade" id="del_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">刪除項目</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      欲刪除場域:<br>
+                      <select required id="area_del" onchange="area_del_func()">
                   </select><br> 欲刪除感測器群組:
-                  <br>
-                  <select required id="group_del" onchange="group_del_func()">
+                      <br>
+                      <select required id="group_del" onchange="group_del_func()">
                   </select><br> 欲刪除感測器:
-                  <br>
-                  <select required id="sensor_del" onchange="sensor_del_func()">
+                      <br>
+                      <select required id="sensor_del" onchange="sensor_del_func()">
                   </select><br>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- jQuery -->
-      <!-- Bootstrap -->
-      <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-      <!-- FastClick -->
-      <script src="../vendors/fastclick/lib/fastclick.js"></script>
-      <!-- NProgress -->
-      <script src="../vendors/nprogress/nprogress.js"></script>
-      <!-- Chart.js -->
-      <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
-      <!-- gauge.js -->
-      <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
-      <!-- bootstrap-progressbar -->
-      <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-      <!-- iCheck -->
-      <script src="../vendors/iCheck/icheck.min.js"></script>
-      <!-- Skycons -->
-      <script src="../vendors/skycons/skycons.js"></script>
-      <!-- Flot -->
-      <script src="../vendors/Flot/jquery.flot.js"></script>
-      <script src="../vendors/Flot/jquery.flot.pie.js"></script>
-      <script src="../vendors/Flot/jquery.flot.time.js"></script>
-      <script src="../vendors/Flot/jquery.flot.stack.js"></script>
-      <script src="../vendors/Flot/jquery.flot.resize.js"></script>
-      <!-- Flot plugins -->
-      <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-      <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-      <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
-      <!-- DateJS -->
-      <script src="../vendors/DateJS/build/date.js"></script>
-      <!-- JQVMap -->
-      <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
-      <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-      <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
-      <!-- bootstrap-daterangepicker -->
-      <script src="../vendors/moment/min/moment.min.js"></script>
-      <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-      <!-- ECharts -->
-      <script src="../vendors/echarts/dist/echarts.min.js"></script>
+          <!-- jQuery -->
+          <!-- Bootstrap -->
+          <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+          <!-- FastClick -->
+          <script src="../vendors/fastclick/lib/fastclick.js"></script>
+          <!-- NProgress -->
+          <script src="../vendors/nprogress/nprogress.js"></script>
+          <!-- Chart.js -->
+          <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+          <!-- gauge.js -->
+          <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+          <!-- bootstrap-progressbar -->
+          <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+          <!-- iCheck -->
+          <script src="../vendors/iCheck/icheck.min.js"></script>
+          <!-- Skycons -->
+          <script src="../vendors/skycons/skycons.js"></script>
+          <!-- Flot -->
+          <script src="../vendors/Flot/jquery.flot.js"></script>
+          <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+          <script src="../vendors/Flot/jquery.flot.time.js"></script>
+          <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+          <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+          <!-- Flot plugins -->
+          <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+          <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+          <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+          <!-- DateJS -->
+          <script src="../vendors/DateJS/build/date.js"></script>
+          <!-- JQVMap -->
+          <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+          <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+          <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+          <!-- bootstrap-daterangepicker -->
+          <script src="../vendors/moment/min/moment.min.js"></script>
+          <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+          <!-- ECharts -->
+          <script src="../vendors/echarts/dist/echarts.min.js"></script>
 
 
-      <!-- Custom Theme Scripts -->
-      <script src="../build/js/custom.js"></script>
-      <!-- Scripts by CTL -->
-      <script src="../build/js/cookie.js"></script>
-      <script src="../build/js/draw_homepage.js"></script>
+          <!-- Custom Theme Scripts -->
+          <script src="../build/js/custom.js"></script>
+          <!-- Scripts by CTL -->
+          <script src="../build/js/cookie.js"></script>
+          <script src="../build/js/draw_homepage.js"></script>
 
-      <script>
-        window.onload = draw_tree();
-      </script>
+          <script>
+            window.onload = draw_tree();
+          </script>
 </body>
 
 </html>

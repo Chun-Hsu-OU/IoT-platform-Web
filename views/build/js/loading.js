@@ -27,15 +27,4 @@ function get_username() {
     //var body = JSON.parse(data);
     document.getElementById("username").innerHTML = data.name;
   });
-
-  $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
-    var body = JSON.parse(data);
-    body.Items.forEach(function (hub) {
-      if (hub.groupId == sensorhub){
-        //document.getElementById("sensorhub_page_title").innerHTML = hub.name;
-        $( "#sensorhub_page_title" ).append('<h1>' + hub.name + '</h1>');
-        $( "#sensorhub_description" ).append('<h2>' + hub.description + '</h2>');
-      }
-    });
-  });
 }
