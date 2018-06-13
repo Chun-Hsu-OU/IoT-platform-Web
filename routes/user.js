@@ -30,6 +30,11 @@ users.get('/login', function(req, res) {
     res.end();
 });
 
+users.get('/', function(req, res) {
+    res.render('login.html');
+    res.end();
+});
+
 //when user logs in or registers
 users.post('/login', unlencodedParser, function(req, res) {
   if (req.body.username == doc.HSNL_platform_admin.USER && req.body.pwd == doc.HSNL_platform_admin.PWD) {

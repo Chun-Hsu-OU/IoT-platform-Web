@@ -24,7 +24,7 @@ function get_name() {
     var body = JSON.parse(data);
     body.Items.forEach(function make(area){
       if(area.areaId == area_id){
-        $('#page_title').append('<h3>' + area['name'] + '</h3>');
+        $('#page_title').prepend('<h1>' + area['name'] + '<a href="#" data-toggle="modal" data-target="#set_area_modal"><span style="font-size:0.5em; color:#A9A9A9">   編輯</span></a></h1>');
       }
     });
   });

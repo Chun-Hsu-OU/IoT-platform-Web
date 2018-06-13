@@ -42,25 +42,31 @@ function make_area() {
 }
 
 function add_area() {
-  var new_area = document.getElementById("area_name").value;
+  var new_area_name = document.getElementById("new_area_name").value;
+  var new_area_location = document.getElementById("new_area_location").value;
+  var new_area_map = document.getElementById("new_area_map").value;
 
-  if (document.getElementById("area_name").value != null) {
+  if (new_area_name != null && new_area_location != null && new_area_map != null) {
     $.post(api_url + 'api/add/area/', {
       "ownerId": uuid,
-      "name": new_area
+      "name": new_area_name,
+      "location": new_area_location,
+      "map_location": new_area_map
     });
   }
 }
 
 function add_group() {
-  var new_group = document.getElementById("group_name").value;
+  var new_group_name = document.getElementById("new_group_name").value;
+  var new_group_description = document.getElementById("new_group_description").value;
+  var new_group_product = document.getElementById("new_group_product").value;
 
-  if (document.getElementById("group_name").value != null) {
-    $.post(api_url + 'api/add/sensorGroup', {
-      "areaId": getCookie("area"),
-      "name": new_group
-    });
-  }
+  $.post(api_url + 'api/add/sensorGroup', {
+    "areaId": getCookie("area"),
+    "name": new_group_name,
+    "description": new_group_description,
+    "product": new_group_product
+  });
 }
 
 function del_from_db() {
@@ -70,8 +76,7 @@ function del_from_db() {
 
   if (area == "blank") {
     console.log("error");
-  }
-  else if (group == "blank") {
+  } else if (group == "blank") {
     $.post(api_url + 'api/delete_item/area', {
       "ownerId": uuid,
       "areaId": area
@@ -205,5 +210,49 @@ function load_sensor_in_modal() {
     body.Items.forEach(function make(sensor) {
       $('#sensor_del').append('<option value="' + sensor.sensorId + '">' + sensor.name + '</option>');
     });
+  });
+}
+
+function update_sensor_item() {
+  var update_name = document.getElementById("update_sensorname").value;
+  var update_type = document.getElementById("update_sensorType").value;
+
+  $.post(api_url + 'api/update/sensor', {
+    "groupId": getCookie("group"),
+    "sensorId": getCookie("sensor"),
+    "name": update_name,
+    "sensorType": update_type
+  }, function() {
+    window.location.replace('sensorhub.html');
+  });
+}
+
+function update_sensorgroup_item() {
+  var update_name = document.getElementById("update_sensorgroup_name").value;
+  var update_description = document.getElementById("update_sensorgroup_description").value;
+  var update_product = document.getElementById("update_product").value;
+
+  $.post(api_url + 'api/update/group', {
+    "groupId": getCookie("group"),
+    "areaId": getCookie("area"),
+    "name": update_name,
+    "description": update_description,
+    "product": update_product
+  }, function() {
+    window.location.replace('homepage.html');
+  });
+}
+
+function update_area_item() {
+  var update_name = document.getElementById("update_area_name").value;
+  var update_location = document.getElementById("update_area_location").value;
+
+  $.post(api_url + 'api/update/group', {
+    "ownerId": getCookie("checker"),
+    "areaId": getCookie("area"),
+    "name": update_name,
+    "location": update_location
+  }, function() {
+    window.location.replace('homepage.html');
   });
 }

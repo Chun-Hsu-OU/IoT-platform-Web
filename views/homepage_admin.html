@@ -110,10 +110,10 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
-              </ul>
-              <ul class="nav side-menu">
-                <li><a href="https://agri-log.herokuapp.com/"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                <li><a id="agri-log"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                  <script>
+                    $("#agri-log").attr("href", "https://agri-log.herokuapp.com?checker=" + getCookie("checker"));
+                  </script>
                 </li>
               </ul>
               <ul class="nav side-menu">
@@ -235,13 +235,19 @@
               <div class="modal-body">
                 <form>
                   場域名稱:<br>
-                  <input type="text" id="area_name">
+                  <input type="text" id="new_area_name">
+                  <br><br>
+                  場域位置:<br>
+                  <input type="text" id="new_area_location">
+                  <br><br>
+                  場域地圖:<br>
+                  <input type="text" id="new_area_map">
                   <br><br>
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
               </div>
             </div>
           </div>
@@ -260,15 +266,24 @@
               <div class="modal-body">
                 <form>
                   感測器群組名稱:<br>
-                  <input type="text" id="group_name">
-                  <br><br> 建制於場域:<br>
-                  <select autofocus id="group_select" onchange="group_select_func(value);">
+                  <input type="text" id="new_group_name">
+                  <br><br>
+                  感測器群組描述:<br>
+                  <input type="text" id="new_group_description">
+                  <br><br>
+                  作物種類：<br>
+                  <select required="required" id="new_group_product">
+                    <option value="Green_Onion">蔥</option>
+                    <option value="Others">其他</option>
                   </select>
+                  <br><br> 建制於場域:<br>
+                  <select required="required" id="group_select" onchange="group_select_func(value);">
+              </select>
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
               </div>
             </div>
           </div>
@@ -298,8 +313,8 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
               </div>
             </div>
           </div>
@@ -329,8 +344,8 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
               </div>
             </div>
           </div>

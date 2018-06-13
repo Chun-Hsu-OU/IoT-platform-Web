@@ -6,6 +6,7 @@ var toDate = new Date();
 
 var toEpoch = toDate.getTime();
 var fromEpoch = toEpoch - 86400000;
+// firstLoadTag allows the system to define whether it is loading current data or customized time interval
 var firstLoadTag = 1;
 
 function getCookie(cname) {
@@ -22,6 +23,31 @@ function getCookie(cname) {
     }
   }
   return "";
+}
+
+
+String.prototype.capitalize = function() {
+  return this.replace(/(?:^|\s)\S/g, function(a) {
+    return a.toUpperCase();
+  });
+};
+
+function change_limit() {
+  var max = document.getElementById("knob_max").value;
+  var min = document.getElementById("knob_min").value;
+  var group = getCookie("group");
+
+  $.get(api_url + 'api/control/search/' + group, function(data) {
+    var body = JSON.parse(data);
+    var controller = body.Items[0].controllerId;
+
+    $.post(api_url + 'api/control/limit', {
+      "controllerId": controller,
+      "max": max,
+      "min": min
+    });
+  });
+
 }
 
 function load_sensorhub_descriptions() {
@@ -123,11 +149,9 @@ function import_sensor_data() {
 
 function draw_sensor_data(data, type, firstLoadTag) {
   main();
-  console.log(firstLoadTag);
 
   async function main() {
     var body = JSON.parse(data);
-    //console.log(body);
     try {
       var dataset = await parseData(body);
       var date = await parseDate(body);
@@ -192,8 +216,6 @@ function draw_sensor_data(data, type, firstLoadTag) {
           for (let index = 0; index < body.Count; index++) {
             if (type == body.Items[index].feature) {
               if (body.Items[index].max < max || body.Items[index].min > min){
-                console.log(body.Items[index].max + "-" + max);
-                console.log(body.Items[index].min + "-" + min);
                 $('#' + body.Items[index].feature + '_feature').css("background-color", "red");
               }
             }
