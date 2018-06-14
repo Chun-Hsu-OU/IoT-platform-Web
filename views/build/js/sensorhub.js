@@ -53,11 +53,11 @@ function change_limit() {
 function load_sensorhub_descriptions() {
   $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
     var body = JSON.parse(data);
-    body.Items.forEach(function (hub) {
-      if (hub.groupId == sensorhub){
+    body.Items.forEach(function(hub) {
+      if (hub.groupId == sensorhub) {
         //document.getElementById("sensorhub_page_title").innerHTML = hub.name;
-        $( "#sensorhub_page_title" ).append('<h1>' + hub.name + '</h1>');
-        $( "#sensorhub_description" ).append('<h2>' + hub.description + '</h2>');
+        $("#sensorhub_page_title").append('<h1>' + hub.name + '</h1>');
+        $("#sensorhub_description").append('<h2>' + hub.description + '</h2>');
       }
     });
   });
@@ -82,7 +82,7 @@ function import_sensor_data() {
           var sensor_type = "CO2";
         } else if (body.Items[index].feature == "SOIL_EC") {
           var sensor_type = "Soil EC";
-        } else if (body.Items[index].feature == "AVG_WIND_SPEED"){
+        } else if (body.Items[index].feature == "AVG_WIND_SPEED") {
           var sensor_type = "Average Wind Speed"
         } else {
           var sensor_type = body.Items[index].feature.replace("_", " ").toLowerCase();
@@ -155,7 +155,7 @@ function draw_sensor_data(data, type, firstLoadTag) {
     try {
       var dataset = await parseData(body);
       var date = await parseDate(body);
-      if (dataset.length != 0){
+      if (dataset.length != 0) {
         var map = await draw(dataset, date);
       }
     } catch (err) {
@@ -204,128 +204,223 @@ function draw_sensor_data(data, type, firstLoadTag) {
 
     if (firstLoadTag == 1) {
       $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
-        var body = JSON.parse(data);
-        for (let j = 0; j < body.Count; j++) {
-          if (body.Items[j].groupId == group) {
-            product = body.Items[j].product;
-          }
-        }
-        $.get(api_url + 'api/expert/' + product, function(data) {
+        check_expert_system();
+        async function check_expert_system() {
           var body = JSON.parse(data);
-
-          for (let index = 0; index < body.Count; index++) {
-            if (type == body.Items[index].feature) {
-              if (body.Items[index].max < max || body.Items[index].min > min){
-                $('#' + body.Items[index].feature + '_feature').css("background-color", "red");
-              }
+          for (let j = 0; j < body.Count; j++) {
+            if (body.Items[j].groupId == group) {
+              product = body.Items[j].product;
             }
           }
-        });
+          try {
+            $.get(api_url + 'api/expert/' + product, function(data) {
+              var body = JSON.parse(data);
+
+              for (let index = 0; index < body.Count; index++) {
+                if (type == body.Items[index].feature) {
+                  if (body.Items[index].max < max || body.Items[index].min > min) {
+                    $('#' + body.Items[index].feature + '_feature').css("background-color", "red");
+                  }
+                }
+              }
+            });
+          } catch (err) {
+            console.error(err);
+          }
+        }
       });
     }
 
-    var temp = Highcharts.chart(type + '_div', {
-      //console.log(dataset);
-      chart: {
-        scrollablePlotArea: {
-          minWidth: 600
+    if (type != "WIND_DIRECTION") {
+      var temp = Highcharts.chart(type + '_div', {
+        //console.log(dataset);
+        chart: {
+          scrollablePlotArea: {
+            minWidth: 600
+          },
+          height: 550
         },
-        height: 550
-      },
 
-      xAxis: {
-        tickInterval: Math.floor((date.length) / 10),
-        categories: date,
-        labels: {
-          enabled: true,
-        }
-      },
+        xAxis: {
+          tickInterval: Math.floor((date.length) / 10),
+          categories: date,
+          labels: {
+            enabled: true,
+          }
+        },
 
-      yAxis: {
+        yAxis: {
+          title: {
+            text: sensor_type
+          }
+        },
+
         title: {
           text: sensor_type
-        }
-      },
+        },
 
-      title: {
-        text: sensor_type
-      },
+        legend: {
+          align: 'left',
+          verticalAlign: 'top',
+          borderWidth: 0
+        },
 
-      legend: {
-        align: 'left',
-        verticalAlign: 'top',
-        borderWidth: 0
-      },
+        tooltip: {
+          shared: true,
+          crosshairs: true,
+          style: {
+            fontSize: 15
+          }
+        },
 
-      tooltip: {
-        shared: true,
-        crosshairs: true,
-        style: {
-          fontSize: 15
-        }
-      },
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            label: {
+              connectorAllowed: false
+            },
+            marker: {
+              lineWidth: 1
+            },
+            label: {
+              enabled: false,
+            }
+          }
+        },
 
-      plotOptions: {
-        series: {
-          cursor: 'pointer',
-          label: {
-            connectorAllowed: false
-          },
-          marker: {
-            lineWidth: 1
-          },
-          label: {
-            enabled: false,
+        exporting: false,
+
+        series: [{
+          name: sensor_type,
+          data: dataset
+        }]
+      });
+
+      temp.yAxis[0].addPlotLine({
+        value: avg,
+        color: 'green',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: '平均 : ' + avg,
+          style: {
+            color: 'white'
           }
         }
-      },
+      });
 
-      exporting: false,
-
-      series: [{
-        name: sensor_type,
-        data: dataset
-      }]
-    });
-
-    temp.yAxis[0].addPlotLine({
-      value: avg,
-      color: 'green',
-      dashStyle: 'shortdash',
-      width: 2,
-      label: {
-        text: '平均 : ' + avg,
-        style: {
-          color: 'white'
+      temp.yAxis[0].addPlotLine({
+        value: min,
+        color: 'red',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: '最低 : ' + min,
+          style: {
+            color: 'white'
+          }
         }
-      }
-    });
+      });
 
-    temp.yAxis[0].addPlotLine({
-      value: min,
-      color: 'red',
-      dashStyle: 'shortdash',
-      width: 2,
-      label: {
-        text: '最低 : ' + min,
-        style: {
-          color: 'white'
+      temp.yAxis[0].addPlotLine({
+        value: max,
+        color: 'red',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: '最高 : ' + max,
+          style: {
+            color: 'white'
+          }
         }
-      }
-    });
+      });
+    } else {
+      var temp = Highcharts.chart(type + '_div', {
+        //console.log(dataset);
+        chart: {
+          scrollablePlotArea: {
+            minWidth: 600
+          },
+          height: 550
+        },
 
-    temp.yAxis[0].addPlotLine({
-      value: max,
-      color: 'red',
-      dashStyle: 'shortdash',
-      width: 2,
-      label: {
-        text: '最高 : ' + max,
-        style: {
-          color: 'white'
-        }
-      }
-    });
+        xAxis: {
+          tickInterval: Math.floor((date.length) / 10),
+          categories: date,
+          labels: {
+            enabled: true,
+          }
+        },
+
+        yAxis: {
+          title: {
+            text: sensor_type
+          },
+          categories: ["北", "東北", "東", "東南", "南", "西南", "西", "西北"]
+        },
+
+        title: {
+          text: sensor_type
+        },
+
+        legend: {
+          align: 'left',
+          verticalAlign: 'top',
+          borderWidth: 0
+        },
+
+        tooltip: {
+          shared: true,
+          crosshairs: true,
+          formatter: function() {
+            if (this.y == 0) {
+              var dir = "北";
+            } else if (this.y == 1) {
+              var dir = "東北";
+            } else if (this.y == 2) {
+              var dir = "東";
+            } else if (this.y == 3) {
+              var dir = "東南";
+            } else if (this.y == 4) {
+              var dir = "南";
+            } else if (this.y == 5) {
+              var dir = "西南";
+            } else if (this.y == 6) {
+              var dir = "西";
+            } else if (this.y == 7) {
+              var dir = "西北";
+            }
+            return '<b>' + this.x +
+              '</b><br>風向：<b>' + dir + '</b>';
+          },
+          style: {
+            fontSize: 15
+          }
+        },
+
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            label: {
+              connectorAllowed: false
+            },
+            marker: {
+              lineWidth: 1
+            },
+            label: {
+              enabled: false,
+            }
+          }
+        },
+
+        exporting: false,
+
+        series: [{
+          name: sensor_type,
+          data: dataset
+        }]
+      });
+    }
+    //console.log(dataset);
   }
-  //console.log(dataset);
 }

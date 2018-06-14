@@ -147,57 +147,50 @@
                     <i class="fa fa-exclamation-circle"></i>
                     <span class="badge bg-red"></span>
                   </a>
-                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                  <li>
+                <ul id="top_warning" class="dropdown-menu list-unstyled msg_list" role="menu">
+                  <div class="text-center">
                     <a>
-                        <span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>
-                        <span>
-                          <span><strong>Temperature</strong></span>
-                          <span class="time">1 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Temperature was too high!.....
-                        </span>
-                      </a>
-                  </li>
-                  <li>
-                    <a>
-                        <span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>
-                        <span>
-                          <span><strong>Humidity</strong></span>
-                          <span class="time">2 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Humidity was too high!.......
-                        </span>
-                      </a>
-                  </li>
-                  <li>
-                    <a>
-                        <span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>
-                        <span>
-                          <span><strong>Battery</strong></span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Battery was too low!.........
-                        </span>
-                      </a>
-                  </li>
-                  <li>
-                    <div class="text-center">
-                      <a>
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                    </div>
-                  </li>
+                      <strong>See All Alerts</strong>
+                      <i class="fa fa-angle-right"></i>
+                    </a>
+                  </div>
                 </ul>
               </li>
             </ul>
           </nav>
         </div>
       </div>
+
+      <script>
+        $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
+          var body = JSON.parse(data);
+
+          for (sensor_num = 0; sensor_num < body.Count; sensor_num ++) {
+            load_warnings();
+
+            async function load_warnings() {
+              var name = body.Items[sensor_num].name;
+              try {
+                $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
+                  if (res == "No data") {
+                    $('#top_warning').prepend('<li><a>' +
+                      '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
+                      '<span>' +
+                        '<span><strong>' + name + '</strong></span>' +
+                      '</span>' +
+                      '<span class="message">' +
+                        'No signal for atleast 1 hour' +
+                      '</span>' +
+                      '</a></li>');
+                  }
+                });
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          }
+        });
+      </script>
       <!-- /top navigation -->
 
       <!-- page content -->
