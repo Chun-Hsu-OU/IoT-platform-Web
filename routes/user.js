@@ -46,7 +46,7 @@ users.post('/login', unlencodedParser, function(req, res) {
 
     res.redirect('homepage_admin.html');
   } else {
-    request.post({url: api_url + 'api/account/login', form: {"email": req.body.username, "password": req.body.pwd}} , function (error, response, body) {
+    request.post({url: api_url + 'api/account/login', form: {"email": req.body.username_login, "password": req.body.pwd_login}} , function (error, response, body) {
       console.log('error:', error);
       console.log('statusCode:', response && response.statusCode);
       console.log('body:', body);
@@ -68,7 +68,7 @@ users.post('/login', unlencodedParser, function(req, res) {
 });
 
 users.post('/register', unlencodedParser, function(req, res) {
-  request.post({url: api_url + 'api/account', form: {"email": req.body.email, "password": req.body.password, "name": req.body.name}} , function (error, response, body) {
+  request.post({url: api_url + 'api/account', form: {"email": req.body.email_signup, "password": req.body.pwd_signup, "name": req.body.username_signup}} , function (error, response, body) {
     console.log('error:', error); // Print the error if one occurred
     console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
     console.log('body:', body);
