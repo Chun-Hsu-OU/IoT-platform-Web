@@ -5,6 +5,7 @@ function del() {
     document.cookie = "sensor=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "cookies=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "controller=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 function getCookie(cname) {
     var name = cname + "=";

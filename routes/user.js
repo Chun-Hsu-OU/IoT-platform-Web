@@ -43,6 +43,7 @@ users.post('/login', unlencodedParser, function(req, res) {
     res.cookie('group', "blank");
     res.cookie('sensor', "blank");
     res.cookie('admin', "aDmiN");
+    res.cookie('controller', "blank");
 
     res.redirect('homepage_admin.html');
   } else {
@@ -55,6 +56,7 @@ users.post('/login', unlencodedParser, function(req, res) {
       res.cookie('group', "blank");
       res.cookie('sensor', "blank");
       res.cookie('admin', "blank");
+      res.cookie('controller', "blank");
       if (body == "false") {
           res.render('page_404_sign_in.html');
       } else {

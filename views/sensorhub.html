@@ -129,7 +129,7 @@
               <ul class="nav side-menu">
                 <li><a id="agri-log"><i class="fa fa-calendar"></i> 日誌系統 </a>
                   <script>
-                    $("#agri-log").attr("href", "https://agri-log.herokuapp.com?checker=" + getCookie("checker"));
+                    $("#agri-log").attr("href", "http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com/log_list.php?checker=" + getCookie("checker"));
                   </script>
                 </li>
               </ul>
@@ -180,7 +180,7 @@
         $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
           var body = JSON.parse(data);
 
-          for (sensor_num = 0; sensor_num < body.Count; sensor_num ++) {
+          for (sensor_num = 0; sensor_num < body.Count; sensor_num++) {
             load_warnings();
 
             async function load_warnings() {
@@ -191,10 +191,10 @@
                     $('#top_warning').prepend('<li><a>' +
                       '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
                       '<span>' +
-                        '<span><strong>' + name + '</strong></span>' +
+                      '<span><strong>' + name + '</strong></span>' +
                       '</span>' +
                       '<span class="message">' +
-                        'No signal for atleast 1 hour' +
+                      'No signal for atleast 1 hour' +
                       '</span>' +
                       '</a></li>');
                   }
@@ -240,7 +240,7 @@
               </ul>
               <div class="clearfix"></div>
             </div>
-            <div class="x_content">
+            <div class="x_content" id="control">
               <!-- Table row -->
               <div class="row">
                 <div class="col-xs-12 table">
@@ -319,6 +319,22 @@
           </div>
         </div>
 
+        <script>
+          $.get(api_url + 'api/control/search/' + group, function(data) {
+            var body = JSON.parse(data);
+            //console.log(body);
+
+            for (let control_num = 0; control_num < body.Count; control_num++) {
+              $('#control').append('<button type="button" class="btn btn-default" onclick="set_controller_cookie(\'' + body.Items[control_num].controllerId + '\')">' + body.Items[control_num].name + '</button>');
+            }
+          });
+
+          function set_controller_cookie(Id) {
+            document.cookie = "controller=" + Id;
+            window.location.href = 'logic_control.html';
+          }
+        </script>
+
         <div class="col-md-4 col-sm-4 col-xs-4">
           <div class="x_panel">
             <div class="x_title">
@@ -339,130 +355,6 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content" id="current_sensor_data">
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-8 col-sm-8 col-xs-8" id="controllers">
-          <div class="x_panel">
-            <div class="x_title">
-              <h3>控制中心</h3>
-              <div class="title_right">
-              </div>
-              <h2>當溫度大小介於設定範圍之外時，開關將會啟動</h2>
-              <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
-                  <ul class="dropdown-menu" role="menu">
-                  </ul>
-                </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-              </ul>
-              <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-              <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                  <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">主頁面</a>
-                  </li>
-                  <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">設定</a>
-                  </li>
-                </ul>
-                <div id="myTabContent" class="tab-content">
-                  <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-                    <!-- bar -->
-                    <div class="col-md-6">
-                      <p>最大值</p>
-                      <input class="knob" data-width="120" data-height="150" data-min="-10" data-max="50" data-displayPrevious=true data-fgColor="#ff5050" value="30" id="knob_max">
-                    </div>
-                    <div class="col-md-6">
-                      <p>最小值</p>
-                      <input class="knob" data-width="120" data-height="150" data-min="-10" data-max="50" data-displayPrevious=true data-fgColor="#26B99A" value="15" id="knob_min">
-                    </div>
-                    <!-- bar -->
-                    <button type="button" class="btn btn-primary" onclick="change_limit()" style="float:right">確定</button>
-                  </div>
-                  <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
-                    <div class="row">
-                      <form>
-                        <p><b> 自動控制系統 </b></p>
-                        <label class="switch">
-            						  <input type="checkbox" id="auto_control" name="auto_control">
-            						  <span class="slider round"></span>
-            						</label>
-                      </form>
-                      <form id="control_by_user">
-                        <p><b> 手動控制開關 </b></p>
-                        <label class="switch">
-            						  <input type="checkbox" id="user_control" name="user_control">
-            						  <span class="slider round"></span>
-            						</label>
-                      </form>
-                      <script>
-                        $.get(api_url + 'api/control/search/' + group, function(data) {
-                          var body = JSON.parse(data);
-                          if (body.Count > 0) {
-                            $('#controllers').show();
-                          }
-                        });
-
-                        $('#auto_control').change(function() {
-                          if ($(this).prop('checked')) {
-                            $('#control_by_user').hide();
-                            $.get(api_url + 'api/control/search/' + group, function(data) {
-                              var body = JSON.parse(data);
-                              var controller = body.Items[0].controllerId;
-
-                              $.post(api_url + 'api/control/auto', {
-                                "controllerId": controller,
-                                "status": 1
-                              });
-                            });
-                          } else {
-                            $('#control_by_user').show();
-                            $.get(api_url + 'api/control/search/' + group, function(data) {
-                              var body = JSON.parse(data);
-                              var controller = body.Items[0].controllerId;
-
-                              $.post(api_url + 'api/control/auto', {
-                                "controllerId": controller,
-                                "status": 0
-                              });
-                            });
-                          }
-                        });
-
-                        $('#user_control').change(function() {
-                          if ($(this).prop('checked')) {
-                            $.get(api_url + 'api/control/search/' + group, function(data) {
-                              var body = JSON.parse(data);
-                              var controller = body.Items[0].controllerId;
-
-                              $.post(api_url + 'api/control/power', {
-                                "controllerId": controller,
-                                "status": 1
-                              });
-                            });
-                          } else {
-                            $.get(api_url + 'api/control/search/' + group, function(data) {
-                              var body = JSON.parse(data);
-                              var controller = body.Items[0].controllerId;
-
-                              $.post(api_url + 'api/control/power', {
-                                "controllerId": controller,
-                                "status": 0
-                              });
-                            });
-                          }
-                        });
-                      </script>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -699,11 +591,11 @@
                 <form>
                   場域名稱:<br>
                   <input type="text" id="new_area_name">
-                  <br><br>
-                  場域位置:<br>
+                  <br><br> 場域位置:
+                  <br>
                   <input type="text" id="new_area_location">
-                  <br><br>
-                  場域地圖:<br>
+                  <br><br> 場域地圖:
+                  <br>
                   <input type="text" id="new_area_map">
                   <br><br>
                 </form>
@@ -730,11 +622,11 @@
                 <form>
                   感測器群組名稱:<br>
                   <input type="text" id="new_group_name">
-                  <br><br>
-                  感測器群組描述:<br>
+                  <br><br> 感測器群組描述:
+                  <br>
                   <input type="text" id="new_group_description">
-                  <br><br>
-                  作物種類：<br>
+                  <br><br> 作物種類：
+                  <br>
                   <select required="required" id="new_group_product">
                     <option value="Green_Onion">蔥</option>
                     <option value="Others">其他</option>

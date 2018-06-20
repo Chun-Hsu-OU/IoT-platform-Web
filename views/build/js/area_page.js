@@ -37,7 +37,7 @@ function get_sensorhubs(){
     body.Items.forEach(function make(sensorgroup){
       if(sensorgroup.visible == 1){
         $('#sensorhubs').append('<div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12" id="' + sensorgroup.groupId + '_A"></div>');
-        console.log('<div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12" id="' + sensorgroup.groupId + '_A"></div>');
+        //console.log('<div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12" id="' + sensorgroup.groupId + '_A"></div>');
         $('#' + sensorgroup.groupId + '_A').append('<div class="tile-stats" id="' + sensorgroup.groupId + '_B"></div>');
         $('#' + sensorgroup.groupId + '_B').append('<div class="icon"><i class="fa fa-tasks"></i></div>');
         // $('#B').append('<div class="count"></div>');
