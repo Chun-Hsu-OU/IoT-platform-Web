@@ -54,7 +54,7 @@
 </style>
 
 <script>
-  window.onload = make_area();
+  window.onload = load_sidebars();
   window.onload = get_users();
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
@@ -106,6 +106,12 @@
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-area-chart"></i> 場域空間 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" id="showPlace">
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" id="showController">
                   </ul>
                 </li>
               </ul>

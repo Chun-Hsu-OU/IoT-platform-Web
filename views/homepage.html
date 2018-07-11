@@ -73,7 +73,7 @@
 </style>
 
 <script>
-  window.onload = make_area();
+  window.onload = load_sidebars();
   window.onload = get_username();
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
@@ -130,7 +130,9 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a href="logic_control.html"><i class="fa fa-sliders"></i> 邏輯控制 </a>
+                <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" id="showController">
+                  </ul>
                 </li>
               </ul>
               <ul class="nav side-menu">

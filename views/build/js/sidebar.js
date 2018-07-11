@@ -26,17 +26,26 @@ function set_area_cookie(Id) {
   document.cookie = 'area=' + Id;
 }
 
-function make_area() {
+function set_controller_cookie(Id) {
+  document.cookie = 'controller=' + Id;
+}
+
+function load_sidebars() {
   $.get(api_url + 'api/area/' + uuid, function(data, status) {
-    //console.log(api_url + 'api/area/' + uuid);
     var body = JSON.parse(data);
 
     body.Items.forEach(function make(area) {
-      //console.log(area['name']);
       if (area.visible == 1) {
-        //console.log('<li id=\'' + area['name'] + '\'><a onclick="set_cookie(\'' + area.areaId + '\')">' + area.name + '</a></li>');
         $('#showPlace').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="area_page.html">' + area.name + '</a></li>');
       }
+    });
+  });
+
+  $.get(api_url + 'api/search/control/owner/' + uuid, function(data) {
+    var body = JSON.parse(data);
+
+    body.Items.forEach(function make(controller) {
+      $('#showController').append('<li ><a onclick="set_controller_cookie(\'' + controller.controllerId + '\')" href="logic_control.html">' + controller.name + '</a></li>');
     });
   });
 }

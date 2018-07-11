@@ -60,7 +60,7 @@
 </style>
 
 <script>
-  window.onload = make_area();
+  window.onload = load_sidebars();
   window.onload = get_username();
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
@@ -113,6 +113,12 @@
               <ul class="nav side-menu">
                 <li><a><i class="fa fa-area-chart"></i> 場域空間 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" id="showPlace">
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" id="showController">
                   </ul>
                 </li>
               </ul>
@@ -267,12 +273,15 @@
                     <div role="tabpanel" class="tab-pane fade" id="control-tab-2" aria-labelledby="profile-tab-1">
                       <!-- bar -->
                       開關選項：<br>
-                      <select required="required" id="update_control">
-                        <option value="ON_until">開啟直到符合規則</option>
+                      <select required="required" onchange="update_control_func()" id="update_control">
                         <option value="ON_for">開啟一定時間</option>
-                      </select><br> 時間長度：
-                      <br>
-                      <input type="text" id="turnOnfor">
+                        <option value="ON_until">開啟直到符合規則</option>
+                      </select><br><br>
+                      <div id="turnOnfor_div">
+                        時間長度：
+                        <br>
+                        <input type="text" id="turnOnfor" value="">
+                      </div>
                       <!-- bar -->
                       <button type="button" class="btn btn-primary" onclick="change_action()" style="float:right">確定</button>
                     </div>
@@ -319,14 +328,22 @@
               var body = JSON.parse(data);
 
               $('#controller_name').prepend('<h2>' + body.Items[0].name + '</h2>');
+              $('#turnOnfor').attr('value', body.Items[0].work_cycle);
+              if (body.Items[0].follow_rule == 'ON_for') {
+                $('#update_control').val('ON_for').change();
+                $('#turnOnfor_div').show();
+              } else {
+                $('#update_control').val('ON_until').change();
+                $('#turnOnfor_div').hide();
+              }
 
               for (let i = 0; i < body.Items[0].rules.length; i++) {
                 var block_num = body.Items[0].rules[i].block.toString();
                 if (check_children('rule_block_' + block_num)) {
-                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].min, body.Items[0].rules[i].max);
+                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].min, body.Items[0].rules[i].max, body.Items[0].rules[i].todo_bot, body.Items[0].rules[i].todo_mid, body.Items[0].rules[i].todo_top);
                 } else {
                   add_rule_block(block_num);
-                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].min, body.Items[0].rules[i].max);
+                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].min, body.Items[0].rules[i].max, body.Items[0].rules[i].todo_bot, body.Items[0].rules[i].todo_mid, body.Items[0].rules[i].todo_top);
                 }
               }
             });
@@ -334,24 +351,24 @@
             $('#auto_control').change(function() {
               if ($(this).prop('checked')) {
                 $('#control_by_user').hide();
-                $.get(api_url + 'api/control/search/' + group, function(data) {
+                $.get(api_url + 'api/search/control/group/' + group, function(data) {
                   var body = JSON.parse(data);
                   var controller = getCookie("controller");
 
                   $.post(api_url + 'api/control/auto', {
                     "controllerId": controller,
-                    "status": 1
+                    "status": "ON"
                   });
                 });
               } else {
                 $('#control_by_user').show();
-                $.get(api_url + 'api/control/search/' + group, function(data) {
+                $.get(api_url + 'api/search/control/group/' + group, function(data) {
                   var body = JSON.parse(data);
                   var controller = getCookie("controller");
 
                   $.post(api_url + 'api/control/auto', {
                     "controllerId": controller,
-                    "status": 0
+                    "status": "OFF"
                   });
                 });
               }
@@ -359,27 +376,36 @@
 
             $('#user_control').change(function() {
               if ($(this).prop('checked')) {
-                $.get(api_url + 'api/control/search/' + group, function(data) {
+                $.get(api_url + 'api/search/control/group/' + group, function(data) {
                   var body = JSON.parse(data);
                   var controller = getCookie("controller");
 
                   $.post(api_url + 'api/control/power', {
                     "controllerId": controller,
-                    "status": 1
+                    "status": "ON"
                   });
                 });
               } else {
-                $.get(api_url + 'api/control/search/' + group, function(data) {
+                $.get(api_url + 'api/search/control/group/' + group, function(data) {
                   var body = JSON.parse(data);
                   var controller = getCookie("controller");
 
                   $.post(api_url + 'api/control/power', {
                     "controllerId": controller,
-                    "status": 0
+                    "status": "OFF"
                   });
                 });
               }
             });
+
+            function update_control_func() {
+              var index = document.getElementById('update_control').value;
+              if (index == 'ON_for') {
+                $('#turnOnfor_div').show();
+              } else if (index == 'ON_until') {
+                $('#turnOnfor_div').hide();
+              }
+            }
           </script>
           <!-- /page content -->
 

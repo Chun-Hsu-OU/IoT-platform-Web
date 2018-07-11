@@ -17,7 +17,7 @@ function getCookie(cname) {
 }
 
 
-function add_rules(TYPE, block_num, value_min = '較小值', value_max = '較大值') {
+function add_rules(TYPE, block_num, value_min = '較小值', value_max = '較大值', action_bot = 'No Action', action_mid = 'No Action', action_top = 'No Action') {
   if (TYPE == 'AIR_TEMPERATURE') {
     var type = '空氣溫度&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
   } else if (TYPE == 'AIR_HUMIDITY') {
@@ -33,11 +33,17 @@ function add_rules(TYPE, block_num, value_min = '較小值', value_max = '較大
   } else if (TYPE == 'CO2') {
     var type = '二氧化碳濃度 '
   }
-  $('#add_rule_block_' + block_num).before('<div id="rule' + TYPE + '_block_' + block_num + '">' + type + '介於：' +
-    '&emsp;<input type="text" id="' + TYPE + '_min_block_' + block_num + '" value="' + value_min + '">' +
-    '&emsp;與&emsp;<input type="text" id="' + TYPE + '_max_block_' + block_num + '" value="' + value_max + '">' +
+  $('#add_rule_block_' + block_num).before('<div id="rule' + TYPE + '_block_' + block_num + '">' + type + '設定：' +
+    '&emsp;&emsp;<select required="required" id=' + TYPE + '_bot_' + block_num + '><option value="No Action">不做動作</option><option value="OFF">開啟開關</option><option value="ON">關閉開關</option></select>' +
+    '&emsp;&emsp;<input style="text-align:center;width:70px" type="text" id="' + TYPE + '_min_block_' + block_num + '" value="' + value_min + '">' +
+    '&emsp;&emsp;<select required="required" id=' + TYPE + '_mid_' + block_num + '><option value="No Action">不做動作</option><option value="OFF">開啟開關</option><option value="ON">關閉開關</option></select>' +
+    '&emsp;&emsp;<input style="text-align:center;width:70px" type="text" id="' + TYPE + '_max_block_' + block_num + '" value="' + value_max + '">' +
+    '&emsp;&emsp;<select required="required" id=' + TYPE + '_top_' + block_num + '><option value="No Action">不做動作</option><option value="OFF">開啟開關</option><option value="ON">關閉開關</option></select>' +
     '&emsp;&emsp;<button type="button" onclick="delete_rule(\'' + TYPE + '\', \'' + block_num + '\')" class="btn btn-danger btn-sm">刪除</button>' +
     '<br><br></div>');
+  $('#' + TYPE + '_bot_' + block_num).val(action_bot).change();
+  $('#' + TYPE + '_mid_' + block_num).val(action_mid).change();
+  $('#' + TYPE + '_top_' + block_num).val(action_top).change();
 }
 
 function change_rules() {
@@ -58,22 +64,40 @@ function change_rules() {
       var type = id.slice(4).split('_block_')[0];
       var min = document.getElementById(type + '_min_block_' + block_array[block_num].toString()).value;
       var max = document.getElementById(type + '_max_block_' + block_array[block_num].toString()).value;
+      console.log(document.getElementById(type + '_bot_' + block_array[block_num].toString()).value);
       //console.log(type);
       var new_rule = {
         "block": parseFloat(block_array[block_num]),
         "type": type,
         "min": parseFloat(min),
-        "max": parseFloat(max)
+        "max": parseFloat(max),
+        "todo_bot": document.getElementById(type + '_bot_' + block_array[block_num].toString()).value,
+        "todo_mid": document.getElementById(type + '_mid_' + block_array[block_num].toString()).value,
+        "todo_top": document.getElementById(type + '_top_' + block_array[block_num].toString()).value
       };
       rules.push(new_rule);
     }
   }
 
-  $.post(api_url + 'api/control/rule', {
+  $.post(api_url + 'api/control/rules', {
     "controllerId": controller,
-    "rules": rules
+    "status": rules
   });
   //console.log(rules);
+}
+
+function change_action() {
+  var controller = getCookie("controller");
+  
+  $.post(api_url + 'api/control/follow_rule', {
+    "controllerId": controller,
+    "status": document.getElementById('update_control').value
+  });
+
+  $.post(api_url + 'api/control/work_cycle', {
+    "controllerId": controller,
+    "status": document.getElementById('turnOnfor').value
+  });
 }
 
 function delete_rule(type, block_num) {
@@ -93,7 +117,7 @@ function add_rule_block(block_num = 0) {
         }
       }
     }
-    
+
     block_num ++;
   }
 
