@@ -37,7 +37,7 @@ users.get('/', function(req, res) {
 
 //when user logs in or registers
 users.post('/login', unlencodedParser, function(req, res) {
-  if (req.body.username == doc.HSNL_platform_admin.USER && req.body.pwd == doc.HSNL_platform_admin.PWD) {
+  if (req.body.username_login == doc.HSNL_platform_admin.USER && req.body.pwd_login == doc.HSNL_platform_admin.PWD) {
     res.cookie('checker', "blank");
     res.cookie('area', "blank");
     res.cookie('group', "blank");
@@ -60,9 +60,6 @@ users.post('/login', unlencodedParser, function(req, res) {
       if (body == "false") {
           res.render('page_404_sign_in.html');
       } else {
-          //cookie = 'checker=' + body + '; area=blank; group=blank; admin=aDmiN; sensor=blank';
-          //res.cookie('cookies', cookie);
-
           res.redirect('homepage.html');
       }
     });

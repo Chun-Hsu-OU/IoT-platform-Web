@@ -246,21 +246,21 @@
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
                             <ul class="dropdown-menu" role="menu">
-                              <li><a href="#" onclick="add_rules('AIR_TEMPERATURE', '1', '較小值', '較大值')">空氣溫度</a>
+                              <li><a href="#" onclick="add_rules('AIR_TEMPERATURE', '1')">空氣溫度</a>
                               </li>
-                              <li><a href="#" onclick="add_rules('AIR_HUMIDITY', '1', '較小值', '較大值')">空氣濕度</a>
-                              </li>
-                              <li class="divider"></li>
-                              <li><a href="#" onclick="add_rules('SOIL_TEMPERATURE', '1', '較小值', '較大值')">土壤溫度</a>
-                              </li>
-                              <li><a href="#" onclick="add_rules('SOIL_HUMIDITY', '1', '較小值', '較大值')">土壤濕度</a>
-                              </li>
-                              <li><a href="#" onclick="add_rules('SOIL_EC', '1', '較小值', '較大值')">土壤電導度</a>
+                              <li><a href="#" onclick="add_rules('AIR_HUMIDITY', '1')">空氣濕度</a>
                               </li>
                               <li class="divider"></li>
-                              <li><a href="#" onclick="add_rules('LIGHT_INTENSITY', '1', '較小值', '較大值')">光照程度</a>
+                              <li><a href="#" onclick="add_rules('SOIL_TEMPERATURE', '1')">土壤溫度</a>
                               </li>
-                              <li><a href="#" onclick="add_rules('CO2', '1', '較小值', '較大值')">二氧化碳濃度</a>
+                              <li><a href="#" onclick="add_rules('SOIL_HUMIDITY', '1')">土壤濕度</a>
+                              </li>
+                              <li><a href="#" onclick="add_rules('SOIL_EC', '1')">土壤電導度</a>
+                              </li>
+                              <li class="divider"></li>
+                              <li><a href="#" onclick="add_rules('LIGHT_INTENSITY', '1')">光照程度</a>
+                              </li>
+                              <li><a href="#" onclick="add_rules('CO2', '1')">二氧化碳濃度</a>
                               </li>
                             </ul>
                           </div>
@@ -340,10 +340,10 @@
               for (let i = 0; i < body.Items[0].rules.length; i++) {
                 var block_num = body.Items[0].rules[i].block.toString();
                 if (check_children('rule_block_' + block_num)) {
-                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].min, body.Items[0].rules[i].max, body.Items[0].rules[i].todo_bot, body.Items[0].rules[i].todo_mid, body.Items[0].rules[i].todo_top);
+                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
                 } else {
                   add_rule_block(block_num);
-                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].min, body.Items[0].rules[i].max, body.Items[0].rules[i].todo_bot, body.Items[0].rules[i].todo_mid, body.Items[0].rules[i].todo_top);
+                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
                 }
               }
             });

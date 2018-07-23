@@ -293,17 +293,19 @@
 
         <script>
           var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
-          //var api_url = 'localhost:3000/';
+          var group = getCookie("group");
 
-          $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/Giantcabbage.JPG', function(data) {
-            document.getElementById("Item1").src = "data:image/png;base64," + data;
-          });
-          $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/asparagus.JPG', function(data) {
-            document.getElementById("Item2").src = "data:image/png;base64," + data;
-          });
-          $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/spinach.JPG', function(data) {
-            document.getElementById("Item3").src = "data:image/png;base64," + data;
-          });
+          if (group == '9626cc6c-fe6b-474f-8438-d850c461b9a0' || group == 'ccb6cff0-4d52-11e8-b0d8-83454b04a8a4') {
+            $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/Giantcabbage.JPG', function(data) {
+              document.getElementById("Item1").src = "data:image/png;base64," + data;
+            });
+            $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/asparagus.JPG', function(data) {
+              document.getElementById("Item2").src = "data:image/png;base64," + data;
+            });
+            $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/spinach.JPG', function(data) {
+              document.getElementById("Item3").src = "data:image/png;base64," + data;
+            });
+          }
         </script>
 
         <div class="col-md-4 col-sm-4 col-xs-4">
@@ -374,8 +376,6 @@
                   sensor_type = sensor_type.capitalize();
                 }
 
-                console.log(data);
-
                 if (data != 'No data') {
                   var value = JSON.parse(data);
 
@@ -424,51 +424,6 @@
             }
           });
         </script>
-
-        <div class="col-md-12 col-sm-12 col-xs-12">
-          <div class="x_panel">
-            <div class="x_title">
-              <h3>專家系統建議</h3>
-              <div class="title_right" id="expert_system_description">
-              </div>
-              <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
-                  <ul class="dropdown-menu" role="menu">
-                  </ul>
-                </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-              </ul>
-              <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-              <!-- Table row -->
-              <div class="row">
-                <div class="col-xs-12 table">
-                  <table id="expert_table" class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th>栽種特徵</th>
-                        <th style="width: 10%">建議最小值</th>
-                        <th style="width: 10%">建議最大值</th>
-                        <th style="width: 50%">詳細說明</th>
-                        <th style="width: 15%">專家名稱</th>
-                      </tr>
-                    </thead>
-                    <tbody id="expert_table_identity">
-                    </tbody>
-
-                  </table>
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-          </div>
-        </div>
 
         <div class="row">
           <div class="clearfix"></div>

@@ -64,42 +64,6 @@ function load_sensorhub_descriptions() {
 }
 
 function import_sensor_data() {
-  var product;
-
-  $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
-    var body = JSON.parse(data);
-    for (let j = 0; j < body.Count; j++) {
-      if (body.Items[j].groupId == group) {
-        product = body.Items[j].product;
-      }
-    }
-
-    $.get(api_url + 'api/expert/' + product, function(data) {
-      var body = JSON.parse(data);
-
-      for (let index = 0; index < body.Count; index++) {
-        if (body.Items[index].feature == "CO2") {
-          var sensor_type = "CO2";
-        } else if (body.Items[index].feature == "SOIL_EC") {
-          var sensor_type = "Soil EC";
-        } else if (body.Items[index].feature == "AVG_WIND_SPEED") {
-          var sensor_type = "Average Wind Speed"
-        } else {
-          var sensor_type = body.Items[index].feature.replace("_", " ").toLowerCase();
-          sensor_type = sensor_type.capitalize();
-        }
-        //console.log(body.Items[index]);
-
-        $('#expert_table_identity').append('<tr id="' + body.Items[index].feature + '_feature' + '">' +
-          '<td>' + sensor_type + '</td>' +
-          '<td>' + body.Items[index].min + '</td>' +
-          '<td>' + body.Items[index].max + '</td>' +
-          '<td>' + body.Items[index].description + '</td>' +
-          '<td>' + body.Items[index].expert + '</td>' +
-          '</tr>');
-      }
-    });
-  });
 
   $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
     var body = JSON.parse(data);
@@ -200,35 +164,6 @@ function draw_sensor_data(data, type, firstLoadTag) {
     } else {
       sensor_type = type.replace("_", " ").toLowerCase();
       sensor_type = sensor_type.capitalize();
-    }
-
-    if (firstLoadTag == 1) {
-      $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
-        check_expert_system();
-        async function check_expert_system() {
-          var body = JSON.parse(data);
-          for (let j = 0; j < body.Count; j++) {
-            if (body.Items[j].groupId == group) {
-              product = body.Items[j].product;
-            }
-          }
-          try {
-            $.get(api_url + 'api/expert/' + product, function(data) {
-              var body = JSON.parse(data);
-
-              for (let index = 0; index < body.Count; index++) {
-                if (type == body.Items[index].feature) {
-                  if (body.Items[index].max < max || body.Items[index].min > min) {
-                    $('#' + body.Items[index].feature + '_feature').css("background-color", "red");
-                  }
-                }
-              }
-            });
-          } catch (err) {
-            console.error(err);
-          }
-        }
-      });
     }
 
     if (type != "WIND_DIRECTION") {
