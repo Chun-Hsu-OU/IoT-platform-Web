@@ -79,26 +79,45 @@ function add_group() {
 }
 
 function del_from_db() {
-  var area = checkCookie("area");
-  var group = checkCookie("group");
-  var sensor = checkCookie("sensor");
+  var area = getCookie("area");
+  var group = getCookie("group");
+  var sensor = getCookie("sensor");
 
-  if (area == "blank") {
+  var area_del_selectBox = document.getElementById("area_del");
+  var area_Id = area_del_selectBox.options[area_del_selectBox.selectedIndex].value;
+
+  var group_del_selectBox = document.getElementById("group_del");
+  var group_Id = group_del_selectBox.options[group_del_selectBox.selectedIndex].value;
+
+  var sensor_del_selectBox = document.getElementById("sensor_del");
+  var sensor_Id = sensor_del_selectBox.options[sensor_del_selectBox.selectedIndex].value;
+
+  if (area_Id == 'NoSelection' || group_Id == 'NoSelection' || sensor_Id == 'NoSelection') {
+    console.log('No selection made');
+    alert("請確實填入所有選項");
+  } else if (area == "blank") {
     console.log("error");
+    alert("錯誤！\n請確實填入所有選項");
   } else if (group == "blank") {
     $.post(api_url + 'api/delete_item/area', {
       "ownerId": uuid,
       "areaId": area
+    }, function() {
+      location.reload();
     });
   } else if (sensor == "blank") {
     $.post(api_url + 'api/delete_item/group', {
       "areaId": area,
       "groupId": group
+    }, function() {
+      location.reload();
     });
   } else {
     $.post(api_url + 'api/delete_item/sensor', {
       "groupId": group,
       "sensorId": sensor
+    }, function() {
+      location.reload();
     });
   }
 }
@@ -125,6 +144,7 @@ function area_del_func() {
 function group_del_func() {
   var selectBox = document.getElementById("group_del");
   var Id = selectBox.options[selectBox.selectedIndex].value;
+  console.log(Id);
   if (Id == "None") {
     document.cookie = "group=blank";
   } else {
@@ -182,11 +202,16 @@ function load_area_in_modal() {
   $.get(api_url + 'api/area/' + uuid, function(data) {
     var body = JSON.parse(data);
 
+    $('#area_del').append('<option selected value="NoSelection">---請選擇---</option>');
     $('#area_del').append('<option value="None">None</option>');
+
+    $('#group_select').append('<option selected value="NoSelection">---請選擇---</option>');
     $('#group_select').append('<option value="None">None</option>');
     body.Items.forEach(function make(area) {
-      $('#area_del').append('<option value="' + area.areaId + '">' + area.name + '</option>');
-      $('#group_select').append('<option value="' + area.areaId + '">' + area.name + '</option>');
+      if (area.visible == 1) {
+        $('#area_del').append('<option value="' + area.areaId + '">' + area.name + '</option>');
+        $('#group_select').append('<option value="' + area.areaId + '">' + area.name + '</option>');
+      }
     });
   });
 }
@@ -200,9 +225,12 @@ function load_group_in_modal() {
     var body = JSON.parse(data);
     //console.log(body);
 
+    $('#group_del').append('<option selected value="NoSelection">---請選擇---</option>');
     $('#group_del').append('<option value="None">None</option>');
     body.Items.forEach(function make(group) {
-      $('#group_del').append('<option value="' + group.groupId + '">' + group.name + '</option>');
+      if (group.visible == 1) {
+        $('#group_del').append('<option value="' + group.groupId + '">' + group.name + '</option>');
+      }
     });
   });
 }
@@ -210,14 +238,15 @@ function load_group_in_modal() {
 function load_sensor_in_modal() {
   $('#sensor_del').empty();
   var groupId = getCookie("group");
-  console.log("group is " + groupId);
-  console.log(api_url + 'api/sensors_in_group/' + groupId);
   $.get(api_url + 'api/sensors_in_group/' + groupId, function(data) {
     var body = JSON.parse(data);
 
+    $('#sensor_del').append('<option selected value="NoSelection">---請選擇---</option>');
     $('#sensor_del').append('<option value="None">None</option>');
     body.Items.forEach(function make(sensor) {
-      $('#sensor_del').append('<option value="' + sensor.sensorId + '">' + sensor.name + '</option>');
+      if (sensor.visible == 1) {
+        $('#sensor_del').append('<option value="' + sensor.sensorId + '">' + sensor.name + '</option>');
+      }
     });
   });
 }

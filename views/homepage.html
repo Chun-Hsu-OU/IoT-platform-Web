@@ -273,19 +273,23 @@
                         $.get(api_url + 'api/area/' + uuid, function(data) {
                           var area_body = JSON.parse(data);
                           for (let i = 0; i < area_body.Count; i++) {
-                            $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[i].areaId, function(data) {
-                              var group_body = JSON.parse(data);
-                              for (let j = 0; j < group_body.Count; j++) {
-                                $('tbody').append('<tr>' +
-                                  '<td>' + area_body.Items[i].name + '</td>' +
-                                  '<td>' + area_body.Items[i].location + '</td>' +
-                                  '<td>' + group_body.Items[j].name + '</td>' +
-                                  '<td>' + group_body.Items[j].description + '</td>' +
-                                  '<td>' + timeConverter(group_body.Items[j].createdtime) + '</td>' +
-                                  '<td><a onclick="set_group_cookie(\'' + group_body.Items[j].groupId + '\')" href="#" data-toggle="modal" data-target="#set_sensorgroup_modal">編輯</a></td>' +
-                                  '</tr>');
-                              }
-                            });
+                            if (area_body.Items[i].visible == 1) {
+                              $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[i].areaId, function(data) {
+                                var group_body = JSON.parse(data);
+                                for (let j = 0; j < group_body.Count; j++) {
+                                  if (group_body.Items[j].visible == 1) {
+                                    $('tbody').append('<tr>' +
+                                      '<td>' + area_body.Items[i].name + '</td>' +
+                                      '<td>' + area_body.Items[i].location + '</td>' +
+                                      '<td>' + group_body.Items[j].name + '</td>' +
+                                      '<td>' + group_body.Items[j].description + '</td>' +
+                                      '<td>' + timeConverter(group_body.Items[j].createdtime) + '</td>' +
+                                      '<td><a onclick="set_group_cookie(\'' + group_body.Items[j].groupId + '\')" href="#" data-toggle="modal" data-target="#set_sensorgroup_modal">編輯</a></td>' +
+                                      '</tr>');
+                                  }
+                                }
+                              });
+                            }
                           }
                         });
 

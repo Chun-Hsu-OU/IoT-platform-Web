@@ -126,35 +126,41 @@ function draw_tree() {
 
       for (let area_count = 0; area_count < area_body.Count; area_count++) {
         //console.log(tree_data);
-        tree_data[0].children.push({
-          "name": area_body.Items[area_count].name,
-          "parent": account_body.name,
-          "id": area_body.Items[area_count].areaId,
-          "type": "area",
-          "children": []
-        });
+        if (area_body.Items[area_count].visible == 1) {
+          tree_data[0].children.push({
+            "name": area_body.Items[area_count].name,
+            "parent": account_body.name,
+            "id": area_body.Items[area_count].areaId,
+            "type": "area",
+            "children": []
+          });
+        }
         //console.log("area count = " + area_count + " areaID = " + area_body.Items[area_count].areaId);
 
         $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[area_count].areaId, function(data) {
           var group_body = JSON.parse(data);
           for (let group_count = 0; group_count < group_body.Count; group_count++) {
-            tree_data[0].children[area_count].children.push({
-              "name": group_body.Items[group_count].name,
-              "parent": area_body.Items[area_count].name,
-              "id": group_body.Items[group_count].groupId,
-              "type": "group",
-              "children": []
-            });
+            if (group_body.Items[group_count].visible == 1) {
+              tree_data[0].children[area_count].children.push({
+                "name": group_body.Items[group_count].name,
+                "parent": area_body.Items[area_count].name,
+                "id": group_body.Items[group_count].groupId,
+                "type": "group",
+                "children": []
+              });
+            }
 
             $.get(api_url + 'api/sensors_in_group/' + group_body.Items[group_count].groupId, function(data) {
               var sensor_body = JSON.parse(data);
               for (let sensor_count = 0; sensor_count < sensor_body.Count; sensor_count++) {
-                tree_data[0].children[area_count].children[group_count].children.push({
-                  "name": sensor_body.Items[sensor_count].name,
-                  "parent": group_body.Items[group_count].name,
-                  "id": sensor_body.Items[sensor_count].sensorId,
-                  "type": "sensor"
-                });
+                if (sensor_body.Items[sensor_count].visible) {
+                  tree_data[0].children[area_count].children[group_count].children.push({
+                    "name": sensor_body.Items[sensor_count].name,
+                    "parent": group_body.Items[group_count].name,
+                    "id": sensor_body.Items[sensor_count].sensorId,
+                    "type": "sensor"
+                  });
+                }
               }
             });
           }
