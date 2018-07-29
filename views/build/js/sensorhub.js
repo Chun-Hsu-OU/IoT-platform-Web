@@ -1,13 +1,12 @@
+var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
+
 var uuid = getCookie("checker");
 var group_id = getCookie("group");
-var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
 
 var toDate = new Date();
 
 var toEpoch = toDate.getTime();
 var fromEpoch = toEpoch - 86400000;
-// firstLoadTag allows the system to define whether it is loading current data or customized time interval
-var firstLoadTag = 1;
 
 function getCookie(cname) {
   var name = cname + "=";
@@ -86,7 +85,7 @@ function import_sensor_data() {
       });
 
       $.get(api_url + 'api/sensors_in_timeinterval/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
-        draw_sensor_data(data, sensor.sensorType, firstLoadTag);
+        draw_sensor_data(data, sensor.sensorType);
       });
 
       $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
@@ -100,7 +99,7 @@ function import_sensor_data() {
           for (let i = 0; i < body.Count; i++) {
             if (body.Items[i].visible == 1) {
               $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
-                draw_sensor_data(data, body.Items[i].sensorType, firstLoadTag = 0);
+                draw_sensor_data(data, body.Items[i].sensorType);
               });
             }
           }
@@ -111,7 +110,7 @@ function import_sensor_data() {
   });
 }
 
-function draw_sensor_data(data, type, firstLoadTag) {
+function draw_sensor_data(data, type) {
   main();
 
   async function main() {

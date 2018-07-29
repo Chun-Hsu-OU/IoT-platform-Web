@@ -1,7 +1,7 @@
+var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
 // Loads user name
 var uuid = getCookie("checker");
-var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
-//var api_url = 'http://localhost:3000/'
+
 var area = getCookie("area");
 var sensorhub = getCookie("group");
 

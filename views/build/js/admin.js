@@ -1,6 +1,4 @@
-//api_url = 'http://localhost:3000/'
-api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
-
+var api_url = 'http://ec2-13-125-205-170.ap-northeast-2.compute.amazonaws.com:3000/';
 function get_users(){
   $.get(api_url + 'api/account/all', function(data) {
     var body = JSON.parse(data);
