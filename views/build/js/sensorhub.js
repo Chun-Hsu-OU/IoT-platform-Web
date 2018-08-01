@@ -31,29 +31,11 @@ String.prototype.capitalize = function() {
   });
 };
 
-function change_limit() {
-  var max = document.getElementById("knob_max").value;
-  var min = document.getElementById("knob_min").value;
-  var group = getCookie("group");
-
-  $.get(api_url + 'api/control/search/' + group, function(data) {
-    var body = JSON.parse(data);
-    var controller = body.Items[0].controllerId;
-
-    $.post(api_url + 'api/control/limit', {
-      "controllerId": controller,
-      "max": max,
-      "min": min
-    });
-  });
-
-}
-
 function load_sensorhub_descriptions() {
   $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
     var body = JSON.parse(data);
     body.Items.forEach(function(hub) {
-      if (hub.groupId == sensorhub) {
+      if (hub.groupId == group_id) {
         //document.getElementById("sensorhub_page_title").innerHTML = hub.name;
         $("#sensorhub_page_title").append('<h1>' + hub.name + '</h1>');
         $("#sensorhub_description").append('<h2>' + hub.description + '</h2>');
@@ -87,28 +69,29 @@ function import_sensor_data() {
       $.get(api_url + 'api/sensors_in_timeinterval/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
         draw_sensor_data(data, sensor.sensorType);
       });
+    });
 
-      $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
-        var fromDate = new Date(picker.startDate.format('YYYY-MM-DD HH:mm'));
-        var fromEpoch = fromDate.getTime();
-        var toDate = new Date(picker.endDate.format('YYYY-MM-DD HH:mm'));
-        var toEpoch = toDate.getTime();
+    $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
 
-        $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
-          var body = JSON.parse(data);
-          for (let i = 0; i < body.Count; i++) {
-            if (body.Items[i].visible == 1) {
-              $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
-                draw_sensor_data(data, body.Items[i].sensorType);
-              });
-            }
+      var fromDate = new Date(picker.startDate.format('YYYY-MM-DD HH:mm'));
+      var fromEpoch = fromDate.getTime();
+      var toDate = new Date(picker.endDate.format('YYYY-MM-DD HH:mm'));
+      var toEpoch = toDate.getTime();
+
+      $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
+        var body = JSON.parse(data);
+        for (let i = 0; i < body.Count; i++) {
+          if (body.Items[i].visible == 1) {
+            $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
+              draw_sensor_data(data, body.Items[i].sensorType);
+            });
           }
-        });
-
+        }
       });
     });
   });
 }
+
 
 function draw_sensor_data(data, type) {
   main();
@@ -157,12 +140,12 @@ function draw_sensor_data(data, type) {
     };
 
     if (type == "CO2") {
-      sensor_type = "CO2";
+      var sensor_type = "CO2";
     } else if (type == "SOIL_EC") {
-      sensor_type = "Soil EC";
+      var sensor_type = "Soil EC";
     } else {
-      sensor_type = type.replace("_", " ").toLowerCase();
-      sensor_type = sensor_type.capitalize();
+      var sensor_type = type.replace("_", " ").toLowerCase();
+      var sensor_type = sensor_type.capitalize();
     }
 
     if (type != "WIND_DIRECTION") {

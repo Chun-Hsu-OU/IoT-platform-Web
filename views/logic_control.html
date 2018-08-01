@@ -351,49 +351,32 @@
             $('#auto_control').change(function() {
               if ($(this).prop('checked')) {
                 $('#control_by_user').hide();
-                $.get(api_url + 'api/search/control/group/' + group, function(data) {
-                  var body = JSON.parse(data);
-                  var controller = getCookie("controller");
-
-                  $.post(api_url + 'api/control/auto', {
-                    "controllerId": controller,
-                    "status": "ON"
-                  });
+                var controller = getCookie("controller");
+                $.post(api_url + 'api/control/auto', {
+                  "controllerId": controller,
+                  "status": "ON"
                 });
               } else {
                 $('#control_by_user').show();
-                $.get(api_url + 'api/search/control/group/' + group, function(data) {
-                  var body = JSON.parse(data);
-                  var controller = getCookie("controller");
-
-                  $.post(api_url + 'api/control/auto', {
-                    "controllerId": controller,
-                    "status": "OFF"
-                  });
+                var controller = getCookie("controller");
+                $.post(api_url + 'api/control/auto', {
+                  "controllerId": controller,
+                  "status": "OFF"
                 });
               }
             });
-
             $('#user_control').change(function() {
               if ($(this).prop('checked')) {
-                $.get(api_url + 'api/search/control/group/' + group, function(data) {
-                  var body = JSON.parse(data);
-                  var controller = getCookie("controller");
-
-                  $.post(api_url + 'api/control/power', {
-                    "controllerId": controller,
-                    "status": "ON"
-                  });
+                var controller = getCookie("controller");
+                $.post(api_url + 'api/control/power', {
+                  "controllerId": controller,
+                  "status": "ON"
                 });
               } else {
-                $.get(api_url + 'api/search/control/group/' + group, function(data) {
-                  var body = JSON.parse(data);
-                  var controller = getCookie("controller");
-
-                  $.post(api_url + 'api/control/power', {
-                    "controllerId": controller,
-                    "status": "OFF"
-                  });
+                var controller = getCookie("controller");
+                $.post(api_url + 'api/control/power', {
+                  "controllerId": controller,
+                  "status": "OFF"
                 });
               }
             });

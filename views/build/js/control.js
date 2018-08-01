@@ -42,12 +42,12 @@ function add_rules(TYPE, block_num, value = '數值', symbol = 'greater') {
 }
 
 function change_rules() {
-  var block = 0;
+  //var block = 0;
   var block_array = [];
   var controller = getCookie("controller");
   var rules = [];
 
-  block_change(block, block_array);
+  block_change(block_array);
 
   for (let block_num = 0; block_num < block_array.length; block_num++) {
     current_block = 'rule_block_' + block_array[block_num].toString();
@@ -155,7 +155,8 @@ function check_children(check) {
   return false;
 }
 
-function block_change(block, block_array) {
+function block_change(block_array) {
+  var block = 0;
   var children = document.getElementById("control-tab-1").children;
 
   for (let i = 0; i < children.length; i++) {
