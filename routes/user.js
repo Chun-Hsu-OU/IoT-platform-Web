@@ -9,7 +9,6 @@ var unlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
 
-
 var AWS = require("aws-sdk");
 const uuidv1 = require('uuid/v1');
 
