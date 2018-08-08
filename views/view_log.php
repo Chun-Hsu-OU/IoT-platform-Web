@@ -65,7 +65,7 @@
 </style>
 
 <script>
-  window.onload = make_area();
+  window.onload = load_sidebars();
   window.onload = get_name();
   window.onload = get_sensorhubs();
   window.onload = get_username();
