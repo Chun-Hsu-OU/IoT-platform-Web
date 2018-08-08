@@ -1,0 +1,85 @@
+.background{
+    background-color: #FFFFBB;
+}
+
+.center{
+    width: 450px;
+    margin:0px auto;
+}
+
+.right{
+    float: right;
+}
+
+.container {
+    position: relative;
+
+}
+
+.image_topright {
+    position: absolute;
+	left: 300px;
+    bottom: 50px;
+    font-size: 24px;
+}
+
+.video_topright {
+    position: absolute;
+	left: 300px;
+    bottom: 200px;
+    font-size: 24px;
+}
+
+form ol {
+    padding-left: 0;
+}
+
+form li, div > p {
+    background: #eee;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    list-style-type: none;
+    border: 1px solid black;
+}
+
+form img {
+    height: 64px;
+    order: 1;
+}
+
+form video {
+    height: 64px;
+    order: 1;
+}
+
+form p {
+    line-height: 32px;
+    padding-left: 10px;
+}
+
+.file {
+    background-color: #5599FF;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px ridge black;
+    font-size: 14px;
+    height: auto;
+    
+}
+
+.file:hover {
+    background-color: rgb(22, 74, 158);
+    color: white;
+}
+
+form label:active, form button:active {
+    background-color: #0D3F8F;
+    color: white;
+}
+
+.notify{
+    position: absolute;
+    top: 150px;
+    right: 50px;
+}
