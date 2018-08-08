@@ -35,7 +35,7 @@ function load_sidebars() {
 
     body.Items.forEach(function make(area) {
       if (area.visible == 1) {
-        $('#showPlace').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="area_page.html">' + area.name + '</a></li>');
+        $('#showPlace').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/area_page.html">' + area.name + '</a></li>');
       }
     });
   });
@@ -44,7 +44,7 @@ function load_sidebars() {
     var body = JSON.parse(data);
 
     body.Items.forEach(function make(controller) {
-      $('#showController').append('<li ><a onclick="set_controller_cookie(\'' + controller.controllerId + '\')" href="logic_control.html">' + controller.name + '</a></li>');
+      $('#showController').append('<li ><a onclick="set_controller_cookie(\'' + controller.controllerId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/logic_control.html">' + controller.name + '</a></li>');
     });
   });
 }

@@ -138,7 +138,7 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
+                <li><a data-toggle="modal" data-target="#Setting_Modal"><i class="fa fa-cog"></i> 使用者設定 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
@@ -839,7 +839,13 @@
               <div class="modal-body">
                 <form>
                   場域名稱:<br>
-                  <input type="text" id="area_name">
+                  <input type="text" id="new_area_name">
+                  <br><br>
+                  場域位置:<br>
+                  <input type="text" id="new_area_location">
+                  <br><br>
+                  場域地圖:<br>
+                  <input type="text" id="new_area_map">
                   <br><br>
                 </form>
               </div>
@@ -864,9 +870,18 @@
               <div class="modal-body">
                 <form>
                   感測器群組名稱:<br>
-                  <input type="text" id="group_name">
+                  <input type="text" id="new_group_name">
+                  <br><br>
+                  感測器群組描述:<br>
+                  <input type="text" id="new_group_description">
+                  <br><br>
+                  作物種類：<br>
+                  <select required="required" id="new_group_product">
+                    <option value="Green_Onion">蔥</option>
+                    <option value="Others">其他</option>
+                  </select>
                   <br><br> 建制於場域:<br>
-                  <select autofocus id="group_select" onchange="group_select_func(value);">
+                  <select required="required" id="group_select" onchange="group_select_func(value);">
                   </select>
                 </form>
               </div>
