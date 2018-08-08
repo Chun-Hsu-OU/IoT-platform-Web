@@ -109,7 +109,7 @@
             <div class="menu_section">
               <h3></h3>
               <ul class="nav side-menu">
-                <li><a href="homepage.html"><i class="fa fa-home"></i> 首頁 </a>
+                <li><a href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/homepage.html"><i class="fa fa-home"></i> 首頁 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
@@ -139,7 +139,7 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a onclick="del()" href="login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
+                <li><a onclick="del()" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
                 </li>
               </ul>
             </div>

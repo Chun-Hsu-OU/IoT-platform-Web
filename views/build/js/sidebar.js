@@ -168,9 +168,9 @@ function sensor_del_func() {
 function check_admin() {
   admin = getCookie("admin");
   if (admin == "aDmiN") {
-    window.location.replace('homepage_admin.html');
+    window.location.replace('http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/homepage_admin.html');
   } else {
-    window.location.replace('homepage.html');
+    window.location.replace('http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/homepage.html');
   }
 }
 
