@@ -7,11 +7,8 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var unlencodedParser = bodyParser.urlencoded({ extended: false });
 
-if (process.env.NODE_ENV == 'test') {
-  var api_url = 'http://localhost:3000/';
-} else {
-  var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-}
+var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
+
 
 var AWS = require("aws-sdk");
 const uuidv1 = require('uuid/v1');
