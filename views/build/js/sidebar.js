@@ -174,25 +174,35 @@ function check_admin() {
   }
 }
 
-function settings() {
+function initial_setting(){
   $.get(api_url + 'api/account/single/' + uuid, function(data) {
-    //console.log("Data = " + data);
-    var new_username = data.name;
-    var new_password = data.password;
-
-    if (document.getElementById("new_username").value) {
-      new_username = document.getElementById("new_username").value;
-    }
-    if (document.getElementById("new_password_confirm").value) {
-      new_password = document.getElementById("new_password_confirm").value;
-    }
-
-    $.post(api_url + 'api/account/settings', {
-      "uuid": uuid,
-      "name": new_username,
-      "password": new_password
-    });
+    document.getElementById("new_username").value = data.name;
+    document.getElementById("new_password").value = "";
+    document.getElementById("new_password_confirm").value = "";
   });
+}
+
+function settings() {
+    var new_username = document.getElementById("new_username").value;
+    var new_password = document.getElementById("new_password").value;
+    var new_password_confirm = document.getElementById("new_password_confirm").value;
+    //檢查所有欄位都有值
+    if (new_username && new_password && new_password_confirm) {
+      //檢查密碼和確認密碼是否一樣
+      if(new_password == new_password_confirm){
+        $.post(api_url + 'api/account/settings', {
+          "uuid": uuid,
+          "name": new_username,
+          "password": new_password
+        },function(){
+          alert("修改使用者資料完成！");
+        });
+      }else{
+        alert("確認密碼與密碼不相同，請重新輸入");
+      }
+    }else{
+      alert("請確實填入所有欄位");
+    }
 }
 
 function load_area_in_modal() {
