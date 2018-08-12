@@ -80,6 +80,7 @@ function add_group() {
       "description": new_group_description,
       "product": new_group_product
     },function(){
+      alert("感測器群組新增成功！");
       location.reload();
     });
   }else{
@@ -208,6 +209,7 @@ function settings() {
           "password": new_password
         },function(){
           alert("修改使用者資料完成！");
+          location.reload();
         });
       }else{
         alert("確認密碼與密碼不相同，請重新輸入");
