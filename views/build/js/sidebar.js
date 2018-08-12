@@ -67,14 +67,26 @@ function add_area() {
 function add_group() {
   var new_group_name = document.getElementById("new_group_name").value;
   var new_group_description = document.getElementById("new_group_description").value;
-  var new_group_product = document.getElementById("new_group_product").value;
+  var new_group_product_selectBox = document.getElementById("new_group_product");
+  var new_group_product = new_group_product_selectBox.options[new_group_product_selectBox.selectedIndex].value;
+  var group_select_selectBox = document.getElementById("group_select");
+  var group_select = group_select_selectBox.options[group_select_selectBox.selectedIndex].value;
 
-  $.post(api_url + 'api/add/sensorGroup', {
-    "areaId": getCookie("area"),
-    "name": new_group_name,
-    "description": new_group_description,
-    "product": new_group_product
-  });
+  //檢查每個欄位都有值
+  if(new_group_name && new_group_description && new_group_product!="NoSelection" && group_select!="NoSelection"){
+    $.post(api_url + 'api/add/sensorGroup', {
+      "areaId": getCookie("area"),
+      "name": new_group_name,
+      "description": new_group_description,
+      "product": new_group_product
+    },function(){
+      location.reload();
+    });
+  }else{
+    alert("請確實填入所有欄位");
+  }
+
+  
 }
 
 function del_from_db() {
@@ -215,7 +227,7 @@ function load_area_in_modal() {
     $('#area_del').append('<option value="None">None</option>');
 
     $('#group_select').append('<option selected value="NoSelection">---請選擇---</option>');
-    $('#group_select').append('<option value="None">None</option>');
+    // $('#group_select').append('<option value="None">None</option>');
     body.Items.forEach(function make(area) {
       if (area.visible == 1) {
         $('#area_del').append('<option value="' + area.areaId + '">' + area.name + '</option>');

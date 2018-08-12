@@ -125,39 +125,55 @@ function draw_tree() {
     $.get(api_url + 'api/area/' + uuid, function(data) {
       var area_body = JSON.parse(data);
 
-      for (let area_count = 0; area_count < area_body.Count; area_count++) {
-        //console.log(tree_data);
+      var area_visible = [];
+      var area_index = 0;
+      for(let area_count = 0; area_count < area_body.Count; area_count++){
         if (area_body.Items[area_count].visible == 1) {
-          tree_data[0].children.push({
-            "name": area_body.Items[area_count].name,
-            "parent": account_body.name,
-            "id": area_body.Items[area_count].areaId,
-            "type": "area",
-            "children": []
-          });
+          area_visible[area_index] = area_count;
+          area_index++;
         }
-        //console.log("area count = " + area_count + " areaID = " + area_body.Items[area_count].areaId);
+      }
 
-        $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[area_count].areaId, function(data) {
+      for (let area_count = 0; area_count < area_visible.length; area_count++) {
+        var current_area = area_body.Items[area_visible[area_count]];
+        tree_data[0].children.push({
+          "name": current_area.name,
+          "parent": account_body.name,
+          "id": current_area.areaId,
+          "type": "area",
+          "children": []
+        });
+
+        $.get(api_url + 'api/sensorgroup_in_area/' + current_area.areaId, function(data) {
           var group_body = JSON.parse(data);
-          for (let group_count = 0; group_count < group_body.Count; group_count++) {
-            if (group_body.Items[group_count].visible == 1) {
-              tree_data[0].children[area_count].children.push({
-                "name": group_body.Items[group_count].name,
-                "parent": area_body.Items[area_count].name,
-                "id": group_body.Items[group_count].groupId,
-                "type": "group",
-                "children": []
-              });
-            }
 
-            $.get(api_url + 'api/sensors_in_group/' + group_body.Items[group_count].groupId, function(data) {
+          var group_visible = [];
+          var group_index = 0;
+          for(let group_count = 0; group_count < group_body.Count; group_count++){
+            if (group_body.Items[group_count].visible == 1) {
+              group_visible[group_index] = group_count;
+              group_index++;
+            }
+          }
+
+          for (let group_count = 0; group_count < group_visible.length; group_count++) {
+            var current_group = group_body.Items[group_visible[group_count]];
+              
+            tree_data[0].children[area_count].children.push({
+              "name": current_group.name,
+              "parent": current_area.name,
+              "id": current_group.groupId,
+              "type": "group",
+              "children": []
+            });
+
+            $.get(api_url + 'api/sensors_in_group/' + current_group.groupId, function(data) {
               var sensor_body = JSON.parse(data);
               for (let sensor_count = 0; sensor_count < sensor_body.Count; sensor_count++) {
                 if (sensor_body.Items[sensor_count].visible) {
                   tree_data[0].children[area_count].children[group_count].children.push({
                     "name": sensor_body.Items[sensor_count].name,
-                    "parent": group_body.Items[group_count].name,
+                    "parent": current_group.name,
                     "id": sensor_body.Items[sensor_count].sensorId,
                     "type": "sensor"
                   });

@@ -443,6 +443,7 @@
                   <br><br>
                   作物種類：<br>
                   <select required="required" id="new_group_product">
+                    <option value="NoSelection">---請選擇---</option>
                     <option value="Green_Onion">蔥</option>
                     <option value="Others">其他</option>
                   </select>
