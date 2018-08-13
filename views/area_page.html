@@ -52,6 +52,11 @@
   .count {
     font-size: 20px;
   }
+
+  #map {
+    height: 400px;  /* The height is 400 pixels */
+    width: 800px;  /* The width is the width of the web page */
+  }
 </style>
 
 <script>
@@ -220,6 +225,43 @@
               </div>
 
             </div>
+
+            <!--The div element for the map -->
+            <div id="map"></div>
+            <script>
+              // Initialize and add the map
+              function initMap() {
+                $.get(api_url + 'api/area/' + uuid, function (data, status) {
+                  var body = JSON.parse(data);
+                  body.Items.forEach(function make(area){
+                    if(area.areaId == getCookie("area")){
+                      if(area.longitude != "None" &&  area.latitude != "None"){
+                        console.log(parseFloat(area.longitude));
+                        console.log(parseFloat(area.latitude));
+                        // The location of Uluru
+                        var uluru = {lat: parseFloat(area.latitude), lng: parseFloat(area.longitude)};
+                        // The map, centered at Uluru
+                        var map = new google.maps.Map(
+                            document.getElementById('map'), {zoom: 17, center: uluru});
+                        // The marker, positioned at Uluru
+                        var marker = new google.maps.Marker({position: uluru, map: map});
+                      }
+                      else{
+                        $("#map").hide();
+                      }
+                    }
+                  });
+                });
+              }
+            </script>
+            <!--Load the API from the specified URL
+            * The async attribute allows the browser to render the page while the API loads
+            * The key parameter will contain your own API key (which is not needed for this tutorial)
+            * The callback parameter executes the initMap() function
+            -->
+            <script async defer
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSFUJehUd8mqfxuFCAY9zwXOHd3-9Wlmk&callback=initMap">
+            </script>
           </div>
         </div>
       </div>
@@ -240,11 +282,12 @@
                   場域名稱:<br>
                   <input type="text" id="new_area_name">
                   <br><br>
-                  場域位置:<br>
+                  場域地址:<br>
                   <input type="text" id="new_area_location">
                   <br><br>
-                  場域地圖:<br>
-                  <input type="text" id="new_area_map">
+                  場域經緯度:&nbsp;&nbsp;<input type="checkbox" id="enable_map" onclick="click_add_area_enable_map()" checked>關閉/開啟<br>
+                  經度:<input type="text" id="new_area_longitude" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  緯度:<input type="text" id="new_area_latitude" disabled>
                   <br><br>
                 </form>
               </div>
@@ -379,7 +422,10 @@
                         $('#area_setting_modify').prepend('場域名稱：<br>' +
                           '<input type="text" id="update_area_name" value="' + body.Items[area_num].name + '">' +
                           '<br><br>場域位置：<br>' +
-                          '<input type="text" id="update_area_location" value="' + body.Items[area_num].location + '">')
+                          '<input type="text" size="60" id="update_area_location" value="' + body.Items[area_num].location + '"><br><br>' +
+                          '場域經緯度:<br>' +
+                          '經度:<input type="text" id="update_longitude" value="'+ body.Items[area_num].longitude + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                          '緯度:<input type="text" id="update_latitude" value="'+ body.Items[area_num].latitude + '"><br><br>')
                       }
                     }
                   });

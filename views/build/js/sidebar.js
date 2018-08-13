@@ -49,18 +49,46 @@ function load_sidebars() {
   });
 }
 
+function click_add_area_enable_map(){
+  console.log(document.getElementById("enable_map").checked);
+  if(document.getElementById("enable_map").checked){
+    document.getElementById("new_area_longitude").disabled = true;
+    document.getElementById("new_area_latitude").disabled = true;
+  }else{
+    document.getElementById("new_area_longitude").disabled = false;
+    document.getElementById("new_area_latitude").disabled = false;
+  }
+}
+
 function add_area() {
   var new_area_name = document.getElementById("new_area_name").value;
   var new_area_location = document.getElementById("new_area_location").value;
-  var new_area_map = document.getElementById("new_area_map").value;
 
-  if (new_area_name != null && new_area_location != null && new_area_map != null) {
+  if (new_area_name && new_area_location) {
+    if(document.getElementById("new_area_longitude").disabled && document.getElementById("new_area_latitude").disabled){
+      var new_area_longitude = "None";
+      var new_area_latitude = "None";
+    }else{
+      var new_area_longitude = document.getElementById("new_area_longitude").value;
+      var new_area_latitude = document.getElementById("new_area_latitude").value;
+      if(new_area_longitude == "" || new_area_latitude == ""){
+        alert("請確實填入所有欄位");
+        return;
+      }
+    }
+    console.log("add area");
     $.post(api_url + 'api/add/area/', {
       "ownerId": uuid,
       "name": new_area_name,
       "location": new_area_location,
-      "map_location": new_area_map
+      "longitude": new_area_longitude,
+      "latitude": new_area_latitude
+    },function(){
+      alert("新增場域成功！");
+      location.reload();
     });
+  }else{
+    alert("請確實填入所有欄位");
   }
 }
 
@@ -115,6 +143,7 @@ function del_from_db() {
       "ownerId": uuid,
       "areaId": area
     }, function() {
+      alert("刪除 場域 成功!");
       location.reload();
     });
   } else if (sensor == "blank") {
@@ -122,6 +151,7 @@ function del_from_db() {
       "areaId": area,
       "groupId": group
     }, function() {
+      alert("刪除 感測器群組 成功!");
       location.reload();
     });
   } else {
@@ -129,6 +159,7 @@ function del_from_db() {
       "groupId": group,
       "sensorId": sensor
     }, function() {
+      alert("刪除 感測器 成功!");
       location.reload();
     });
   }
@@ -307,13 +338,17 @@ function update_sensorgroup_item() {
 function update_area_item() {
   var update_name = document.getElementById("update_area_name").value;
   var update_location = document.getElementById("update_area_location").value;
+  var update_longitude = document.getElementById("update_longitude").value;
+  var update_latitude = document.getElementById("update_latitude").value;
 
-  $.post(api_url + 'api/update/group', {
+  $.post(api_url + 'api/update/area', {
     "ownerId": getCookie("checker"),
     "areaId": getCookie("area"),
     "name": update_name,
-    "location": update_location
+    "location": update_location,
+    "longitude": update_longitude,
+    "latitude": update_latitude
   }, function() {
-    window.location.replace('homepage.html');
+    window.location.replace('area_page.html');
   });
 }
