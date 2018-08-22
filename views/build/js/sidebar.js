@@ -352,3 +352,22 @@ function update_area_item() {
     window.location.replace('area_page.html');
   });
 }
+
+function add_sensor_item() {
+  var add_name = document.getElementById("add_sensorname").value;
+  var add_type = document.getElementById("add_sensorType").value;
+  var add_number = document.getElementById("add_number").value;
+  var add_macAddr = document.getElementById("add_macAddr").value;
+  
+  $.post(api_url + 'api/add/sensor', {
+      "groupId": getCookie("group"),
+      "name": add_name,
+      "macAddr": add_macAddr,
+      "sensorType": add_type,
+      "num": add_number,
+      "ownerId": getCookie("checker")
+  }, function() {
+    alert("新增感測器 '" + add_name + "'成功！");
+    window.location.replace('sensorhub.html');
+  });
+}
