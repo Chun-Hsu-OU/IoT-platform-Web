@@ -370,63 +370,65 @@
           $.get(api_url + 'api/sensors_in_group/' + group, function(data) {
             var body = JSON.parse(data);
             for (let j = 0; j < body.Count; j++) {
-              $.get(api_url + 'api/sensors/' + body.Items[j].sensorType + '/' + body.Items[j].sensorId, function(data) {
-                if (body.Items[j].sensorType == "CO2") {
-                  var sensor_type = "CO2";
-                } else if (body.Items[j].sensorType == "SOIL_EC") {
-                  var sensor_type = "Soil EC";
-                } else if (body.Items[j].sensorType == "AVG_WIND_SPEED") {
-                  var sensor_type = "Average Wind Speed"
-                } else {
-                  var sensor_type = body.Items[j].sensorType.replace("_", " ").toLowerCase();
-                  sensor_type = sensor_type.capitalize();
-                }
-
-                if (data != 'No data') {
-                  var value = JSON.parse(data);
-
-                  if (body.Items[j].sensorType == "WIND_DIRECTION") {
-                    if (value.value == 0) {
-                      var val = "北";
-                    } else if (value.value == 1) {
-                      var val = "東北";
-                    } else if (value.value == 2) {
-                      var val = "東";
-                    } else if (value.value == 3) {
-                      var val = "東南";
-                    } else if (value.value == 4) {
-                      var val = "南";
-                    } else if (value.value == 5) {
-                      var val = "西南";
-                    } else if (value.value == 6) {
-                      var val = "西";
-                    } else if (value.value == 7) {
-                      var val = "西北";
-                    }
+              if(body.Items[j].visible == 1){
+                $.get(api_url + 'api/sensors/' + body.Items[j].sensorType + '/' + body.Items[j].sensorId, function(data) {
+                  if (body.Items[j].sensorType == "CO2") {
+                    var sensor_type = "CO2";
+                  } else if (body.Items[j].sensorType == "SOIL_EC") {
+                    var sensor_type = "Soil EC";
+                  } else if (body.Items[j].sensorType == "AVG_WIND_SPEED") {
+                    var sensor_type = "Average Wind Speed"
                   } else {
-                    var val = value.value;
+                    var sensor_type = body.Items[j].sensorType.replace("_", " ").toLowerCase();
+                    sensor_type = sensor_type.capitalize();
                   }
-                  $('#current_sensor_data').append('<div class="mail_list">' +
-                    '<div class="left">' +
-                    '<a onclick="set_sensors_cookie(\'' + body.Items[j].sensorId + '\')" href="#" data-toggle="modal" data-target="#set_sensor_modal"><i class="fa fa-cog"></a></i>' +
-                    '</div>' +
-                    '<div class="right">' +
-                    '<h3>' + body.Items[j].name + '<small>' + timeConverter(value.timestamp) + '</small></h3>' +
-                    '<p>' + sensor_type + ' : ' + val + '</p>' +
-                    '</div>' +
-                    '</div>');
-                } else {
-                  $('#current_sensor_data').append('<div class="mail_list">' +
-                    '<div class="left">' +
-                    '<a onclick="set_sensors_cookie(\'' + body.Items[j].sensorId + '\')" href="#" data-toggle="modal" data-target="#set_sensor_modal"><i class="fa fa-cog"></a></i>' +
-                    '</div>' +
-                    '<div class="right">' +
-                    '<h3>' + body.Items[j].name + '<small>' + 'No Signal' + '</small></h3>' +
-                    '<p>' + sensor_type + ' : ' + 'No Signal' + '</p>' +
-                    '</div>' +
-                    '</div>');
-                }
-              });
+
+                  if (data != 'No data') {
+                    var value = JSON.parse(data);
+
+                    if (body.Items[j].sensorType == "WIND_DIRECTION") {
+                      if (value.value == 0) {
+                        var val = "北";
+                      } else if (value.value == 1) {
+                        var val = "東北";
+                      } else if (value.value == 2) {
+                        var val = "東";
+                      } else if (value.value == 3) {
+                        var val = "東南";
+                      } else if (value.value == 4) {
+                        var val = "南";
+                      } else if (value.value == 5) {
+                        var val = "西南";
+                      } else if (value.value == 6) {
+                        var val = "西";
+                      } else if (value.value == 7) {
+                        var val = "西北";
+                      }
+                    } else {
+                      var val = value.value;
+                    }
+                    $('#current_sensor_data').append('<div class="mail_list">' +
+                      '<div class="left">' +
+                      '<a onclick="set_sensors_cookie(\'' + body.Items[j].sensorId + '\')" href="#" data-toggle="modal" data-target="#set_sensor_modal"><i class="fa fa-cog"></a></i>' +
+                      '</div>' +
+                      '<div class="right">' +
+                      '<h3>' + body.Items[j].name + '<small>' + timeConverter(value.timestamp) + '</small></h3>' +
+                      '<p>' + sensor_type + ' : ' + val + '</p>' +
+                      '</div>' +
+                      '</div>');
+                  } else {
+                    $('#current_sensor_data').append('<div class="mail_list">' +
+                      '<div class="left">' +
+                      '<a onclick="set_sensors_cookie(\'' + body.Items[j].sensorId + '\')" href="#" data-toggle="modal" data-target="#set_sensor_modal"><i class="fa fa-cog"></a></i>' +
+                      '</div>' +
+                      '<div class="right">' +
+                      '<h3>' + body.Items[j].name + '<small>' + 'No Signal' + '</small></h3>' +
+                      '<p>' + sensor_type + ' : ' + 'No Signal' + '</p>' +
+                      '</div>' +
+                      '</div>');
+                  }
+                });
+              }
             }
           });
         </script>
