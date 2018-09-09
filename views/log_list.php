@@ -250,8 +250,6 @@
                   <option value="10">10月</option>
                   <option value="11">11月</option>
                   <option value="12">12月</option>
-                  <option value="13"><?= date("Y/m/d H:i:s",$str->Items[$i]->set_time) ?></option>
-                  
                 </select>
               </div>
             </div>
