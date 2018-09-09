@@ -227,19 +227,94 @@
                     <span class="glyphicon glyphicon-plus"></span>新增日誌
                 </a>
             </div>
+            <form>
+            <div style="width: 450px">
+              <div class="form-group col-md-6 col-sm-6 col-xs-6">
+                <label for="month"><h4>查詢年份:</h4></label>
+                <select class="form-control" id="select_year">
+                </select>
+              </div>
+
+              <div class="form-group col-md-6 col-sm-6 col-xs-6">
+                <label for="month"><h4>查詢月份:</h4></label>
+                <select class="form-control" id="select_month">
+                  <option value="1">1月</option>
+                  <option value="2">2月</option>
+                  <option value="3">3月</option>
+                  <option value="4">4月</option>
+                  <option value="5">5月</option>
+                  <option value="6">6月</option>
+                  <option value="7">7月</option>
+                  <option value="8">8月</option>
+                  <option value="9">9月</option>
+                  <option value="10">10月</option>
+                  <option value="11">11月</option>
+                  <option value="12">12月</option>
+                  <option value="13"><?= date("Y/m/d H:i:s",$str->Items[$i]->set_time) ?></option>
+                  
+                </select>
+              </div>
+            </div>
+            </form>
+            <!-- 調整月份 -->
+            <script>
+              
+
+              $(document).ready(function(){
+                var d = new Date();
+                for(let i=2018;i<=d.getFullYear();i++){
+                  $("#select_year").append("<option value="+ i +">"+ i +"年</option>");
+                }
+
+                $("#select_month").val(d.getMonth()+1);
+                $("#select_month,#select_year").change(function(){
+                  $("#list").empty();
+                  $("#noData").remove();
+                  $.ajax({
+                    type: "POST",
+                    url: "adjust_date.php",
+                    data: {
+                      ownerId: "<?= $ownerId ?>",
+                      year: $("#select_year").val(),
+                      month: $("#select_month").val()
+                    },
+                    success: function(result){
+                      // alert(result);
+                      var data = JSON.parse(result);
+                      $("#list").append('<tr style="background-color: #CCDDFF"><th width="15%">場域</th><th width="15%">作物</th><th width="15%">工作項目</th><th width="15%">日期</th><th>功能</th></tr>');
+                      if(data.length == 0){
+                        $("#list").after("<div id='noData' style='text-align: center;font-size: 25px;color: red'>目前尚無資料</div>");
+                      }
+                      for(let i=0;i<data.length;i++){
+                        // console.log(data[i].area);
+                        var date = new Date(Number(data[i].set_time * 1000));
+                        var month = (Number(date.getMonth()+1) < 10 ? '0' : '')+(date.getMonth()+1);
+                        var day = (Number(date.getDate()) < 10 ? '0' : '')+date.getDate();
+
+                        $("#list").append("<tr><td>" + data[i].area + "</td><td>" + data[i].crop + "</td>" + 
+                        "<td>" + data[i].type + "</td><td>" + month + "/" + day + "</td>" + 
+                        "<td><a href='view_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-success'>" + 
+                        "<span class='glyphicon glyphicon-search'></span>查看</a>" + 
+                        "<a href='edit_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-primary'>" + 
+                        "<span class='glyphicon glyphicon-pencil'></span>編輯</a>" + 
+                        "<a href='delete_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-danger'>" + 
+                        "<span class='glyphicon glyphicon-remove'></span>刪除</a></td></tr>");
+                      }
+                    }
+                  })
+                });
+                  
+              });
+            </script>
 
             <div style="margin-top: 20px">
                 <div class="container">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="list">
                         <tr style="background-color: #CCDDFF">
-                            <th>場域</th>
-                            <th></th>
-                            <th>日誌項目</th>
-                            <th></th>
-                            <th>日期</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th width="15%">場域</th>
+                            <th width="15%">作物</th>
+                            <th width="15%">工作項目</th>
+                            <th width="15%">日期</th>
                             <th>功能</th>
                         </tr>
                         <?php
@@ -263,17 +338,16 @@
                             $str = json_decode($str);
                             // echo count($str->Items);
                             for($i=0;$i<count($str->Items);$i++){
-                                if($str->Items[$i]->visible == 1){
+                                $year = substr(date("Y/m/d H:i:s",$str->Items[$i]->set_time), 0, 4);
+                                $month = substr(date("Y/m/d H:i:s",$str->Items[$i]->set_time), 5, 2);
+                                
+                                if($str->Items[$i]->visible==1 && $month==date("m") && $year==date("Y")){
                         ?>
                         <tr>
                             <td><?= $str->Items[$i]->area ?></td>
-                            <td></td>
+                            <td><?= $str->Items[$i]->crop ?></td>
                             <td><?= $str->Items[$i]->type ?></td>
-                            <td></td>
                             <td><?= substr(date("Y/m/d H:i:s",$str->Items[$i]->set_time), 5, 5) ?></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                             <td>
                                 <a href="view_log.php?ownerId=<?= $ownerId ?>&timestamp=<?= $str->Items[$i]->timestamp ?>" class="btn btn-success">
                                     <span class="glyphicon glyphicon-search"></span>查看
