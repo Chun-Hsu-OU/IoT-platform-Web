@@ -337,14 +337,17 @@
                       <option value="桃園安親農場">桃園安親農場</option>
                       <option value="宜蘭三星蔥">宜蘭三星蔥</option>
                       <option value="旺山休閒農場">旺山休閒農場</option>
+                      <option value="other">其他</option>
                     </select>
                   </div>
                   <script>
-                    document.getElementById('area').style.display = "none";
                     function changeArea() {
-                      document.getElementById('area').style.display = "block";
-                      var area = document.getElementById("select_area").value;
-                      document.getElementById("area").value = area;
+                      if(document.getElementById("select_area").value == "other"){
+                        document.getElementById("area").value = "";
+                      }else{
+                        var area = document.getElementById("select_area").value;
+                        document.getElementById("area").value = area;
+                      }
                     }
                   </script>
                   <div class="clearfix"></div>
@@ -369,14 +372,17 @@
                       <option value="花生">花生</option>
                       <option value="棉花">棉花</option>
                       <option value="香蕉">香蕉</option>
+                      <option value="other">其他</option>
                     </select>
                   </div>
                   <script>
-                    document.getElementById('crop').style.display = "none";
                     function changeCrop() {
-                      document.getElementById('crop').style.display = "block";
-                      var crop = document.getElementById("select_crop").value;
-                      document.getElementById("crop").value = crop;
+                      if(document.getElementById("select_crop").value == "other"){
+                        document.getElementById("crop").value = "";
+                      }else{
+                        var crop = document.getElementById("select_crop").value;
+                        document.getElementById("crop").value = crop;
+                      }
                     }
                   </script>
                   <div class="clearfix"></div>
@@ -399,15 +405,17 @@
                       <option value="枝蔓修剪">枝蔓修剪</option>
                       <option value="人工授粉">人工授粉</option>
                       <option value="病蟲害防治">病蟲害防治</option>
-                      <option value="其他">其他</option>
+                      <option value="other">其他</option>
                     </select>
                   </div>
                   <script>
-                    document.getElementById('type').style.display = "none";
                     function changeType() {
-                      document.getElementById('type').style.display = "block";
-                      var type = document.getElementById("select_type").value;
-                      document.getElementById("type").value = type;
+                      if(document.getElementById("select_type").value == "other"){
+                        document.getElementById("type").value = "";
+                      }else{
+                        var type = document.getElementById("select_type").value;
+                        document.getElementById("type").value = type;
+                      }
                     }
                   </script>
                   <div class="clearfix"></div>
@@ -452,14 +460,17 @@
                       <option value="鏈鋸">鏈鋸</option>
                       <option value="整地後機械">整地後機械</option>
                       <option value="鑽孔機">鑽孔機</option>
+                      <option value="other">其他</option>
                     </select>
                   </div>
                   <script>
-                    document.getElementById('tool').style.display = "none";
                     function changeTool() {
-                      document.getElementById('tool').style.display = "block";
-                      var tool = document.getElementById("select_tool").value;
-                      document.getElementById("tool").value = tool;
+                      if(document.getElementById("select_tool").value == "other"){
+                        document.getElementById("tool").value = "";
+                      }else{
+                        var tool = document.getElementById("select_tool").value;
+                        document.getElementById("tool").value = tool;
+                      }
                     }
                   </script>
                   <div class="clearfix"></div>
@@ -477,14 +488,17 @@
                       <option value="非洲菊斑潛蠅">非洲菊斑潛蠅</option>
                       <option value="水稻水象鼻蟲">水稻水象鼻蟲</option>
                       <option value="梨衰弱病">梨衰弱病</option>
+                      <option value="other">其他</option>
                     </select>
                   </div>
                   <script>
-                    document.getElementById('disease').style.display = "none";
                     function changeDisease() {
-                      document.getElementById('disease').style.display = "block";
-                      var disease = document.getElementById("select_disease").value;
-                      document.getElementById("disease").value = disease;
+                      if(document.getElementById("select_disease").value == "other"){
+                        document.getElementById("disease").value = "";
+                      }else{
+                        var disease = document.getElementById("select_disease").value;
+                        document.getElementById("disease").value = disease;
+                      }
                     }
                   </script>
                   <div class="clearfix"></div>
