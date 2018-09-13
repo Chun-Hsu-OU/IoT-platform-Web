@@ -28,3 +28,13 @@ function get_username() {
     document.getElementById("username").innerHTML = data.name;
   });
 }
+
+function get_area_name(){
+    $.get(api_url + 'api/area/' + uuid, function(data) {
+        //console.log(data);
+        var body = JSON.parse(data);
+        for(let i=0; i<body.Items.length; i++){
+            $("#select_area").prepend('<option value="' + body.Items[i].name + '">' + body.Items[i].name + '</option>');
+        }
+    });
+}
