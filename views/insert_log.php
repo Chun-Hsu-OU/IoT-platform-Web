@@ -252,19 +252,13 @@
                     <label for="area"><h4>場域:</h4></label>
                     <input type="text" class="form-control" id="area" placeholder="場域名稱" name="area" value="合勤頂樓" required>
                     <select class="form-control" id="select_area" onchange="changeArea()">
-                      <option value="other">其他</option>
                     </select>
                   </div>
                   <script>
                     document.getElementById('area').style.display = "none";
                     function changeArea() {
-                      if(document.getElementById("select_area").value == "other"){
-                        document.getElementById("area").value = "";
-                      }else{
-                        document.getElementById('area').style.display = "none";
-                        var area = document.getElementById("select_area").value;
-                        document.getElementById("area").value = area;
-                      }
+                      var area = document.getElementById("select_area").value;
+                      document.getElementById("area").value = area;
                     }
                   </script>
                   <div class="clearfix"></div>

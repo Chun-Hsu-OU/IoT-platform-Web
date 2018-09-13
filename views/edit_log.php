@@ -76,6 +76,7 @@
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
   window.onload = load_sensor_in_modal();
+  window.onload = get_area_name();
 </script>
 
  <!-- onload="checkCookie()" -->
@@ -333,21 +334,12 @@
                     <label for="area"><h4>場域:</h4></label>
                     <input type="text" class="form-control" id="area"  value="<?= $area ?>" placeholder="場域名稱" name="area" required>
                     <select class="form-control" id="select_area" onchange="changeArea()">
-                      <option value="合勤頂樓">合勤頂樓</option>
-                      <option value="桃園安親農場">桃園安親農場</option>
-                      <option value="宜蘭三星蔥">宜蘭三星蔥</option>
-                      <option value="旺山休閒農場">旺山休閒農場</option>
-                      <option value="other">其他</option>
                     </select>
                   </div>
                   <script>
                     function changeArea() {
-                      if(document.getElementById("select_area").value == "other"){
-                        document.getElementById("area").value = "";
-                      }else{
-                        var area = document.getElementById("select_area").value;
-                        document.getElementById("area").value = area;
-                      }
+                      var area = document.getElementById("select_area").value;
+                      document.getElementById("area").value = area;
                     }
                   </script>
                   <div class="clearfix"></div>

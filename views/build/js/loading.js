@@ -34,7 +34,7 @@ function get_area_name(){
         //console.log(data);
         var body = JSON.parse(data);
         for(let i=0; i<body.Items.length; i++){
-            $("#select_area").prepend('<option value="' + body.Items[i].name + '">' + body.Items[i].name + '</option>');
+            $("#select_area").append('<option value="' + body.Items[i].name + '">' + body.Items[i].name + '</option>');
         }
     });
 }
