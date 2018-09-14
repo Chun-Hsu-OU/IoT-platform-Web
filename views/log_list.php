@@ -288,9 +288,29 @@
                         var date = new Date(Number(data[i].set_time * 1000));
                         var month = (Number(date.getMonth()+1) < 10 ? '0' : '')+(date.getMonth()+1);
                         var day = (Number(date.getDate()) < 10 ? '0' : '')+date.getDate();
+                        //工作事項用圖來顯示
+                        if(data[i].type == "灌溉"){
+                          var type_imgORname = '<img src="images/irrigation.png">';
+                        }else if(data[i].type == "定植"){
+                          var type_imgORname = '<img src="images/field_planting.png">';
+                        }else if(data[i].type == "播種"){
+                          var type_imgORname = '<img src="images/sowing.png">';
+                        }else if(data[i].type == "施肥"){
+                          var type_imgORname = '<img src="images/fertilize.png">';
+                        }else{
+                          var type_imgORname = "";
+                        }
+                        
+                        var type_html = type_imgORname + "<div style='text-align: center;width: 50px'>" + data[i].type + "</div>";
+                        //作物沒資料就顯示"未設定作物名稱"
+                        if(typeof(data[i].crop) == "undefined"){
+                          var crop = "未設定作物名稱";
+                        }else{
+                          var crop = data[i].crop;
+                        }
 
-                        $("#list").append("<tr><td>" + data[i].area + "</td><td>" + data[i].crop + "</td>" + 
-                        "<td>" + data[i].type + "</td><td>" + month + "/" + day + "</td>" + 
+                        $("#list").append("<tr><td>" + data[i].area + "</td><td>" + crop + "</td>" + 
+                        "<td>" + type_html + "</td><td>" + month + "/" + day + "</td>" + 
                         "<td><a href='view_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-success'>" + 
                         "<span class='glyphicon glyphicon-search'></span>查看</a>" + 
                         "<a href='edit_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-primary'>" + 
@@ -357,10 +377,8 @@
                                 $type_imgORname = "";
                               }
 
-                              echo "<center>";
                               echo $type_imgORname;
-                              echo "</center>";
-                              echo "<div style='text-align: center'>";
+                              echo "<div style='text-align: center;width: 50px' >";
                               echo $str->Items[$i]->type;
                               echo "</div>";
                              ?>
