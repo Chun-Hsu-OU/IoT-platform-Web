@@ -344,7 +344,27 @@
                         <tr>
                             <td><?= $str->Items[$i]->area ?></td>
                             <td><?= $str->Items[$i]->crop ?></td>
-                            <td><?= $str->Items[$i]->type ?></td>
+                            <td><?php
+                              if($str->Items[$i]->type == "灌溉"){
+                                $type_imgORname = '<img src="images/irrigation.png">';
+                              }else if($str->Items[$i]->type == "定植"){
+                                $type_imgORname = '<img src="images/field_planting.png">';
+                              }else if($str->Items[$i]->type == "播種"){
+                                $type_imgORname = '<img src="images/sowing.png">';
+                              }else if($str->Items[$i]->type == "施肥"){
+                                $type_imgORname = '<img src="images/fertilize.png">';
+                              }else{
+                                $type_imgORname = "";
+                              }
+
+                              echo "<center>";
+                              echo $type_imgORname;
+                              echo "</center>";
+                              echo "<div style='text-align: center'>";
+                              echo $str->Items[$i]->type;
+                              echo "</div>";
+                             ?>
+                            </td>
                             <td><?= substr(date("Y/m/d H:i:s",$str->Items[$i]->set_time), 5, 5) ?></td>
                             <td>
                                 <a href="view_log.php?ownerId=<?= $ownerId ?>&timestamp=<?= $str->Items[$i]->timestamp ?>" class="btn btn-success">
