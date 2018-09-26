@@ -74,6 +74,11 @@ function change_rules() {
     "controllerId": controller,
     "status": rules
   });
+
+  $.post(api_url + 'api/control/rule/length', {
+    "controllerId": controller,
+    "status": rules.length
+  });
   //console.log(rules);
 }
 
