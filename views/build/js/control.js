@@ -92,7 +92,7 @@ function change_action() {
 
   $.post(api_url + 'api/control/work_cycle', {
     "controllerId": controller,
-    "status": document.getElementById('turnOnfor').value
+    "status": document.getElementById('turnOnfor').value * 1000
   });
 }
 
