@@ -44,7 +44,9 @@ function load_sidebars() {
     var body = JSON.parse(data);
 
     body.Items.forEach(function make(controller) {
-      $('#showController').append('<li ><a onclick="set_controller_cookie(\'' + controller.controllerId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/logic_control.html">' + controller.name + '</a></li>');
+      if(controller.visible == 1){
+        $('#showController').append('<li ><a onclick="set_controller_cookie(\'' + controller.controllerId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/logic_control.html">' + controller.name + '</a></li>');
+      }
     });
   });
 }
@@ -114,8 +116,29 @@ function add_group() {
   }else{
     alert("請確實填入所有欄位");
   }
+}
 
-  
+function add_controller() {
+  var new_controller_name = document.getElementById("new_controller_name").value;
+  var controller_in_area_selectBox = document.getElementById("controller_in_area");
+  var controller_in_area = controller_in_area_selectBox.options[controller_in_area_selectBox.selectedIndex].value;
+  var controller_in_group_selectBox = document.getElementById("controller_in_group");
+  var controller_in_group = controller_in_group_selectBox.options[controller_in_group_selectBox.selectedIndex].value;
+
+  //檢查每個欄位都有值
+  if(new_controller_name && controller_in_area!="NoSelection" && controller_in_group!="NoSelection"){
+    $.post(api_url + 'api/add/control', {
+      "ownerId": getCookie("checker"),
+      "areaId": getCookie("area"),
+      "groupId": getCookie("group"),
+      "name": new_controller_name
+    },function(){
+      alert("控制器 '"+ new_controller_name +"' 新增成功！");
+      location.reload();
+    });
+  }else{
+    alert("請確實填入所有欄位");
+  }
 }
 
 function del_from_db() {
@@ -172,6 +195,22 @@ function group_select_func() {
   //console.log(getCookie("area"));
 }
 
+function controller_area_select(){
+  //console.log("in area_del_function");
+  var selectBox = document.getElementById("controller_in_area");
+  var Id = selectBox.options[selectBox.selectedIndex].value;
+
+  set_area_cookie(Id);
+  load_group_in_modal();
+}
+
+function controller_group_select(){
+  var selectBox = document.getElementById("controller_in_group");
+  var Id = selectBox.options[selectBox.selectedIndex].value;
+
+  document.cookie = "group=" + Id;
+}
+
 function area_del_func() {
   //console.log("in area_del_function");
   var selectBox = document.getElementById("area_del");
@@ -206,8 +245,6 @@ function sensor_del_func() {
     document.cookie = "sensor=" + Id;
   }
 }
-
-
 
 function check_admin() {
   admin = getCookie("admin");
@@ -253,6 +290,7 @@ function settings() {
 function load_area_in_modal() {
   $('#area_del').empty();
   $('#group_select').empty();
+  $('#controller_in_area').empty();
   $.get(api_url + 'api/area/' + uuid, function(data) {
     var body = JSON.parse(data);
 
@@ -261,10 +299,13 @@ function load_area_in_modal() {
 
     $('#group_select').append('<option selected value="NoSelection">---請選擇---</option>');
     // $('#group_select').append('<option value="None">None</option>');
+
+    $('#controller_in_area').append('<option selected value="NoSelection">---請選擇---</option>');
     body.Items.forEach(function make(area) {
       if (area.visible == 1) {
         $('#area_del').append('<option value="' + area.areaId + '">' + area.name + '</option>');
         $('#group_select').append('<option value="' + area.areaId + '">' + area.name + '</option>');
+        $('#controller_in_area').append('<option value="' + area.areaId + '">' + area.name + '</option>');
       }
     });
   });
@@ -272,6 +313,7 @@ function load_area_in_modal() {
 
 function load_group_in_modal() {
   $('#group_del').empty();
+  $('#controller_in_group').empty();
   //console.log(areaId);
   var areaId = getCookie("area");
   console.log(api_url + 'api/sensorgroup_in_area/' + areaId);
@@ -281,9 +323,12 @@ function load_group_in_modal() {
 
     $('#group_del').append('<option selected value="NoSelection">---請選擇---</option>');
     $('#group_del').append('<option value="None">None</option>');
+
+    $('#controller_in_group').append('<option selected value="NoSelection">---請選擇---</option>');
     body.Items.forEach(function make(group) {
       if (group.visible == 1) {
         $('#group_del').append('<option value="' + group.groupId + '">' + group.name + '</option>');
+        $('#controller_in_group').append('<option value="' + group.groupId + '">' + group.name + '</option>');
       }
     });
   });
