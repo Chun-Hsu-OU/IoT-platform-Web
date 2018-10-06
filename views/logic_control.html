@@ -48,6 +48,10 @@
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/loading.js"></script>
   <script src="../build/js/control.js"></script>
+  <!-- dateRangePicker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 </head>
 <style>
   .x_title span {
@@ -241,6 +245,82 @@
                         <div style="border-width:3px;border-style:dashed;border-color:#339933;padding:5px;">
                           <!-- Split button -->
                           <div class="btn-group" id="add_rule_block_1">
+                            <!-- <form action="/action_page.php">
+                              <input type="checkbox" name="vehicle" value="1">星期一
+                              <input type="checkbox" name="vehicle" value="2" checked>星期二
+                              <input type="checkbox" name="vehicle" value="3" checked>星期三
+                              <input type="checkbox" name="vehicle" value="4" checked>星期四
+                              <input type="checkbox" name="vehicle" value="5" checked>星期五
+                              <input type="checkbox" name="vehicle" value="6" checked>星期六
+                              <input type="checkbox" name="vehicle" value="7" checked>星期日<br>
+                            </form>
+                            <div class='col-sm-2'>
+                            判斷區間:
+                            </div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class='col-sm-3'>
+                                        <div class="form-group">
+                                            <span class='input-group date' id='datetimepicker3'>
+                                                
+                                                <input type='text' class="form-control" value="8:00 AM"/>
+          
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class='col-sm-1'>
+                                        ▬▬
+                                    </div>
+                                    <div class='col-sm-3'>
+                                        <div class="form-group">
+                                            <div class='input-group date' id='datetimepicker4'>
+                                                <input type='text' class="form-control" value="10:00 AM"/>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            $('#datetimepicker3').datetimepicker({
+                                                format: 'LT'
+                                            });
+                                            $('#datetimepicker4').datetimepicker({
+                                                format: 'LT'
+                                            });
+                                        });
+                                    </script>
+                                    <div class="clearfix"></div>
+                                    <div class='col-sm-2'>
+                                    啟動時間:
+                                    </div>
+                                    <div class="form-group col-sm-2">
+                                      <select class="form-control" id="select_time">
+                                          <option value="1">1</option>
+                                          <option value="5">5</option>
+                                          <option value="10">10</option>
+                                          <option value="15">15</option>
+                                          <option value="20">20</option>
+                                          <option value="25">25</option>
+                                          <option value="30">30</option>
+                                          <option value="35">35</option>
+                                          <option value="40">40</option>
+                                          <option value="45">45</option>
+                                          <option value="50">50</option>
+                                          <option value="55">55</option>
+                                          <option value="60">60</option>
+                                      </select>
+                                    </div>
+                                    <div class='col-sm-1'>
+                                        分鐘
+                                    </div>
+                                </div>
+                            </div>
+                          <div class="clearfix"></div> -->
                             <button type="button" class="btn btn-success">新增規則</button>
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
@@ -289,7 +369,7 @@
                     <div role="tabpanel" class="tab-pane fade" id="control-tab-3" aria-labelledby="profile-tab-2">
                       <div class="row">
                         <form>
-                          <p><b> 自動控制系統 </b></p>
+                          <p><b> 自動控制開關 </b></p>
                           <label class="switch">
               						  <input type="checkbox" id="auto_control" name="auto_control">
               						  <span class="slider round"></span>
@@ -302,7 +382,19 @@
               						  <span class="slider round"></span>
               						</label>
                         </form>
-
+                        <form id="control_by_clock">
+                          <p><b> 時間控制開關 </b></p>
+                          <label class="switch">
+              						  <input type="checkbox" id="clock_control" name="clock_control">
+              						  <span class="slider round"></span>
+              						</label>
+                        </form>
+                        <div id="clock_group">
+                        </div>
+                        <div id="clock_buttons">
+                          <button type="button" class="btn btn-success" onclick="add_clock()">新增時間</button>
+                          <button type="button" class="btn btn-primary" onclick="submit_clock()">確定</button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -313,7 +405,7 @@
                     </li>
                     <li role="presentation" class=""><a href="#control-tab-2" role="tab" id="profile-tab-1" data-toggle="tab" aria-expanded="false">動作設定</a>
                     </li>
-                    <li role="presentation" class=""><a href="#control-tab-3" role="tab" id="profile-tab-2" data-toggle="tab" aria-expanded="false">自動控制</a>
+                    <li role="presentation" class=""><a href="#control-tab-3" role="tab" id="profile-tab-2" data-toggle="tab" aria-expanded="false">開關設定</a>
                     </li>
                   </ul>
                 </div>
@@ -338,6 +430,25 @@
                 $('#turnOnfor_div').hide();
               }
 
+              // document.getElementById("add_rule_block_1").children[2].innerHTML = "";
+
+              //---- 鬧鐘 -----
+              //初始化鬧鐘開關和設定
+              if(body.Items[0].clock == "ON"){
+                $('#clock_control').prop("checked",true);
+                $("#clock_group").show();
+                $("#clock_buttons").show();
+              }else{
+                $('#clock_control').prop("checked",false);
+                $("#clock_group").hide();
+                $("#clock_buttons").hide();
+              }
+
+              for(let i = 0; i < body.Items[0].clock_setting.length; i++){
+                add_clock(body.Items[0].clock_setting[i]);
+              }
+              //---- 鬧鐘 -----
+
               for (let i = 0; i < body.Items[0].rules.length; i++) {
                 var block_num = body.Items[0].rules[i].block.toString();
                 if (check_children('rule_block_' + block_num)) {
@@ -347,18 +458,20 @@
                   add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
                 }
               }
+
+              
             });
 
             $('#auto_control').change(function() {
               if ($(this).prop('checked')) {
-                $('#control_by_user').hide();
+                // $('#control_by_user').hide();
                 var controller = getCookie("controller");
                 $.post(api_url + 'api/control/auto', {
                   "controllerId": controller,
                   "status": "ON"
                 });
               } else {
-                $('#control_by_user').show();
+                // $('#control_by_user').show();
                 var controller = getCookie("controller");
                 $.post(api_url + 'api/control/auto', {
                   "controllerId": controller,
@@ -381,6 +494,25 @@
                 });
               }
             });
+            $('#clock_control').change(function() {
+              var controller = getCookie("controller");
+              if ($(this).prop('checked')) {
+                $("#clock_group").show();
+                $("#clock_buttons").show();
+                $.post(api_url + 'api/control/clock', {
+                  "controllerId": controller,
+                  "status": "ON"
+                });
+              }else{
+                $("#clock_group").hide();
+                $("#clock_buttons").hide();
+                $.post(api_url + 'api/control/clock', {
+                  "controllerId": controller,
+                  "status": "OFF"
+                });
+              }
+            });
+            // $('#clock_control').prop("checked",true)
 
             function update_control_func() {
               var index = document.getElementById('update_control').value;

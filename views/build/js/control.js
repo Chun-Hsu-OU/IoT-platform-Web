@@ -174,3 +174,98 @@ function block_change(block_array) {
     }
   }
 }
+
+function add_clock(clock_record = 0){
+  var clock_group = $("#clock_group").children();
+  var clock_num = 1;
+  if(clock_group.length != 0){
+    clock_num = parseInt(clock_group[clock_group.length - 1].id.slice(6)) + 1;
+  }
+
+  $("#clock_group").append('<div id="clock_'+ clock_num +'">'+
+    '<div class="col-sm-3">'+
+      '選擇星期:&nbsp&nbsp'+
+      '<select>'+
+        '<option value="1">星期一</option>'+
+        '<option value="2">星期二</option>'+
+        '<option value="3">星期三</option>'+
+        '<option value="4">星期四</option>'+
+        '<option value="5">星期五</option>'+
+        '<option value="6">星期六</option>'+
+        '<option value="7">星期日</option>'+
+      '</select>'+
+    '</div>'+
+    '<div class="col-sm-1">'+
+      '開始於:'+
+    '</div>'+
+    '<div class="col-sm-3">'+
+      '<div class="input-group date timepicker">'+
+        '<input type="text" class="form-control" value="10:00 AM"/>'+
+        '<span class="input-group-addon">'+
+          '<span class="glyphicon glyphicon-time"></span>'+
+        '</span>'+
+      '</div>'+
+    '</div>'+
+    '<div class="col-sm-1"></div>'+
+    '<div class="col-sm-3">'+
+      '啟動時間:&nbsp&nbsp'+
+      '<select>'+
+        '<option value="1">1分鐘</option>'+
+        '<option value="5">5分鐘</option>'+
+        '<option value="10">10分鐘</option>'+
+        '<option value="15">15分鐘</option>'+
+        '<option value="20">20分鐘</option>'+
+        '<option value="25">25分鐘</option>'+
+        '<option value="30">30分鐘</option>'+
+        '<option value="35">35分鐘</option>'+
+        '<option value="40">40分鐘</option>'+
+        '<option value="45">45分鐘</option>'+
+        '<option value="50">50分鐘</option>'+
+        '<option value="55">55分鐘</option>'+
+        '<option value="60">60分鐘</option>'+
+      '</select>'+
+    '</div>'+
+    '<button type="button" onclick="delete_clock('+ clock_num +')" class="btn btn-danger btn-sm">刪除</button>'+
+    '<div class="clearfix"></div>'+
+    '<hr>'+
+  '</div>');
+
+  //表示是來自資料庫的鬧鐘設定
+  if(clock_record != 0){
+    var clock_group = $("#clock_"+clock_num).children();
+    clock_group[0].children[0].value = clock_record.weekday;
+    clock_group[2].children[0].children[0].value = clock_record.start;
+    clock_group[4].children[0].value = clock_record.duration;
+  }
+
+  //一定要加，讓新加進來的timepicker也可以選時間
+  $('.timepicker').datetimepicker({
+    format: 'LT'
+  });
+}
+
+function delete_clock(clock_num){
+  $("#clock_"+clock_num).remove();
+}
+
+function submit_clock(){
+  var clock_group = $("#clock_group").children();
+  var clocks = [];
+  for(let i=0; i<clock_group.length; i++){
+    var clock_items = clock_group[i].children;
+    var new_clock = {
+      "weekday": clock_items[0].children[0].value,
+      "start": clock_items[2].children[0].children[0].value,
+      "duration": clock_items[4].children[0].value
+    };
+    clocks.push(new_clock);
+  }
+  console.log(clocks);
+  //將鬧鐘設定傳到資料庫
+  $.post(api_url + 'api/control/clock_setting', {
+    "controllerId": getCookie("controller"),
+    "status": clocks
+  },function(){
+    alert("時間設定完成！");
+  });
+}

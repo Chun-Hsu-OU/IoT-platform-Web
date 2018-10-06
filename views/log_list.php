@@ -265,6 +265,7 @@
                   $("#select_year").append("<option value="+ i +">"+ i +"年</option>");
                 }
 
+                $("#select_year").val(d.getFullYear());
                 $("#select_month").val(d.getMonth()+1);
                 $("#select_month,#select_year").change(function(){
                   $("#list").empty();
