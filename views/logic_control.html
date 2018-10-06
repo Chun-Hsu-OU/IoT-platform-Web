@@ -240,7 +240,7 @@
                 <!-- panel-->
                 <div class="col-xs-9">
                   <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane fade active in" id="control-tab-1" aria-labelledby="home-tab">
+                    <div role="tabpanel" class="tab-pane fade" id="control-tab-1" aria-labelledby="home-tab">
                       <div id="rule_block_1">
                         <div style="border-width:3px;border-style:dashed;border-color:#339933;padding:5px;">
                           <!-- Split button -->
@@ -351,39 +351,45 @@
                       <button id="submit_change_rule" type="button" class="btn btn-primary" onclick="change_rules()" style="float:right">確定</button>
                       <button type="button" class="btn btn-success" onclick="add_rule_block()" style="float:right">新增區塊</button>
                     </div>
-                    <div role="tabpanel" class="tab-pane fade" id="control-tab-2" aria-labelledby="profile-tab-1">
-                      <!-- bar -->
-                      開關選項：<br>
-                      <select required="required" onchange="update_control_func()" id="update_control">
-                        <option value="ON_for">開啟一定時間</option>
-                        <option value="ON_until">開啟直到符合規則</option>
-                      </select><br><br>
-                      <div id="turnOnfor_div">
-                        時間長度(秒)：
-                        <br>
-                        <input type="text" id="turnOnfor" value="">
-                      </div>
-                      <!-- bar -->
-                      <button type="button" class="btn btn-primary" onclick="change_action()" style="float:right">確定</button>
-                    </div>
-                    <div role="tabpanel" class="tab-pane fade" id="control-tab-3" aria-labelledby="profile-tab-2">
+                    <div role="tabpanel" class="tab-pane fade active in" id="control-tab-2" aria-labelledby="profile-tab-2">
                       <div class="row">
-                        <form>
-                          <p><b> 自動控制開關 </b></p>
+                        <form id="control_by_rule">
+                          <p style="font-size: 16px"><b> 自動控制開關 (搭配規則設定) </b></p>
                           <label class="switch">
               						  <input type="checkbox" id="auto_control" name="auto_control">
               						  <span class="slider round"></span>
               						</label>
                         </form>
-                        <form id="control_by_user">
-                          <p><b> 手動控制開關 </b></p>
+                        <form id="control_by_manual">
+                          <p style="font-size: 16px"><b> 手動控制開關 </b></p>
                           <label class="switch">
               						  <input type="checkbox" id="user_control" name="user_control">
               						  <span class="slider round"></span>
               						</label>
                         </form>
+                        <div id="manual_items">
+                          啟動時間:&nbsp&nbsp
+                          <select>
+                            <option value="1">1分鐘</option>
+                            <option value="5">5分鐘</option>
+                            <option value="10">10分鐘</option>
+                            <option value="15">15分鐘</option>
+                            <option value="20">20分鐘</option>
+                            <option value="25">25分鐘</option>
+                            <option value="30">30分鐘</option>
+                            <option value="35">35分鐘</option>
+                            <option value="40">40分鐘</option>
+                            <option value="45">45分鐘</option>
+                            <option value="50">50分鐘</option>
+                            <option value="55">55分鐘</option>
+                            <option value="60">60分鐘</option>
+                          </select>
+                          <br><br>
+                          <button type="button" class="btn btn-primary" onclick="submit_duration()">確定</button>
+                          <br><br>
+                        </div>
                         <form id="control_by_clock">
-                          <p><b> 時間控制開關 </b></p>
+                          <p style="font-size: 16px"><b> 時間控制開關 </b></p>
                           <label class="switch">
               						  <input type="checkbox" id="clock_control" name="clock_control">
               						  <span class="slider round"></span>
@@ -401,12 +407,11 @@
                 </div>
                 <div class="col-xs-3">
                   <ul class="nav nav-tabs tabs-right">
-                    <li role="presentation" class="active"><a href="#control-tab-1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">規則設定</a>
+                    <li role="presentation" class="active"><a href="#control-tab-2" role="tab" id="profile-tab-2" data-toggle="tab" aria-expanded="false">開關設定</a>
                     </li>
-                    <li role="presentation" class=""><a href="#control-tab-2" role="tab" id="profile-tab-1" data-toggle="tab" aria-expanded="false">動作設定</a>
+                    <li role="presentation" class=""><a href="#control-tab-1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">規則設定</a>
                     </li>
-                    <li role="presentation" class=""><a href="#control-tab-3" role="tab" id="profile-tab-2" data-toggle="tab" aria-expanded="false">開關設定</a>
-                    </li>
+                    
                   </ul>
                 </div>
                 <!-- panel-->
@@ -431,6 +436,28 @@
               }
 
               // document.getElementById("add_rule_block_1").children[2].innerHTML = "";
+
+              //------ 自動 ------
+              //初始化自動開關
+              if(body.Items[0].auto == "ON"){
+                $('#auto_control').prop("checked",true);
+              }else{
+                $('#auto_control').prop("checked",false);
+              }
+              //------ 自動 ------
+
+              //------ 手動 ------
+              //初始化手動開關和啟動時間設定
+              if(body.Items[0].power == "ON"){
+                $('#user_control').prop("checked",true);
+                $("#manual_items").show();
+              }else{
+                $('#user_control').prop("checked",false);
+                $("#manual_items").hide();
+              }
+
+              document.getElementById("manual_items").children[0].value = body.Items[0].work_cycle;
+              //------ 手動 ------
 
               //---- 鬧鐘 -----
               //初始化鬧鐘開關和設定
@@ -458,10 +485,8 @@
                   add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
                 }
               }
-
-              
             });
-
+            //自動
             $('#auto_control').change(function() {
               if ($(this).prop('checked')) {
                 // $('#control_by_user').hide();
@@ -479,6 +504,7 @@
                 });
               }
             });
+            //手動
             $('#user_control').change(function() {
               if ($(this).prop('checked')) {
                 var controller = getCookie("controller");
@@ -486,26 +512,29 @@
                   "controllerId": controller,
                   "status": "ON"
                 });
+                $("#manual_items").slideToggle();
               } else {
                 var controller = getCookie("controller");
                 $.post(api_url + 'api/control/power', {
                   "controllerId": controller,
                   "status": "OFF"
                 });
+                $("#manual_items").slideToggle();
               }
             });
+            //鬧鐘
             $('#clock_control').change(function() {
               var controller = getCookie("controller");
               if ($(this).prop('checked')) {
-                $("#clock_group").show();
-                $("#clock_buttons").show();
+                $("#clock_group").slideToggle();
+                $("#clock_buttons").slideToggle();
                 $.post(api_url + 'api/control/clock', {
                   "controllerId": controller,
                   "status": "ON"
                 });
               }else{
-                $("#clock_group").hide();
-                $("#clock_buttons").hide();
+                $("#clock_group").slideToggle();
+                $("#clock_buttons").slideToggle();
                 $.post(api_url + 'api/control/clock', {
                   "controllerId": controller,
                   "status": "OFF"

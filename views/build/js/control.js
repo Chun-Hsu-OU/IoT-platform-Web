@@ -82,20 +82,6 @@ function change_rules() {
   //console.log(rules);
 }
 
-function change_action() {
-  var controller = getCookie("controller");
-
-  $.post(api_url + 'api/control/follow_rule', {
-    "controllerId": controller,
-    "status": document.getElementById('update_control').value
-  });
-
-  $.post(api_url + 'api/control/work_cycle', {
-    "controllerId": controller,
-    "status": document.getElementById('turnOnfor').value * 1000
-  });
-}
-
 function delete_rule(type, block_num) {
   $("#rule" + type + '_block_' + block_num).remove();
 }
@@ -175,6 +161,7 @@ function block_change(block_array) {
   }
 }
 
+//------ 鬧鐘 ------
 function add_clock(clock_record = 0){
   var clock_group = $("#clock_group").children();
   var clock_num = 1;
@@ -269,3 +256,16 @@ function submit_clock(){
     alert("時間設定完成！");
   });
 }
+//------ 鬧鐘 ------
+
+//------ 手動 ------
+function submit_duration(){
+  console.log(document.getElementById("manual_items").children[0].value);
+  $.post(api_url + 'api/control/work_cycle', {
+    "controllerId": getCookie("controller"),
+    "status": document.getElementById("manual_items").children[0].value
+  },function(){
+    alert("手動啟動時間設定完成！");
+  });
+}
+//------ 手動 ------
