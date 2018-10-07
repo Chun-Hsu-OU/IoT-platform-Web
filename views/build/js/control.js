@@ -87,7 +87,6 @@ function delete_rule(type, block_num) {
 }
 
 function add_rule_block(block_num = 0) {
-  //var block_num = block.toString();
   if (block_num == 0) {
     var children = document.getElementById("control-tab-1").children;
 

@@ -106,10 +106,10 @@
             $mail->Host = "smtp.gmail.com";             //Gamil的SMTP主機
             $mail->Port = 465;                                 //Gamil的SMTP主機的埠號(Gmail為465)。
             $mail->CharSet = "utf-8";                       //郵件編碼
-            $mail->Username = "zz9638512@gmail.com"; //Gamil帳號
-            $mail->Password = "b6352801";                 //Gmail密碼
-            $mail->From = "zz9638512@gmail.com";        //寄件者信箱
-            $mail->FromName = "NTHU HSNL 物聯網平台"; //寄件者姓名
+            $mail->Username = "hsnl33564@gmail.com"; //Gamil帳號
+            $mail->Password = "Hsnl-iot33564";                 //Gmail密碼
+            $mail->From = "hsnl33564@gmail.com";        //寄件者信箱
+            $mail->FromName = "清華大學智慧農業物聯網平台"; //寄件者姓名
             $mail->Subject ="未知病蟲害即時通報"; //郵件標題
             $mail->Body = "<b style='color:blue'>場域：</b><br>".$_POST["area"]."<br><br><b style='color:blue'>作物：</b><br>".$_POST["crop"]."<br><br><b style='color:blue'>病情描述：</b><br>".$_POST["description"]; //郵件內容
             $mail->IsHTML(true);                             //郵件內容為html
