@@ -56,7 +56,11 @@
         return false;
     }
   </script>
-  <?php session_start(); ?>
+  <?php 
+    //設定時區
+    date_default_timezone_set('Asia/Taipei');
+    session_start(); 
+  ?>
 </head>
 <style>
   .x_title span {

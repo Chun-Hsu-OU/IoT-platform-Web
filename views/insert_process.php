@@ -1,4 +1,6 @@
 <?php
+    //設定時區
+    date_default_timezone_set('Asia/Taipei');
     require_once('PHPMailer-master/PHPMailer-master/PHPMailerAutoload.php');
     function insert_log($url,$postdataarray){
         $ch			= curl_init();

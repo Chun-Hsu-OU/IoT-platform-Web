@@ -51,7 +51,9 @@
     }
   </script>
   <?php 
-  session_start();
+    //設定時區
+    date_default_timezone_set('Asia/Taipei');
+    session_start();
   ?>
 </head>
 <style>

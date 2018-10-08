@@ -426,25 +426,8 @@
               var body = JSON.parse(data);
 
               $('#controller_name').prepend('<h2>' + body.Items[0].name + '</h2>');
-              $('#turnOnfor').attr('value', body.Items[0].work_cycle);
-              if (body.Items[0].follow_rule == 'ON_for') {
-                $('#update_control').val('ON_for').change();
-                $('#turnOnfor_div').show();
-              } else {
-                $('#update_control').val('ON_until').change();
-                $('#turnOnfor_div').hide();
-              }
 
               // document.getElementById("add_rule_block_1").children[2].innerHTML = "";
-
-              //------ 自動 ------
-              //初始化自動開關
-              if(body.Items[0].auto == "ON"){
-                $('#auto_control').prop("checked",true);
-              }else{
-                $('#auto_control').prop("checked",false);
-              }
-              //------ 自動 ------
 
               //------ 手動 ------
               //初始化手動開關和啟動時間設定
@@ -476,6 +459,14 @@
               }
               //---- 鬧鐘 -----
 
+              //------ 自動 ------
+              //初始化自動開關和rule初始化
+              if(body.Items[0].auto == "ON"){
+                $('#auto_control').prop("checked",true);
+              }else{
+                $('#auto_control').prop("checked",false);
+              }
+
               for (let i = 0; i < body.Items[0].rules.length; i++) {
                 var block_num = body.Items[0].rules[i].block.toString();
                 if (check_children('rule_block_' + block_num)) {
@@ -485,6 +476,8 @@
                   add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
                 }
               }
+              //------ 自動 ------
+              
             });
             //自動
             $('#auto_control').change(function() {
@@ -541,16 +534,6 @@
                 });
               }
             });
-            // $('#clock_control').prop("checked",true)
-
-            function update_control_func() {
-              var index = document.getElementById('update_control').value;
-              if (index == 'ON_for') {
-                $('#turnOnfor_div').show();
-              } else if (index == 'ON_until') {
-                $('#turnOnfor_div').hide();
-              }
-            }
           </script>
           <!-- /page content -->
 
