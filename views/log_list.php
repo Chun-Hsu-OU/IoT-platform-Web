@@ -314,7 +314,7 @@
                         }
 
                         $("#list").append("<tr><td>" + data[i].area + "</td><td>" + crop + "</td>" + 
-                        "<td>" + type_html + "</td><td>" + date + "/" + day + "</td>" + 
+                        "<td>" + type_html + "</td><td>" + month + "/" + day + "</td>" + 
                         "<td><a href='view_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-success'>" + 
                         "<span class='glyphicon glyphicon-search'></span>查看</a>" + 
                         "<a href='edit_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-primary'>" + 
