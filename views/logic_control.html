@@ -489,8 +489,14 @@
                   "controllerId": controller,
                   "status": "auto"
                 });
+                //關掉手動設定
                 $('#user_control').prop("checked",false);
+                $("#manual_items").slideUp();
+
+                //關掉鬧鐘設定
                 $('#clock_control').prop("checked",false);
+                $("#clock_group").slideUp();
+                $("#clock_buttons").slideUp();
               } else {
                 var controller = getCookie("controller");
                 $.post(api_url + 'api/control/mode', {
@@ -509,7 +515,11 @@
                 });
 
                 $('#auto_control').prop("checked",false);
+
+                //關掉鬧鐘設定
                 $('#clock_control').prop("checked",false);
+                $("#clock_group").slideUp();
+                $("#clock_buttons").slideUp();
 
                 $("#manual_items").slideToggle();
               } else {
@@ -533,7 +543,10 @@
                 });
 
                 $('#auto_control').prop("checked",false);
+                
+                //關掉手動設定
                 $('#user_control').prop("checked",false);
+                $("#manual_items").slideUp();
               }else{
                 $("#clock_group").slideToggle();
                 $("#clock_buttons").slideToggle();
