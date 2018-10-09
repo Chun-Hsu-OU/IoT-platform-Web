@@ -86,7 +86,8 @@ function delete_rule(type, block_num) {
   $("#rule" + type + '_block_' + block_num).remove();
 }
 
-function add_rule_block(block_num = 0) {
+function add_rule_block(block_num = 0, groups = 0) {
+  //按新增區塊用
   if (block_num == 0) {
     var children = document.getElementById("control-tab-1").children;
 
@@ -100,6 +101,15 @@ function add_rule_block(block_num = 0) {
     }
 
     block_num ++;
+  }
+  
+  for (let group_num = 0; group_num < groups.Count; group_num++) {
+    $.get(api_url + 'api/sensors_in_group/' + groups.Items[group_num].groupId, function(data) {
+      var sensors = JSON.parse(data);
+      for (let sensor_num = 0; sensor_num < sensors.Count; sensor_num++) {
+        console.log(sensors.Items[sensor_num].sensorId);
+      }
+    });
   }
 
   console.log(block_num);
@@ -172,13 +182,13 @@ function add_clock(clock_record = 0){
     '<div class="col-sm-3">'+
       '選擇星期:&nbsp&nbsp'+
       '<select>'+
-        '<option value="1">星期一</option>'+
-        '<option value="2">星期二</option>'+
-        '<option value="3">星期三</option>'+
-        '<option value="4">星期四</option>'+
-        '<option value="5">星期五</option>'+
-        '<option value="6">星期六</option>'+
-        '<option value="7">星期日</option>'+
+        '<option value="0">星期一</option>'+
+        '<option value="1">星期二</option>'+
+        '<option value="2">星期三</option>'+
+        '<option value="3">星期四</option>'+
+        '<option value="4">星期五</option>'+
+        '<option value="5">星期六</option>'+
+        '<option value="6">星期日</option>'+
       '</select>'+
     '</div>'+
     '<div class="col-sm-1">'+

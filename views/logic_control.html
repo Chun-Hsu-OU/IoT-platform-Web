@@ -431,7 +431,7 @@
 
               //------ 手動 ------
               //初始化手動開關和啟動時間設定
-              if(body.Items[0].power == "ON"){
+              if(body.Items[0].mode == "power"){
                 $('#user_control').prop("checked",true);
                 $("#manual_items").show();
               }else{
@@ -444,7 +444,7 @@
 
               //---- 鬧鐘 -----
               //初始化鬧鐘開關和設定
-              if(body.Items[0].clock == "ON"){
+              if(body.Items[0].mode == "clock"){
                 $('#clock_control').prop("checked",true);
                 $("#clock_group").show();
                 $("#clock_buttons").show();
@@ -461,39 +461,41 @@
 
               //------ 自動 ------
               //初始化自動開關和rule初始化
-              if(body.Items[0].auto == "ON"){
+              if(body.Items[0].mode == "auto"){
                 $('#auto_control').prop("checked",true);
               }else{
                 $('#auto_control').prop("checked",false);
               }
-
-              for (let i = 0; i < body.Items[0].rules.length; i++) {
-                var block_num = body.Items[0].rules[i].block.toString();
-                if (check_children('rule_block_' + block_num)) {
-                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
-                } else {
-                  add_rule_block(block_num);
-                  add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
+              $.get(api_url + 'api/sensorgroup_in_area/' + body.Items[0].areaId, function(data) {
+                var groups = JSON.parse(data);
+                for (let i = 0; i < body.Items[0].rules.length; i++) {
+                  var block_num = body.Items[0].rules[i].block.toString();
+                  if (check_children('rule_block_' + block_num)) {
+                    add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
+                  } else {
+                    add_rule_block(block_num, groups);
+                    add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
+                  }
                 }
-              }
+              });
               //------ 自動 ------
               
             });
             //自動
             $('#auto_control').change(function() {
               if ($(this).prop('checked')) {
-                // $('#control_by_user').hide();
                 var controller = getCookie("controller");
-                $.post(api_url + 'api/control/auto', {
+                $.post(api_url + 'api/control/mode', {
                   "controllerId": controller,
-                  "status": "ON"
+                  "status": "auto"
                 });
+                $('#user_control').prop("checked",false);
+                $('#clock_control').prop("checked",false);
               } else {
-                // $('#control_by_user').show();
                 var controller = getCookie("controller");
-                $.post(api_url + 'api/control/auto', {
+                $.post(api_url + 'api/control/mode', {
                   "controllerId": controller,
-                  "status": "OFF"
+                  "status": "none"
                 });
               }
             });
@@ -501,16 +503,20 @@
             $('#user_control').change(function() {
               if ($(this).prop('checked')) {
                 var controller = getCookie("controller");
-                $.post(api_url + 'api/control/power', {
+                $.post(api_url + 'api/control/mode', {
                   "controllerId": controller,
-                  "status": "ON"
+                  "status": "power"
                 });
+
+                $('#auto_control').prop("checked",false);
+                $('#clock_control').prop("checked",false);
+
                 $("#manual_items").slideToggle();
               } else {
                 var controller = getCookie("controller");
-                $.post(api_url + 'api/control/power', {
+                $.post(api_url + 'api/control/mode', {
                   "controllerId": controller,
-                  "status": "OFF"
+                  "status": "none"
                 });
                 $("#manual_items").slideToggle();
               }
@@ -521,16 +527,19 @@
               if ($(this).prop('checked')) {
                 $("#clock_group").slideToggle();
                 $("#clock_buttons").slideToggle();
-                $.post(api_url + 'api/control/clock', {
+                $.post(api_url + 'api/control/mode', {
                   "controllerId": controller,
-                  "status": "ON"
+                  "status": "clock"
                 });
+
+                $('#auto_control').prop("checked",false);
+                $('#user_control').prop("checked",false);
               }else{
                 $("#clock_group").slideToggle();
                 $("#clock_buttons").slideToggle();
-                $.post(api_url + 'api/control/clock', {
+                $.post(api_url + 'api/control/mode', {
                   "controllerId": controller,
-                  "status": "OFF"
+                  "status": "none"
                 });
               }
             });
@@ -618,13 +627,20 @@
                     <div class="modal-body">
                       <form>
                         控制器名稱:<br>
-                        <input type="text" id="new_controller_name">
-                        <br><br> 建制於場域:<br>
-                        <select required="required" id="controller_in_area" onchange="controller_area_select();">
-                        </select>
-                        <br><br> 建制於群組:<br>
-                        <select required="required" id="controller_in_group" onchange="controller_group_select();">
-                    </select>
+                      <input type="text" id="new_controller_name">
+                      <br><br> 建制於場域:<br>
+                      <select required="required" id="controller_in_area">
+                      </select>
+                      <br><br> 傳輸協議:<br>
+                      <select required="required" id="protocol">
+                        <option value="NoSelection">---請選擇---</option>
+                        <option value="socket">socket</option>
+                        <option value="lora-p2p">lora-p2p</option>
+                        <option value="nb-iot">nb-iot</option>
+                        <option value="self-control">自控</option>
+                      </select>
+                      <br><br> 協議相關設定:<br>
+                      <input type="text" id="protocol_setting">
                       </form>
                     </div>
                     <div class="modal-footer">

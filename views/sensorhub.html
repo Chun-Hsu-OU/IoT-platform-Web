@@ -606,13 +606,20 @@
                 <div class="modal-body">
                   <form>
                     控制器名稱:<br>
-                    <input type="text" id="new_controller_name">
-                    <br><br> 建制於場域:<br>
-                    <select required="required" id="controller_in_area" onchange="controller_area_select();">
-                    </select>
-                    <br><br> 建制於群組:<br>
-                    <select required="required" id="controller_in_group" onchange="controller_group_select();">
-                </select>
+                      <input type="text" id="new_controller_name">
+                      <br><br> 建制於場域:<br>
+                      <select required="required" id="controller_in_area">
+                      </select>
+                      <br><br> 傳輸協議:<br>
+                      <select required="required" id="protocol">
+                        <option value="NoSelection">---請選擇---</option>
+                        <option value="socket">socket</option>
+                        <option value="lora-p2p">lora-p2p</option>
+                        <option value="nb-iot">nb-iot</option>
+                        <option value="self-control">自控</option>
+                      </select>
+                      <br><br> 協議相關設定:<br>
+                      <input type="text" id="protocol_setting">
                   </form>
                 </div>
                 <div class="modal-footer">

@@ -120,22 +120,22 @@ function add_group() {
 
 function add_controller() {
   var new_controller_name = document.getElementById("new_controller_name").value;
-  var controller_in_area_selectBox = document.getElementById("controller_in_area");
-  var controller_in_area = controller_in_area_selectBox.options[controller_in_area_selectBox.selectedIndex].value;
-  var controller_in_group_selectBox = document.getElementById("controller_in_group");
-  var controller_in_group = controller_in_group_selectBox.options[controller_in_group_selectBox.selectedIndex].value;
-
+  var controller_in_area = document.getElementById("controller_in_area").value;
+  var protocol = document.getElementById("protocol").value;
+  var setting = document.getElementById("protocol_setting").value;
   //檢查每個欄位都有值
-  if(new_controller_name && controller_in_area!="NoSelection" && controller_in_group!="NoSelection"){
+  if(new_controller_name && controller_in_area!="NoSelection" && protocol!="NoSelection" && setting){
     $.post(api_url + 'api/add/control', {
       "ownerId": getCookie("checker"),
-      "areaId": getCookie("area"),
-      "groupId": getCookie("group"),
-      "name": new_controller_name
-    },function(){
+      "areaId": controller_in_area,
+      "name": new_controller_name,
+      "protocol": protocol,
+      "setting": setting
+    });
+    setTimeout(function(){
       alert("控制器 '"+ new_controller_name +"' 新增成功！");
       location.reload();
-    });
+    },1000);
   }else{
     alert("請確實填入所有欄位");
   }
@@ -193,22 +193,6 @@ function group_select_func() {
   var Id = selectBox.options[selectBox.selectedIndex].value;
   set_area_cookie(Id);
   //console.log(getCookie("area"));
-}
-
-function controller_area_select(){
-  //console.log("in area_del_function");
-  var selectBox = document.getElementById("controller_in_area");
-  var Id = selectBox.options[selectBox.selectedIndex].value;
-
-  set_area_cookie(Id);
-  load_group_in_modal();
-}
-
-function controller_group_select(){
-  var selectBox = document.getElementById("controller_in_group");
-  var Id = selectBox.options[selectBox.selectedIndex].value;
-
-  document.cookie = "group=" + Id;
 }
 
 function area_del_func() {
@@ -313,7 +297,6 @@ function load_area_in_modal() {
 
 function load_group_in_modal() {
   $('#group_del').empty();
-  $('#controller_in_group').empty();
   //console.log(areaId);
   var areaId = getCookie("area");
   console.log(api_url + 'api/sensorgroup_in_area/' + areaId);
@@ -324,11 +307,9 @@ function load_group_in_modal() {
     $('#group_del').append('<option selected value="NoSelection">---請選擇---</option>');
     $('#group_del').append('<option value="None">None</option>');
 
-    $('#controller_in_group').append('<option selected value="NoSelection">---請選擇---</option>');
     body.Items.forEach(function make(group) {
       if (group.visible == 1) {
         $('#group_del').append('<option value="' + group.groupId + '">' + group.name + '</option>');
-        $('#controller_in_group').append('<option value="' + group.groupId + '">' + group.name + '</option>');
       }
     });
   });
