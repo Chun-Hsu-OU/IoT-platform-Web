@@ -241,86 +241,9 @@
                 <div class="col-xs-9">
                   <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade" id="control-tab-1" aria-labelledby="home-tab">
-                      <div id="rule_block_1">
+                      <!-- <div id="rule_block_1">
                         <div style="border-width:3px;border-style:dashed;border-color:#339933;padding:5px;">
-                          <!-- Split button -->
                           <div class="btn-group" id="add_rule_block_1">
-                            <!-- <form action="/action_page.php">
-                              <input type="checkbox" name="vehicle" value="1">星期一
-                              <input type="checkbox" name="vehicle" value="2" checked>星期二
-                              <input type="checkbox" name="vehicle" value="3" checked>星期三
-                              <input type="checkbox" name="vehicle" value="4" checked>星期四
-                              <input type="checkbox" name="vehicle" value="5" checked>星期五
-                              <input type="checkbox" name="vehicle" value="6" checked>星期六
-                              <input type="checkbox" name="vehicle" value="7" checked>星期日<br>
-                            </form>
-                            <div class='col-sm-2'>
-                            判斷區間:
-                            </div>
-                            <div class="container">
-                                <div class="row">
-                                    <div class='col-sm-3'>
-                                        <div class="form-group">
-                                            <span class='input-group date' id='datetimepicker3'>
-                                                
-                                                <input type='text' class="form-control" value="8:00 AM"/>
-          
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-time"></span>
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class='col-sm-1'>
-                                        ▬▬
-                                    </div>
-                                    <div class='col-sm-3'>
-                                        <div class="form-group">
-                                            <div class='input-group date' id='datetimepicker4'>
-                                                <input type='text' class="form-control" value="10:00 AM"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-time"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script type="text/javascript">
-                                        $(function () {
-                                            $('#datetimepicker3').datetimepicker({
-                                                format: 'LT'
-                                            });
-                                            $('#datetimepicker4').datetimepicker({
-                                                format: 'LT'
-                                            });
-                                        });
-                                    </script>
-                                    <div class="clearfix"></div>
-                                    <div class='col-sm-2'>
-                                    啟動時間:
-                                    </div>
-                                    <div class="form-group col-sm-2">
-                                      <select class="form-control" id="select_time">
-                                          <option value="1">1</option>
-                                          <option value="5">5</option>
-                                          <option value="10">10</option>
-                                          <option value="15">15</option>
-                                          <option value="20">20</option>
-                                          <option value="25">25</option>
-                                          <option value="30">30</option>
-                                          <option value="35">35</option>
-                                          <option value="40">40</option>
-                                          <option value="45">45</option>
-                                          <option value="50">50</option>
-                                          <option value="55">55</option>
-                                          <option value="60">60</option>
-                                      </select>
-                                    </div>
-                                    <div class='col-sm-1'>
-                                        分鐘
-                                    </div>
-                                </div>
-                            </div>
-                          <div class="clearfix"></div> -->
                             <button type="button" class="btn btn-success">新增規則</button>
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             <span class="caret"></span>
@@ -345,9 +268,9 @@
                               </li>
                             </ul>
                           </div>
-                          <!-- Split button -->
+                          
                         </div>
-                      </div><br>
+                      </div><br> -->
                       <button id="submit_change_rule" type="button" class="btn btn-primary" onclick="change_rules()" style="float:right">確定</button>
                       <button type="button" class="btn btn-success" onclick="add_rule_block()" style="float:right">新增區塊</button>
                     </div>
@@ -425,6 +348,8 @@
             $.get(api_url + 'api/control/single/' + controllerId, function(data) {
               var body = JSON.parse(data);
 
+              set_area_cookie(body.Items[0].areaId);
+
               $('#controller_name').prepend('<h2>' + body.Items[0].name + '</h2>');
 
               // document.getElementById("add_rule_block_1").children[2].innerHTML = "";
@@ -466,19 +391,23 @@
               }else{
                 $('#auto_control').prop("checked",false);
               }
-              $.get(api_url + 'api/sensorgroup_in_area/' + body.Items[0].areaId, function(data) {
-                var groups = JSON.parse(data);
-                for (let i = 0; i < body.Items[0].rules.length; i++) {
-                  var block_num = body.Items[0].rules[i].block.toString();
-                  if (check_children('rule_block_' + block_num)) {
-                    add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
-                  } else {
-                    add_rule_block(block_num, groups);
-                    add_rules(body.Items[0].rules[i].type, block_num, body.Items[0].rules[i].value, body.Items[0].rules[i].symbol);
-                  }
+
+              for (let i = 0; i < body.Items[0].rules.length; i++) {
+                var block_num = body.Items[0].rules[i].block.toString();
+                var type = body.Items[0].rules[i].type;
+                var name = body.Items[0].rules[i].name;
+                var sensorId = body.Items[0].rules[i].sensorId;
+                var value = body.Items[0].rules[i].value;
+                var symbol = body.Items[0].rules[i].symbol;
+                var duration = body.Items[0].rules[i].duration;
+                if (check_children('rule_block_' + block_num)) {
+                  add_rules(type, block_num, name, sensorId, value, symbol);
+                } else {
+                  add_rule_block(block_num, duration);
+                  add_rules(type, block_num, name, sensorId, value, symbol);
                 }
-              });
-              //------ 自動 ------
+              }
+            //------ 自動 ------
               
             });
             //自動
