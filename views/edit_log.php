@@ -754,7 +754,6 @@
                           array_push($file_list,$_FILES['image']['name'][$i]);
                           // echo $_FILES['image']['name'][$i]."<br>";
                       }
-                      $file_list = array_unique($file_list);
                   }
                   //將影片檔名串接
                   $videoCount = count($_FILES['video']['name']);
@@ -764,8 +763,10 @@
                           array_push($file_list,$_FILES['video']['name'][$i]);
                           // echo $_FILES['video']['name'][$i]."<br>";
                       }
-                      $file_list = array_unique($file_list);
                   }
+
+                  //去掉重複檔名(很重要，要不然顯示會出現多個一樣檔案)
+                  $file_list = array_unique($file_list);
 
                   // print_r($file_list);
                   // echo count($_FILES)."<br>";
