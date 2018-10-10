@@ -519,11 +519,8 @@
                   </div>
                   <script type="text/javascript">
                       $(function () {
-                          // $('#datetimepicker1').datetimepicker();
-                          // alert(<?= $time ?>);
-                          // 1528362000
                           $('#datetimepicker1').datetimepicker({
-                              date: new Date(<?= $time ?> - 8*60*60*1000)
+                              date: new Date(<?= $time ?>)
                           });
                       });
                   </script>
