@@ -355,40 +355,6 @@
                       }
                     }
                   ?>
-
-                  
-                  <!-- <?php
-                      if(!empty($row["picture_url"])){
-                          $imgs = explode(",",$row["picture_url"]);
-                          for($i=0;$i<count($imgs);$i++){
-                              
-                  ?>
-                  <tr>
-                      <td width="30%" align="right"><h3>照片<?=$i+1?>:</h3></td>
-                      <td align="center"><img src="http://localhost/LogSystem/<?=$imgs[$i]?>" alt="照片" width="500px" height="300px"></td>
-                  </tr>
-                  <?php
-                          }
-                      }
-                  ?>
-                  <?php
-                      if(!empty($row["video_url"])){
-                          $videos = explode(",",$row["video_url"]);
-                          for($i=0;$i<count($videos);$i++){
-                  ?>
-                  <tr>
-                      <td width="30%" align="right"><h3>影片<?=$i+1?>:</h3></td>
-                      <td align="center">
-                          <video width="500px" height="300px" controls>
-                              <source src="http://localhost/LogSystem/<?=$videos[$i]?>" type="video/mp4">
-                              影片
-                          </video>
-                      </td>
-                  </tr>
-                  <?php
-                          }
-                      }
-                  ?> -->
               </table>
           </div>
         </div>
