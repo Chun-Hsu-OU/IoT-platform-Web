@@ -754,7 +754,7 @@
                           array_push($file_list,$_FILES['image']['name'][$i]);
                           // echo $_FILES['image']['name'][$i]."<br>";
                       }
-                      array_unique($file_list);
+                      $file_list = array_unique($file_list);
                   }
                   //將影片檔名串接
                   $videoCount = count($_FILES['video']['name']);
@@ -764,7 +764,7 @@
                           array_push($file_list,$_FILES['video']['name'][$i]);
                           // echo $_FILES['video']['name'][$i]."<br>";
                       }
-                      array_unique($file_list);
+                      $file_list = array_unique($file_list);
                   }
 
                   // print_r($file_list);
