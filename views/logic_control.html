@@ -293,7 +293,7 @@
                         <div id="manual_items">
                           啟動時間:&nbsp&nbsp
                           <select>
-                            <option value="1">1分鐘</option>
+                            <option value="1" selected="selected">1分鐘</option>
                             <option value="5">5分鐘</option>
                             <option value="10">10分鐘</option>
                             <option value="15">15分鐘</option>
@@ -363,8 +363,10 @@
                 $('#user_control').prop("checked",false);
                 $("#manual_items").hide();
               }
-
-              document.getElementById("manual_items").children[0].value = body.Items[0].work_cycle;
+              
+              if(typeof(body.Items[0].work_cycle) != "undefined"){
+                document.getElementById("manual_items").children[0].value = body.Items[0].work_cycle;
+              }
               //------ 手動 ------
 
               //---- 鬧鐘 -----
