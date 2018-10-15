@@ -36,16 +36,7 @@ function load_sidebars() {
     body.Items.forEach(function make(area) {
       if (area.visible == 1) {
         $('#showPlace').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/area_page.html">' + area.name + '</a></li>');
-      }
-    });
-  });
-
-  $.get(api_url + 'api/search/control/owner/' + uuid, function(data) {
-    var body = JSON.parse(data);
-
-    body.Items.forEach(function make(controller) {
-      if(controller.visible == 1){
-        $('#showController').append('<li ><a onclick="set_controller_cookie(\'' + controller.controllerId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/logic_control.html">' + controller.name + '</a></li>');
+        $('#showController').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/show_controllers.html">' + area.name + '</a></li>');
       }
     });
   });
@@ -392,8 +383,12 @@ function add_sensor_item() {
       "sensorType": add_type,
       "num": add_number,
       "ownerId": getCookie("checker")
-  }, function() {
-    alert("新增感測器 '" + add_name + "'成功！");
-    window.location.replace('sensorhub.html');
+  }, function(data) {
+    if(data == false){
+      alert("感測器名稱已存在，請試其他名稱！");
+    }else{
+      alert("新增感測器 '" + add_name + "'成功！");
+      window.location.replace('sensorhub.html');
+    }
   });
 }

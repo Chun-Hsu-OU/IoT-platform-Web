@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HSNL IoT Platform</title>
+
+  <link rel="Shortcut Icon" type="image/x-icon" href="images/platform-icon.ico">
+  <!-- Bootstrap -->
+  <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendors/bootstrap/dist/js/bootstrap.min.js" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Font Awesome v4.7 -->
+  <link href="../vendors/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Weather icon -->
+  <link href="../vendors/weather-icons-master/css/weather-icons.min.css" rel="stylesheet">
+  <link href="../vendors/weather-icons-master/css/weather-icons-wind.min.css" rel="stylesheet">
+  <!-- NProgress -->
+  <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+  <!-- iCheck -->
+  <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+  <!-- bootstrap-progressbar -->
+  <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+  <!-- JQVMap -->
+  <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+  <!-- bootstrap-daterangepicker -->
+  <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+  <!-- Custom Theme Style -->
+  <link href="../build/css/custom.min.css" rel="stylesheet">
+
+  <script src="../vendors/jquery/dist/jquery.min.js"></script>
+
+  <!-- Scripts by CTLiu -->
+  <script src="../build/js/sidebar.js"></script>
+  <script src="../build/js/show_controllers.js"></script>
+  <script src="../build/js/loading.js"></script>
+
+</head>
+<style>
+  .x_title span {
+    color: #a94442;
+  }
+
+  .count {
+    font-size: 20px;
+  }
+
+  #map {
+    height: 400px;  /* The height is 400 pixels */
+    width: 800px;  /* The width is the width of the web page */
+  }
+</style>
+
+<script>
+  window.onload = load_sidebars();
+  window.onload = get_name();
+  window.onload = get_controllers();
+  window.onload = get_username();
+  window.onload = load_area_in_modal();
+  window.onload = load_group_in_modal();
+  window.onload = load_sensor_in_modal();
+</script>
+
+<body class="nav-md" onload="checkCookie()">
+  <div class="container body">
+    <div class="main_container">
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;">
+            <a onclick="check_admin()" class="site_title"><i class="fa fa-pagelines"></i> <span>HSNL IoT Platform</span></a>
+          </div>
+
+          <div class="clearfix"></div>
+
+          <!-- menu profile quick info -->
+          <div class="profile clearfix">
+            <div class="profile_pic">
+              <img src="images/Apple_User.png" alt="..." class="img-circle profile_img">
+            </div>
+            <div class="profile_info">
+              <span>Welcome,</span>
+              <h2 id="username"></h2>
+            </div>
+          </div>
+          <!-- /menu profile quick info -->
+
+          <br />
+
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+              <h3></h3>
+              <ul class="nav side-menu">
+                <li><a href="homepage.html"><i class="fa fa-home"></i> 首頁 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-plus"></i> 新增/刪除項目 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                    <li><a data-toggle="modal" data-target="#new_area_Modal">新增場域</a></li>
+                    <li><a data-toggle="modal" data-target="#new_group_Modal">新增感應器群組</a></li>
+                    <li><a data-toggle="modal" data-target="#new_controller_Modal">新增控制器</a></li>
+                    <li><a data-toggle="modal" data-target="#del_Modal">刪除項目</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-area-chart"></i> 場域空間 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" id="showPlace">
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a><i class="fa fa-sliders"></i> 邏輯控制 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" id="showController">
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a id="agri-log"><i class="fa fa-calendar"></i> 日誌系統 </a>
+                  <script>
+                    $("#agri-log").attr("href", "http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com/IoT-platform-Web/views/log_list.php?checker=" + getCookie("checker"));
+                  </script>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a data-toggle="modal" data-target="#Setting_Modal" onclick="initial_setting()"><i class="fa fa-cog"></i> 使用者設定 </a>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
+                <li><a onclick="del()" href="login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- /sidebar menu -->
+        </div>
+      </div>
+
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li role="presentation" class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-exclamation-circle"></i>
+                    <span class="badge bg-red"></span>
+                  </a>
+                <ul id="top_warning" class="dropdown-menu list-unstyled msg_list" role="menu">
+                  <div class="text-center">
+                    <a>
+                      <strong>See All Alerts</strong>
+                      <i class="fa fa-angle-right"></i>
+                    </a>
+                  </div>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <script>
+        $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
+          var body = JSON.parse(data);
+
+          for (sensor_num = 0; sensor_num < body.Count; sensor_num ++) {
+            load_warnings();
+
+            async function load_warnings() {
+              var name = body.Items[sensor_num].name;
+              try {
+                $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
+                  if (res == "No data") {
+                    $('#top_warning').prepend('<li><a>' +
+                      '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
+                      '<span>' +
+                        '<span><strong>' + name + '</strong></span>' +
+                      '</span>' +
+                      '<span class="message">' +
+                        'No signal for atleast 1 hour' +
+                      '</span>' +
+                      '</a></li>');
+                  }
+                });
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          }
+        });
+      </script>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+      <div class="right_col" role="main">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left" id="page_title">
+
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="">
+                  <div class="x_content">
+                    <div class="row" id="controllers">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- /page content -->
+      <div class="container">
+        <div class="modal fade" id="new_area_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">新增場域</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  場域名稱:<br>
+                  <input type="text" id="new_area_name">
+                  <br><br>
+                  場域地址:<br>
+                  <input type="text" id="new_area_location">
+                  <br><br>
+                  場域經緯度:&nbsp;&nbsp;<input type="checkbox" id="enable_map" onclick="click_add_area_enable_map()" checked>關閉/開啟<br>
+                  經度:<input type="text" id="new_area_longitude" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  緯度:<input type="text" id="new_area_latitude" disabled>
+                  <br><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="new_group_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">新增感測器群組</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  感測器群組名稱:<br>
+                  <input type="text" id="new_group_name">
+                  <br><br>
+                  感測器群組描述:<br>
+                  <input type="text" id="new_group_description">
+                  <br><br>
+                  作物種類：<br>
+                  <select required="required" id="new_group_product">
+                    <option value="NoSelection">---請選擇---</option>
+                    <option value="Green_Onion">蔥</option>
+                    <option value="Others">其他</option>
+                  </select>
+                  <br><br> 建制於場域:<br>
+                  <select required="required" id="group_select" onchange="group_select_func(value);">
+              </select>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+          <div class="modal fade" id="new_controller_Modal" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">新增控制器</h4>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    控制器名稱:<br>
+                      <input type="text" id="new_controller_name">
+                      <br><br> 建制於場域:<br>
+                      <select required="required" id="controller_in_area">
+                      </select>
+                      <br><br> 傳輸協議:<br>
+                      <select required="required" id="protocol">
+                        <option value="NoSelection">---請選擇---</option>
+                        <option value="socket">socket</option>
+                        <option value="lora-p2p">lora-p2p</option>
+                        <option value="nb-iot">nb-iot</option>
+                        <option value="self-control">自控</option>
+                      </select>
+                      <br><br> 協議相關設定:<br>
+                      <input type="text" id="protocol_setting">
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_controller()">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <div class="container">
+        <div class="modal fade" id="Setting_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">使用者資訊設定</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  新的使用者名稱:<br>
+                  <input type="text" id="new_username">
+                  <br><br> 新的密碼:
+                  <br>
+                  <input type="text" id="new_password">
+                  <br><br> 確認新的密碼:
+                  <br>
+                  <input type="text" id="new_password_confirm">
+                  <br><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="del_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">刪除項目</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  欲刪除場域:<br>
+                  <select required id="area_del" onchange="area_del_func()">
+                  </select><br> 欲刪除感測器群組:
+                  <br>
+                  <select required id="group_del" onchange="group_del_func()">
+                  </select><br> 欲刪除感測器:
+                  <br>
+                  <select required id="sensor_del" onchange="sensor_del_func()">
+                  </select><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="set_area_modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">編輯場域特徵</h4>
+              </div>
+              <div class="modal-body">
+                <form id="area_setting_modify">
+                </form>
+                <script>
+                  area = getCookie("area");
+                  uuid = getCookie("checker");
+
+                  $.get(api_url + 'api/area/' + uuid, function(data) {
+                    var body = JSON.parse(data);
+                    for (area_num = 0; area_num < body.Count; area_num++) {
+                      if (body.Items[area_num].areaId == area) {
+                        $('#area_setting_modify').prepend('場域名稱：<br>' +
+                          '<input type="text" id="update_area_name" value="' + body.Items[area_num].name + '">' +
+                          '<br><br>場域位置：<br>' +
+                          '<input type="text" size="60" id="update_area_location" value="' + body.Items[area_num].location + '"><br><br>' +
+                          '場域經緯度:<br>' +
+                          '經度:<input type="text" id="update_longitude" value="'+ body.Items[area_num].longitude + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                          '緯度:<input type="text" id="update_latitude" value="'+ body.Items[area_num].latitude + '"><br><br>')
+                      }
+                    }
+                  });
+                </script>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="update_area_item()">Commit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- jQuery -->
+      <!-- Bootstrap -->
+      <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+      <!-- FastClick -->
+      <script src="../vendors/fastclick/lib/fastclick.js"></script>
+      <!-- NProgress -->
+      <script src="../vendors/nprogress/nprogress.js"></script>
+      <!-- Chart.js -->
+      <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+      <!-- gauge.js -->
+      <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
+      <!-- bootstrap-progressbar -->
+      <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+      <!-- iCheck -->
+      <script src="../vendors/iCheck/icheck.min.js"></script>
+      <!-- Skycons -->
+      <script src="../vendors/skycons/skycons.js"></script>
+      <!-- Flot -->
+      <script src="../vendors/Flot/jquery.flot.js"></script>
+      <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+      <script src="../vendors/Flot/jquery.flot.time.js"></script>
+      <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+      <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+      <!-- Flot plugins -->
+      <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+      <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+      <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+      <!-- DateJS -->
+      <script src="../vendors/DateJS/build/date.js"></script>
+      <!-- JQVMap -->
+      <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+      <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+      <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+      <!-- bootstrap-daterangepicker -->
+      <script src="../vendors/moment/min/moment.min.js"></script>
+      <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+      <!-- ECharts -->
+      <script src="../vendors/echarts/dist/echarts.min.js"></script>
+
+      <!-- Custom Theme Scripts -->
+      <script src="../build/js/custom.js"></script>
+      <!-- Scripts by CTL -->
+      <script src="../build/js/cookie.js"></script>
+</body>
+
+</html>

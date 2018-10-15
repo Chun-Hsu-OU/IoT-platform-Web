@@ -440,11 +440,8 @@
             $('#user_control').change(function() {
               if ($(this).prop('checked')) {
                 var controller = getCookie("controller");
-                $.post(api_url + 'api/control/mode', {
-                  "controllerId": controller,
-                  "status": "power"
-                });
 
+                //關掉自動開關
                 $('#auto_control').prop("checked",false);
 
                 //關掉鬧鐘設定
@@ -473,6 +470,7 @@
                   "status": "clock"
                 });
 
+                //關掉自動開關
                 $('#auto_control').prop("checked",false);
                 
                 //關掉手動設定

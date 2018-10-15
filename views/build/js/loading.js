@@ -29,6 +29,7 @@ function get_username() {
   });
 }
 
+//日誌下拉式選單抓使用者有哪些場域
 function get_area_name(){
     $.get(api_url + 'api/area/' + uuid, function(data) {
         //console.log(data);
