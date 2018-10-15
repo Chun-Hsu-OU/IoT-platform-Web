@@ -345,11 +345,14 @@
 
           function set_sensors_cookie(id) {
             document.cookie = "sensor=" + id;
+
+            //更改編輯感應器modal的欄位變成此sensor資料
             $.get(api_url + 'api/sensors_in_group/' + group, function(data) {
               var body = JSON.parse(data);
               for (group_num = 0; group_num < body.Count; group_num++) {
                 if (body.Items[group_num].sensorId == id) {
                   document.getElementById('update_sensorname').value = body.Items[group_num].name;
+                  document.getElementById('update_sensorType').value = body.Items[group_num].sensorType;
                 }
               }
             });
@@ -580,6 +583,8 @@
                     <option value="Green_Onion">蔥</option>
                     <option value="Others">其他</option>
                   </select>
+                  <br><br>LoRa 模組 MacAddress：<br>
+                  <input type="text" id="macAddr" value="">
                   <br><br> 建制於場域:<br>
                   <select required="required" id="group_select" onchange="group_select_func(value);">
               </select>
@@ -708,10 +713,19 @@
                   <input type="text" id="update_sensorname" value="">
                   <br><br>感應器種類：<br>
                   <select required="required" id="update_sensorType">
-                    <option value="AIR_TEMPERATURE">空氣溫度感應器</option>
-                    <option value="AIR_HUMIDITY">空氣濕度感應器</option>
-                    <option value="SOIL_TEMPERATURE">土壤溫度感應器</option>
-                    <option value="SOIL_HUMIDITY>">土壤濕度感應器</option>
+                      <option value="AIR_TEMPERATURE">空氣溫度感應器</option>
+                      <option value="AIR_HUMIDITY">空氣濕度感應器</option>
+                      <option value="CO2">二氧化碳感應器</option>
+                      <option value="AVG_WIND_SPEED">平均風速感應器</option>
+                      <option value="BATTERY_VOLTAGE">電池電壓感應器</option>
+                      <option value="LIGHT_INTENSITY">光照度感應器</option>
+                      <option value="RAINFALL_PER_DAY">每日雨量感應器</option>
+                      <option value="RAINFALL_PER_HOUR">每小時雨量感應器</option>
+                      <option value="REALTIME_WIND_SPEED">即時風速感應器</option>
+                      <option value="SOIL_EC">土壤電解質感應器</option>
+                      <option value="SOIL_TEMPERATURE">土壤溫度感應器</option>
+                      <option value="SOIL_HUMIDITY">土壤濕度感應器</option>
+                      <option value="WIND_DIRECTION">風向感應器</option>
                   </select><br>
                 </form>
               </div>
@@ -761,8 +775,6 @@
                       <option value="4">4</option>
                       <option value="5">5</option>
                     </select>
-                    <br><br>所屬 LoRa 模組 MacAddress：<br>
-                    <input type="text" id="add_macAddr" value="">
                   </form>
                 </div>
                 <div class="modal-footer">

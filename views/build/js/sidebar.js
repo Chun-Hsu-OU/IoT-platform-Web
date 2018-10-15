@@ -92,14 +92,16 @@ function add_group() {
   var new_group_product = new_group_product_selectBox.options[new_group_product_selectBox.selectedIndex].value;
   var group_select_selectBox = document.getElementById("group_select");
   var group_select = group_select_selectBox.options[group_select_selectBox.selectedIndex].value;
+  var macAddr = document.getElementById("macAddr").value;
 
   //檢查每個欄位都有值
-  if(new_group_name && new_group_description && new_group_product!="NoSelection" && group_select!="NoSelection"){
+  if(new_group_name && new_group_description && new_group_product!="NoSelection" && group_select!="NoSelection" && macAddr){
     $.post(api_url + 'api/add/sensorGroup', {
       "areaId": getCookie("area"),
       "name": new_group_name,
       "description": new_group_description,
-      "product": new_group_product
+      "product": new_group_product,
+      "macAddr": macAddr
     },function(){
       alert("感測器群組新增成功！");
       location.reload();
@@ -374,21 +376,16 @@ function add_sensor_item() {
   var add_name = document.getElementById("add_sensorname").value;
   var add_type = document.getElementById("add_sensorType").value;
   var add_number = document.getElementById("add_number").value;
-  var add_macAddr = document.getElementById("add_macAddr").value;
   
   $.post(api_url + 'api/add/sensor', {
       "groupId": getCookie("group"),
       "name": add_name,
-      "macAddr": add_macAddr,
+      "macAddr": getCookie("macAddr"),
       "sensorType": add_type,
       "num": add_number,
       "ownerId": getCookie("checker")
   }, function(data) {
-    if(data == false){
-      alert("感測器名稱已存在，請試其他名稱！");
-    }else{
       alert("新增感測器 '" + add_name + "'成功！");
-      window.location.replace('sensorhub.html');
-    }
+      location.reload();
   });
 }

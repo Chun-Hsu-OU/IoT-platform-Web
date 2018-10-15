@@ -43,7 +43,10 @@ function get_sensorhubs(){
         $('#' + sensorgroup.groupId + '_B').append('<div class="icon"><i class="fa fa-tasks"></i></div>');
         // $('#B').append('<div class="count"></div>');
         $('#' + sensorgroup.groupId + '_B').append('<br>');
-        $('#' + sensorgroup.groupId + '_B').append('<a onclick="set_g_cookie(\''+sensorgroup.groupId+'\')" href="sensorhub.html"><h3>' + sensorgroup.name + '</h3></a>');
+        $('#' + sensorgroup.groupId + '_B').append('<a onclick="set_g_cookie(\''+
+        sensorgroup.groupId+'\');set_macAddr_cookie(\'' +  sensorgroup.macAddr + 
+        '\')" href="sensorhub.html"><h3>' + sensorgroup.name + '</h3></a>');
+        
         $('#' + sensorgroup.groupId + '_B').append('<p>查看詳細數據</p>');
         $('#' + sensorgroup.groupId + '_B').append('<br>');
       }
@@ -53,4 +56,8 @@ function get_sensorhubs(){
 
 function set_g_cookie(Id){
   document.cookie = "group=" + Id;
+}
+
+function set_macAddr_cookie(Id){
+  document.cookie = "macAddr=" + Id;
 }
