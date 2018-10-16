@@ -364,6 +364,7 @@
                 $("#manual_items").hide();
               }
               
+              //有workcycle欄位才設定
               if(typeof(body.Items[0].work_cycle) != "undefined"){
                 document.getElementById("manual_items").children[0].value = body.Items[0].work_cycle;
               }
@@ -380,10 +381,14 @@
                 $("#clock_group").hide();
                 $("#clock_buttons").hide();
               }
-
-              for(let i = 0; i < body.Items[0].clock_setting.length; i++){
-                add_clock(body.Items[0].clock_setting[i]);
+              
+              //有clock_setting欄位才初始化
+              if(typeof(body.Items[0].clock_setting) != "undefined"){
+                for(let i = 0; i < body.Items[0].clock_setting.length; i++){
+                  add_clock(body.Items[0].clock_setting[i]);
+                }
               }
+              
               //---- 鬧鐘 -----
 
               //------ 自動 ------
@@ -393,20 +398,23 @@
               }else{
                 $('#auto_control').prop("checked",false);
               }
-
-              for (let i = 0; i < body.Items[0].rules.length; i++) {
-                var block_num = body.Items[0].rules[i].block.toString();
-                var type = body.Items[0].rules[i].type;
-                var name = body.Items[0].rules[i].name;
-                var sensorId = body.Items[0].rules[i].sensorId;
-                var value = body.Items[0].rules[i].value;
-                var symbol = body.Items[0].rules[i].symbol;
-                var duration = body.Items[0].rules[i].duration;
-                if (check_children('rule_block_' + block_num)) {
-                  add_rules(type, block_num, name, sensorId, value, symbol);
-                } else {
-                  add_rule_block(block_num, duration);
-                  add_rules(type, block_num, name, sensorId, value, symbol);
+              
+              //有rules欄位才初始化
+              if(typeof(body.Items[0].rules) != "undefined"){
+                for (let i = 0; i < body.Items[0].rules.length; i++) {
+                  var block_num = body.Items[0].rules[i].block.toString();
+                  var type = body.Items[0].rules[i].type;
+                  var name = body.Items[0].rules[i].name;
+                  var sensorId = body.Items[0].rules[i].sensorId;
+                  var value = body.Items[0].rules[i].value;
+                  var symbol = body.Items[0].rules[i].symbol;
+                  var duration = body.Items[0].rules[i].duration;
+                  if (check_children('rule_block_' + block_num)) {
+                    add_rules(type, block_num, name, sensorId, value, symbol);
+                  } else {
+                    add_rule_block(block_num, duration);
+                    add_rules(type, block_num, name, sensorId, value, symbol);
+                  }
                 }
               }
             //------ 自動 ------
