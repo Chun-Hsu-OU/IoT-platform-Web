@@ -33,6 +33,17 @@ function add_rules(TYPE, block_num, name, sensorId, value = '數值', symbol = '
   // } else if (TYPE == 'CO2') {
   //   var type = '二氧化碳濃度 '
   // }
+
+  /*
+    取得選定的sensorhub名稱，因為可能sensor會有相同名稱，
+    用來顯示讓使用者區分是哪個sensorhub下的sensor
+  */
+  var group_name = $("#show_groups_block_"+ block_num +" option:selected").text();
+  //直接新增規則才要加sensorhub名稱，從資料庫抓下來本來就有sensorhub名稱
+  if(value == '數值'){
+    name = name + '&nbsp;&nbsp;(&nbsp;' + group_name + '&nbsp;)'; 
+  }
+
   $('#add_rule_block_' + block_num).before('<div id="rule' + TYPE + '_block_' + block_num + '_' + sensorId + '">' + name + '<span id="' + TYPE + ';' + name + ';' + sensorId + '"></span>' + 
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;設定：' +
     '&emsp;&emsp;<select required="required" id="symbol"><option value="greater">大於</option><option value="less">小於</option></select>' +
@@ -142,7 +153,7 @@ function add_rule_block(block_num = 0, duration = 0) {
           '<span class="caret"></span>' +
           '<span class="sr-only">Toggle Dropdown</span>' +
         '</button>' +
-        '<button type="button" class="btn btn-danger" onclick="delete_rule_block(\'' + id_name + '\')" style="float:right">刪除區塊</button>' +
+        '<button type="button" class="btn btn-danger" onclick="delete_rule_block(\'' + id_name + '\')" style="float:right">刪除規則組</button>' +
         '<ul class="dropdown-menu" role="menu" id="show_sensors_block_' + block_num + '">' +
           // '<li><a href="#" onclick="add_rules(\'AIR_TEMPERATURE\', \'' + block_num + '\')">空氣溫度</a></li>' +
           // '<li><a href="#" onclick="add_rules(\'AIR_HUMIDITY\', \'' + block_num + '\')">空氣濕度</a></li>' +
