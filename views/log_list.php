@@ -319,7 +319,7 @@
                         "<span class='glyphicon glyphicon-search'></span>查看</a>" + 
                         "<a href='edit_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-primary'>" + 
                         "<span class='glyphicon glyphicon-pencil'></span>編輯</a>" + 
-                        "<a href='delete_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-danger'>" + 
+                        "<a href='delete_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-danger' onClick='return check();'>" + 
                         "<span class='glyphicon glyphicon-remove'></span>刪除</a></td></tr>");
                       }
                     }

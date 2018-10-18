@@ -40,16 +40,30 @@ function get_controllers(){
         $('#controllers').append('<div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12" id="' + controller.controllerId + '_A"></div>');
         //console.log('<div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12" id="' + sensorgroup.groupId + '_A"></div>');
         $('#' + controller.controllerId + '_A').append('<div class="tile-stats" id="' + controller.controllerId + '_B"></div>');
-        $('#' + controller.controllerId + '_B').append('<div class="icon"><i class="fa fa-tasks"></i></div>');
+        $('#' + controller.controllerId + '_B').append('<div class="icon"><a href="#" class="btn btn-danger" onClick="return check(\'' + controller.controllerId + '\');"><span class="glyphicon glyphicon-remove"></span>刪除</a></div>');
         // $('#B').append('<div class="count"></div>');
         $('#' + controller.controllerId + '_B').append('<br>');
-        $('#' + controller.controllerId + '_B').append('<a onclick="set_controller_cookie(\''+controller.controllerId+'\')" href="logic_control.html"><h3>' + controller.name + '</h3></a>');
+        $('#' + controller.controllerId + '_B').append('<a onclick="set_controller_cookie(\''+controller.controllerId+'\')" href="logic_control.html"><span style="font-size: 25px;margin-left: 10px">' + controller.name + '</span></a>');
         $('#' + controller.controllerId + '_B').append('<br>');
       }
     });
   });
 }
 
+
+
 function set_controller_cookie(Id){
     document.cookie = "controller=" + Id;
+}
+
+function check(id){
+  if (!confirm("確定要刪除此控制器?"))
+  return false;
+
+  $.post(api_url + 'api/delete_item/control', {
+    "controllerId": id
+  }, function(){
+      alert("已刪除控制器！");
+      location.reload();
+  });
 }
