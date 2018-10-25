@@ -52,10 +52,17 @@
   <script src="https://code.highcharts.com/modules/export-data.js"></script>
   <script src="https://code.highcharts.com/themes/dark-unica.js"></script>
 
+  <!-- justgage-master(儀表板) -->
+  <script src="../vendors/justgage-master/raphael-2.1.4.min.js"></script>
+  <script src="../vendors/justgage-master/justgage.js"></script>
+
   <!-- Scripts by CTLiu -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/sensorhub.js"></script>
   <script src="../build/js/loading.js"></script>
+
+  <!-- css by CHOu -->
+  <link href="../build/css/sensorhub.css" rel="stylesheet">
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 </head>
@@ -75,6 +82,7 @@
 </style>
 
 <script>
+  window.onload = current_data();
   window.onload = load_sidebars();
   window.onload = import_sensor_data();
   window.onload = get_username();
@@ -82,6 +90,7 @@
   window.onload = load_group_in_modal();
   window.onload = load_sensor_in_modal();
   window.onload = load_sensorhub_descriptions();
+  
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -224,17 +233,17 @@
       <!-- page content -->
       <div class="right_col" role="main">
         <div class="page-title">
-          <div class="title_left" id="sensorhub_page_title">
+          <div class="inline_title" id="sensorhub_page_title">
           </div>
-          <div class="title_right">
+          <!-- <div class="title_right">
             <div class="input-prepend input-group">
               <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
               <input id="daterange_picker" type="text" class="form-control" name="daterange_picker" value="" />
             </div>
-          </div>
+          </div> -->
         </div>
 
-        <div class="col-md-8 col-sm-8 col-xs-8" id="sensor_table_div">
+        <!-- <div class="col-md-8 col-sm-8 col-xs-8" id="sensor_table_div">
           <div class="x_panel">
             <div class="x_title">
               <h3>說明</h3>
@@ -256,14 +265,14 @@
             <div class="x_content" id="control">
 
               <div id="ShowPhotos" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
+                Indicators
                 <ol class="carousel-indicators">
                   <li data-target="#ShowPhotos" data-slide-to="0" class="active"></li>
                   <li data-target="#ShowPhotos" data-slide-to="1"></li>
                   <li data-target="#ShowPhotos" data-slide-to="2"></li>
                 </ol>
 
-                <!-- Wrapper for slides -->
+                Wrapper for slides
                 <div class="carousel-inner">
                   <div class="item active">
                     <img id="Item1" src="" alt="">
@@ -278,7 +287,7 @@
                   </div>
                 </div>
 
-                <!-- Left and right controls -->
+                Left and right controls
                 <a class="left carousel-control" href="#ShowPhotos" data-slide="prev">
                   <span class="glyphicon glyphicon-chevron-left"></span>
                   <span class="sr-only">Previous</span>
@@ -291,49 +300,133 @@
 
             </div>
           </div>
-        </div>
+        </div> -->
 
         <script>
-          var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
+          // var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
 
-          var group = getCookie("group");
+          // var group = getCookie("group");
 
-          if (group == '9626cc6c-fe6b-474f-8438-d850c461b9a0' || group == 'ccb6cff0-4d52-11e8-b0d8-83454b04a8a4') {
-            $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/Giantcabbage.JPG', function(data) {
-              document.getElementById("Item1").src = "data:image/png;base64," + data;
-            });
-            $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/asparagus.JPG', function(data) {
-              document.getElementById("Item2").src = "data:image/png;base64," + data;
-            });
-            $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/spinach.JPG', function(data) {
-              document.getElementById("Item3").src = "data:image/png;base64," + data;
-            });
-          }
+          // if (group == '9626cc6c-fe6b-474f-8438-d850c461b9a0' || group == 'ccb6cff0-4d52-11e8-b0d8-83454b04a8a4') {
+          //   $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/Giantcabbage.JPG', function(data) {
+          //     document.getElementById("Item1").src = "data:image/png;base64," + data;
+          //   });
+          //   $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/asparagus.JPG', function(data) {
+          //     document.getElementById("Item2").src = "data:image/png;base64," + data;
+          //   });
+          //   $.get(api_url + 'api/search/file/9e3183cb-252d-40cf-874c-48ccd30530a7/1529646996853/spinach.JPG', function(data) {
+          //     document.getElementById("Item3").src = "data:image/png;base64," + data;
+          //   });
+          // }
         </script>
 
-        <div class="col-md-4 col-sm-4 col-xs-4">
+        <div class="row">
           <div class="x_panel">
             <div class="x_title">
-              <h3>感應器目前數值&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <i class="fas fa-plus" data-toggle="modal" data-target="#add_sensor_modal"></i>
-              </h3>
-              
-              <div class="title_right">
-              </div>
+              <div class="inline_font">感應器目前數值</div>
               <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                <li>
+                  <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                  </a>
                 </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
-                  <ul class="dropdown-menu" role="menu">
-                  </ul>
-                </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                <li>
+                  <a class="close-link">
+                    <i class="fa fa-close"></i>
+                  </a>
                 </li>
               </ul>
+              <br><br>
+              <div class="button_right">
+                  <i class="fas fa-plus" data-toggle="modal" data-target="#add_sensor_modal">
+                    新增感應器
+                  </i>
+                </div>
               <div class="clearfix"></div>
             </div>
-            <div class="x_content" id="current_sensor_data">
+            <!-- <div class="x_content" id="current_sensor_data">
+            </div> -->
+            <div class="x_content">
+              <div class="gauge" id="current_AIR_TEMPERATURE_div">
+                  <center>
+                      <embed class="image_size" src="images/thermometer.svg"/>
+                      <div class="font_style" id="text">空氣溫度</div>
+                  </center>
+                  <br>
+                  <div id="current_AIR_TEMPERATURE"></div>
+              </div>
+          
+              <div class="gauge" id="current_AIR_HUMIDITY_div">
+                  <center>
+                      <embed class="image_size" src="images/drop.svg"/>
+                      <div class="font_style" id="text">空氣濕度</div>
+                  </center>
+                  <br>
+                  <div id="current_AIR_HUMIDITY"></div>
+              </div>
+
+              <div class="gauge" id="current_SOIL_TEMPERATURE_div">
+                  <center>
+                      <embed class="image_size" src="images/thermometer.svg"/>
+                      <div class="font_style" id="text">土壤溫度</div>
+                  </center>
+                  <br>
+                  <div id="current_SOIL_TEMPERATURE"></div>
+              </div>
+
+              <div class="gauge" id="current_SOIL_HUMIDITY_div">
+                  <center>
+                      <embed class="image_size" src="images/drop.svg"/>
+                      <div class="font_style" id="text">土壤濕度</div>
+                  </center>
+                  <br>
+                  <div id="current_SOIL_HUMIDITY"></div>
+              </div>
+          
+              <div class="gauge" id="current_LIGHT_INTENSITY_div">
+                  <center>
+                      <embed class="image_size" src="images/sunlight.svg"/>
+                      <div class="font_style" id="text">光照度</div>
+                  </center>
+                  <br>
+                  <div id="current_LIGHT_INTENSITY"></div>
+              </div>
+          
+              <div class="gauge" id="current_SOIL_EC_div">
+                  <center>
+                      <embed class="image_size" src="images/flash.svg"/>
+                      <div class="font_style" id="text">電導度</div>
+                  </center>
+                  <br>
+                  <div id="current_SOIL_EC"></div>
+              </div>
+          
+              <div class="gauge" id="current_BATTERY_VOLTAGE_div">
+                  <center>
+                      <embed class="image_size" src="images/battery.svg"/>
+                      <div class="font_style" id="text">電池電壓</div>
+                  </center>
+                  <br>
+                  <div id="current_BATTERY_VOLTAGE"></div>
+              </div>
+              
+              <div class="gauge" id="current_REALTIME_WIND_SPEED_div">
+                  <center>
+                      <embed class="image_size" src="images/anemometer.svg"/>
+                      <div class="font_style" id="text">風速</div>
+                  </center>
+                  <br>
+                  <div id="current_REALTIME_WIND_SPEED"></div>
+              </div>
+              
+              <div class="gauge" id="current_WIND_DIRECTION_div">
+                  <center>
+                      <embed class="image_size" src="images/signal.svg"/>
+                      <div class="font_style" id="text">風向</div>
+                  </center>
+                  <br>
+                  <div id="current_WIND_DIRECTION"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -438,94 +531,119 @@
         </script>
 
         <div class="row">
-          <div class="clearfix"></div>
-          <div class="col-md-12 col-sm-12 col-xs-12" id="AIR_TEMPERATURE">
-            <div class="x_panel">
-              <div id="AIR_TEMPERATURE_div"></div>
+          <div class="x_panel">
+            <div class="x_title">
+              <div class="inline_font">感應器歷史數據</div>
+              <ul class="nav navbar-right panel_toolbox">
+                <li>
+                  <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                  </a>
+                </li>
+                <li>
+                  <a class="close-link">
+                    <i class="fa fa-close"></i>
+                  </a>
+                </li>
+              </ul>
+              <div class="time_select">
+                <div class="input-prepend input-group">
+                  <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                  <input id="daterange_picker" type="text" class="form-control" name="daterange_picker" value="" />
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <div class="diagram" id="AIR_TEMPERATURE">
+                    <div id="AIR_TEMPERATURE_div"></div>
+                </div>
+        
+                <div class="diagram" id="AIR_HUMIDITY">
+                    <div id="AIR_HUMIDITY_div"></div>
+                </div>
+        
+                <div class="diagram" id="SOIL_HUMIDITY">
+                    <div id="SOIL_HUMIDITY_div"></div>
+                </div>
+        
+                <div class="diagram" id="SOIL_TEMPERATURE">
+                    <div id="SOIL_TEMPERATURE_div"></div>
+                </div>
+        
+                <div class="diagram" id="SOIL_EC">
+                    <div id="SOIL_EC_div"></div>
+                </div>
+        
+                <div class="diagram" id="CO2">
+                    <div id="CO2_div"></div>
+                </div>
+        
+                <div class="diagram" id="BATTERY_VOLTAGE">
+                    <div id="BATTERY_VOLTAGE_div"></div>
+                </div>
+        
+                <div class="diagram" id="LIGHT_INTENSITY">
+                    <div id="LIGHT_INTENSITY_div"></div>
+                </div>
+        
+                <div class="diagram" id="RAINFALL_PER_DAY">
+                    <div id="RAINFALL_PER_DAY_div"></div>
+                </div>
+        
+                <div class="diagram" id="RAINFALL_PER_HOUR">
+                    <div id="RAINFALL_PER_HOUR_div"></div>
+                </div>
+      
+                <div class="diagram" id="REALTIME_WIND_SPEED">
+                    <div id="REALTIME_WIND_SPEED_div"></div>
+                </div>
+        
+                <div class="diagram" id="HIGHEST_WIND_SPEED">
+                    <div id="HIGHEST_WIND_SPEED_div"></div>
+                </div>
+      
+                <div class="diagram" id="AVG_WIND_SPEED">
+                    <div id="AVG_WIND_SPEED_div"></div>
+                </div>
+        
+                <div class="diagram" id="WIND_DIRECTION">
+                    <div id="WIND_DIRECTION_div"></div>
+                </div>
             </div>
           </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="AIR_HUMIDITY">
-            <div class="x_panel">
-              <div id="AIR_HUMIDITY_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="SOIL_HUMIDITY">
-            <div class="x_panel">
-              <div id="SOIL_HUMIDITY_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="SOIL_TEMPERATURE">
-            <div class="x_panel">
-              <div id="SOIL_TEMPERATURE_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="SOIL_EC">
-            <div class="x_panel">
-              <div id="SOIL_EC_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="CO2">
-            <div class="x_panel">
-              <div id="CO2_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="BATTERY_VOLTAGE">
-            <div class="x_panel">
-              <div id="BATTERY_VOLTAGE_div"></div>
-            </div>
-          </div>
-
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="LIGHT_INTENSITY">
-            <div class="x_panel">
-              <div id="LIGHT_INTENSITY_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="RAINFALL_PER_DAY">
-            <div class="x_panel">
-              <div id="RAINFALL_PER_DAY_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="RAINFALL_PER_HOUR">
-            <div class="x_panel">
-              <div id="RAINFALL_PER_HOUR_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="REALTIME_WIND_SPEED">
-            <div class="x_panel">
-              <div id="REALTIME_WIND_SPEED_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="HIGHEST_WIND_SPEED">
-            <div class="x_panel">
-              <div id="HIGHEST_WIND_SPEED_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="AVG_WIND_SPEED">
-            <div class="x_panel">
-              <div id="AVG_WIND_SPEED_div"></div>
-            </div>
-          </div>
-
-          <div class="col-md-12 col-sm-12 col-xs-12" id="WIND_DIRECTION">
-            <div class="x_panel">
-              <div id="WIND_DIRECTION_div"></div>
-            </div>
-          </div>
-
         </div>
       </div>
+
+      <script type="text/javascript">
+        //目前數據儀表板
+        $('#current_AIR_TEMPERATURE_div').hide();
+        $('#current_AIR_HUMIDITY_div').hide();
+        $('#current_SOIL_TEMPERATURE_div').hide();
+        $('#current_SOIL_HUMIDITY_div').hide();
+        $('#current_LIGHT_INTENSITY_div').hide();
+        $('#current_SOIL_EC_div').hide();
+        $('#current_BATTERY_VOLTAGE_div').hide();
+        $('#current_REALTIME_WIND_SPEED_div').hide();
+        $('#current_WIND_DIRECTION_div').hide();
+
+        //歷史數據圖
+        $('#AIR_TEMPERATURE').hide();
+        $('#AIR_HUMIDITY').hide();
+        $('#CO2').hide();
+        $('#AVG_WIND_SPEED').hide();
+        $('#HIGHEST_WIND_SPEED').hide();
+        $('#BATTERY_VOLTAGE').hide();
+        $('#LIGHT_INTENSITY').hide();
+        $('#RAINFALL_PER_DAY').hide();
+        $('#RAINFALL_PER_HOUR').hide();
+        $('#REALTIME_WIND_SPEED').hide();
+        $('#SOIL_HUMIDITY').hide();
+        $('#SOIL_TEMPERATURE').hide();
+        $('#SOIL_EC').hide();
+        $('#WIND_DIRECTION').hide();
+      </script>
 
       <!-- /page content -->
       <div class="container">
@@ -786,22 +904,6 @@
           </div>
       </div>
 
-      <script type="text/javascript">
-        $('#AIR_TEMPERATURE').hide();
-        $('#AIR_HUMIDITY').hide();
-        $('#CO2').hide();
-        $('#AVG_WIND_SPEED').hide();
-        $('#HIGHEST_WIND_SPEED').hide();
-        $('#BATTERY_VOLTAGE').hide();
-        $('#LIGHT_INTENSITY').hide();
-        $('#RAINFALL_PER_DAY').hide();
-        $('#RAINFALL_PER_HOUR').hide();
-        $('#REALTIME_WIND_SPEED').hide();
-        $('#SOIL_HUMIDITY').hide();
-        $('#SOIL_TEMPERATURE').hide();
-        $('#SOIL_EC').hide();
-        $('#WIND_DIRECTION').hide();
-      </script>
       <!-- jQuery -->
       <!-- Bootstrap -->
       <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>

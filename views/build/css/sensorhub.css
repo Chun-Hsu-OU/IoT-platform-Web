@@ -1,0 +1,77 @@
+.inline_title{
+    font-size: 36px;
+    display: block;
+    float: left;
+    width: 100%;
+}
+
+.inline_font{
+    font-size: 24px;
+    display: inline-block;
+}
+
+.button_right{
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 5px;
+    border: solid 2px black;
+    background-color: lightgreen;
+    width: 150px;
+    height: 40px;
+    color: black;
+    text-align: center;
+    padding: 5px;
+}
+
+.button_right:hover{
+    background-color: green;
+    color: white;
+}
+
+.diagram{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.time_select{
+    width: 30%
+}
+
+.gauge {
+    display: inline-block;
+    float: left;
+    box-sizing: border-box;
+    width: 25%;
+}
+
+.font_style {
+    display: inline-block;
+    font-size: 30px;
+}
+
+.image_size{
+    width: 40px;
+    height: 40px;
+}
+
+@media screen and (max-width: 800px){
+    .gauge{
+        width: 50%;
+    }
+    .time_select{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .gauge{
+        width: 100%;
+    }
+    .time_select{
+        width: 100%;
+    }
+}
+  /* .b
+    width: 100%
+  .c,.d,.e,.f
+    width: 50% */

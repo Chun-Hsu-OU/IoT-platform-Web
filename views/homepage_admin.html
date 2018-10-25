@@ -41,6 +41,7 @@
   <!-- Scripts by CTLiu -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/admin.js"></script>
+  <script src="../build/js/loading.js"></script>
 
 </head>
 <style>
@@ -56,6 +57,7 @@
 <script>
   window.onload = load_sidebars();
   window.onload = get_users();
+  window.onload = get_username();
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
   window.onload = load_sensor_in_modal();
@@ -79,7 +81,7 @@
             </div>
             <div class="profile_info">
               <span>Welcome,</span>
-              <h2>Admin</h2>
+              <h2 id="username"></h2>
             </div>
           </div>
           <!-- /menu profile quick info -->
@@ -218,6 +220,7 @@
                 <div class="">
                   <div class="x_content">
                     <div class="row" id="admin_page">
+                      <h1>你目前所管理的帳號</h1>
                     </div>
                   </div>
                 </div>

@@ -37,7 +37,7 @@ function load_sensorhub_descriptions() {
     body.Items.forEach(function(hub) {
       if (hub.groupId == group_id) {
         //document.getElementById("sensorhub_page_title").innerHTML = hub.name;
-        $("#sensorhub_page_title").append('<h1>' + hub.name + '</h1>');
+        $("#sensorhub_page_title").append(hub.name);
         $("#sensorhub_description").append('<h2>' + hub.description + '</h2>');
       }
     });
@@ -153,13 +153,13 @@ function draw_sensor_data(data, type) {
         //console.log(dataset);
         chart: {
           scrollablePlotArea: {
-            minWidth: 600
+            minWidth: 300
           },
-          height: 550
+          height: 400
         },
 
         xAxis: {
-          tickInterval: Math.floor((date.length) / 10),
+          tickInterval: Math.floor((date.length) / 6),
           categories: date,
           labels: {
             enabled: true,
@@ -256,13 +256,13 @@ function draw_sensor_data(data, type) {
         //console.log(dataset);
         chart: {
           scrollablePlotArea: {
-            minWidth: 600
+            minWidth: 300
           },
           height: 550
         },
 
         xAxis: {
-          tickInterval: Math.floor((date.length) / 10),
+          tickInterval: Math.floor((date.length) / 6),
           categories: date,
           labels: {
             enabled: true,
@@ -341,3 +341,307 @@ function draw_sensor_data(data, type) {
     //console.log(dataset);
   }
 }
+
+function current_data(){
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var sensors = {};
+
+    sensors.air_temp = new JustGage({
+      id: "current_AIR_TEMPERATURE",
+      label: "度",
+      value: 0,
+      min: 0,
+      max: 40,
+      levelColors: [
+          "#2187ED",
+          "#EDDF1A",
+          "#E31251"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.air_hum = new JustGage({
+        id: "current_AIR_HUMIDITY",
+        label: "%",
+        value: 0,
+        min: 0,
+        max: 100,
+        levelColors: [
+            "#C8EDFA",
+            "#145CE0"
+        ],
+        humanFriendly: true,
+        gaugeWidthScale: 0.7,
+        pointer: true,
+        pointerOptions: {
+            toplength: 10,
+            bottomlength: 10,
+            bottomwidth: 2
+        },
+        counter: true,
+        relativeGaugeSize: true
+    });
+
+    sensors.soil_temp = new JustGage({
+      id: "current_SOIL_TEMPERATURE",
+      label: "度",
+      value: 0,
+      min: 0,
+      max: 40,
+      levelColors: [
+          "#2187ED",
+          "#EDDF1A",
+          "#E31251"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.soil_hum = new JustGage({
+      id: "current_SOIL_HUMIDITY",
+      label: "%",
+      value: 0,
+      min: 0,
+      max: 100,
+      levelColors: [
+          "#C8EDFA",
+          "#145CE0"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.light = new JustGage({
+        id: "current_LIGHT_INTENSITY",
+        label: "lux",
+        value: 0,
+        min: 0,
+        max: 70000,
+        levelColors: [
+            "#91918D",
+            "#FCDB03"
+        ],
+        humanFriendly: true,
+        gaugeWidthScale: 0.7,
+        pointer: true,
+        pointerOptions: {
+            toplength: 10,
+            bottomlength: 10,
+            bottomwidth: 2
+        },
+        counter: true,
+        relativeGaugeSize: true
+    });
+
+    sensors.soil_ec = new JustGage({
+        id: "current_SOIL_EC",
+        label: "S/m",
+        value: 0,
+        min: 0,
+        max: 1000,
+        levelColors: [
+            "#CCF7CB",
+            "#098205"
+        ],
+        humanFriendly: true,
+        gaugeWidthScale: 0.7,
+        pointer: true,
+        pointerOptions: {
+            toplength: 10,
+            bottomlength: 10,
+            bottomwidth: 2
+        },
+        counter: true,
+        relativeGaugeSize: true
+    });
+
+    sensors.battery = new JustGage({
+        id: "current_BATTERY_VOLTAGE",
+        label: "V",
+        value: 12.6,
+        min: 0,
+        max: 13,
+        levelColors: [
+            "#CCF7CB",
+            "#098205"
+        ],
+        humanFriendly: true,
+        gaugeWidthScale: 0.7,
+        pointer: true,
+        pointerOptions: {
+            toplength: 10,
+            bottomlength: 10,
+            bottomwidth: 2
+        },
+        counter: true,
+        relativeGaugeSize: true
+    });
+
+    sensors.wind_speed = new JustGage({
+        id: "current_REALTIME_WIND_SPEED",
+        label: "m/s",
+        value: 0,
+        min: 0,
+        max: 8,
+        levelColors: [
+            "#CCF7CB",
+            "#098205"
+        ],
+        humanFriendly: true,
+        gaugeWidthScale: 0.7,
+        pointer: true,
+        pointerOptions: {
+            toplength: 10,
+            bottomlength: 10,
+            bottomwidth: 2
+        },
+        counter: true,
+        relativeGaugeSize: true
+    });
+
+    sensors.weed_direction = new JustGage({
+      id: "current_WIND_DIRECTION",
+      label: "",
+      value: 0,
+      min: 0,
+      max: 8,
+      donut: true,
+      levelColors: [
+          "#F0F2F2",
+          "#F0F2F2"
+      ],
+      textRenderer: function(val) {
+          if (val == 0) {
+              return '北';
+          } else if (val == 1) {
+              return '東北';
+          } else if (val == 2) {
+              return '東';
+          }else if (val == 3) {
+              return '東南';
+          }else if (val == 4) {
+              return '南';
+          }else if (val == 5) {
+              return '西南';
+          }else if (val == 6) {
+              return '西';
+          }else if (val == 7) {
+              return '西北';
+          }
+      },
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+    console.log(sensors);
+    update_current_data(sensors);
+  });
+}
+
+function update_current_data(sensors){
+  $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
+    var body = JSON.parse(data);
+    for (let j = 0; j < body.Count; j++) {
+      if(body.Items[j].visible == 1){
+        $.get(api_url + 'api/sensors/' + body.Items[j].sensorType + '/' + body.Items[j].sensorId, function(data) {
+          
+          if (data != 'No data') {
+            var value = JSON.parse(data);
+            var val = value.value;
+
+            if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
+              $('#current_AIR_TEMPERATURE_div').show();
+              sensors.air_temp.refresh(val);
+            } else if(body.Items[j].sensorType=="AIR_HUMIDITY"){
+              $('#current_AIR_HUMIDITY_div').show();
+              sensors.air_hum.refresh(val);
+            } else if(body.Items[j].sensorType=="SOIL_TEMPERATURE"){
+              $('#current_SOIL_TEMPERATURE_div').show();
+              sensors.soil_temp.refresh(val);
+            } else if(body.Items[j].sensorType=="SOIL_HUMIDITY"){
+              $('#current_SOIL_HUMIDITY_div').show();
+              sensors.soil_hum.refresh(val);
+            } else if(body.Items[j].sensorType=="LIGHT_INTENSITY"){
+              $('#current_LIGHT_INTENSITY_div').show();
+              sensors.light.refresh(val);
+            } else if(body.Items[j].sensorType=="BATTERY_VOLTAGE"){
+              $('#current_BATTERY_VOLTAGE_div').show();
+              sensors.battery.refresh(val);
+            } else if(body.Items[j].sensorType=="SOIL_EC"){
+              $('#current_SOIL_EC_div').show();
+              sensors.soil_ec.refresh(val);
+            } else if(body.Items[j].sensorType=="REALTIME_WIND_SPEED"){
+              $('#current_REALTIME_WIND_SPEED_div').show();
+              sensors.wind_speed.refresh(val);
+            } else if (body.Items[j].sensorType == "WIND_DIRECTION") {
+              $('#current_WIND_DIRECTION_div').show();
+              sensors.weed_direction.refresh(val);
+            }
+          } else{
+            if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
+              $('#current_AIR_TEMPERATURE_div').show();
+              sensors.air_temp.refresh("無數據");
+            } else if(body.Items[j].sensorType=="AIR_HUMIDITY"){
+              $('#current_AIR_HUMIDITY_div').show();
+              sensors.air_hum.refresh("無數據");
+            } else if(body.Items[j].sensorType=="SOIL_TEMPERATURE"){
+              $('#current_SOIL_TEMPERATURE_div').show();
+              sensors.soil_temp.refresh("無數據");
+            } else if(body.Items[j].sensorType=="SOIL_HUMIDITY"){
+              $('#current_SOIL_HUMIDITY_div').show();
+              sensors.soil_hum.refresh("無數據");
+            } else if(body.Items[j].sensorType=="LIGHT_INTENSITY"){
+              $('#current_LIGHT_INTENSITY_div').show();
+              sensors.light.refresh("無數據");
+            } else if(body.Items[j].sensorType=="BATTERY_VOLTAGE"){
+              $('#current_BATTERY_VOLTAGE_div').show();
+              sensors.battery.refresh("無數據");
+            } else if(body.Items[j].sensorType=="SOIL_EC"){
+              $('#current_SOIL_EC_div').show();
+              sensors.soil_ec.refresh("無數據");
+            } else if(body.Items[j].sensorType=="REALTIME_WIND_SPEED"){
+              $('#current_REALTIME_WIND_SPEED_div').show();
+              sensors.wind_speed.refresh("無數據");
+            } else if (body.Items[j].sensorType == "WIND_DIRECTION") {
+              $('#current_WIND_DIRECTION_div').show();
+              sensors.weed_direction.refresh("無數據");
+            }
+          }
+        });
+      }
+    }
+  });
+}
+

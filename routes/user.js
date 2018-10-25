@@ -38,14 +38,16 @@ users.get('/', function(req, res) {
 //when user logs in or registers
 users.post('/login', unlencodedParser, function(req, res) {
   if (req.body.username_login == doc.HSNL_platform_admin.USER && req.body.pwd_login == doc.HSNL_platform_admin.PWD) {
-    res.cookie('checker', "blank");
-    res.cookie('area', "blank");
-    res.cookie('group', "blank");
-    res.cookie('sensor', "blank");
-    res.cookie('admin', "aDmiN");
-    res.cookie('controller', "blank");
+    request.post({url: api_url + 'api/account/login', form: {"email": req.body.username_login, "password": req.body.pwd_login}} , function (error, response, body) {
+      res.cookie('checker', body);
+      res.cookie('area', "blank");
+      res.cookie('group', "blank");
+      res.cookie('sensor', "blank");
+      res.cookie('admin', "aDmiN");
+      res.cookie('controller', "blank");
 
-    res.redirect('homepage_admin.html');
+      res.redirect('homepage_admin.html');
+    });
   } else {
     request.post({url: api_url + 'api/account/login', form: {"email": req.body.username_login, "password": req.body.pwd_login}} , function (error, response, body) {
       console.log('error:', error);
