@@ -342,7 +342,37 @@ function draw_sensor_data(data, type) {
   }
 }
 
-function current_data(){
+function set_sensors_cookie(id) {
+  document.cookie = "sensor=" + id;
+}
+
+function change_update_sensor_modal(id){
+  $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
+    var body = JSON.parse(data);
+    for (group_num = 0; group_num < body.Count; group_num++) {
+      if (body.Items[group_num].sensorId == id) {
+        document.getElementById('update_sensorname').value = body.Items[group_num].name;
+        document.getElementById('update_sensorType').value = body.Items[group_num].sensorType;
+      }
+    }
+  });
+}
+
+function initial_sensor(){
+  $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
+    var body = JSON.parse(data);
+    for (group_num = 0; group_num < body.Count; group_num++) {
+        var type = body.Items[group_num].sensorType;
+        var id = body.Items[group_num].sensorId;
+        var name = body.Items[group_num].name;
+        $("#current_"+type+"_div").find("#edit").attr('onclick','set_sensors_cookie(\'' + id + '\');'+
+        'change_update_sensor_modal(\''+ id +'\')');
+        $("#current_"+type+"_div").find("#name").text(name);
+    }
+  });
+}
+
+function initial_current_chart(){
   document.addEventListener("DOMContentLoaded", function(event) {
     var sensors = {};
 
@@ -566,21 +596,23 @@ function current_data(){
       relativeGaugeSize: true
     });
     console.log(sensors);
-    update_current_data(sensors);
+    initial_current_data(sensors);
   });
 }
 
-function update_current_data(sensors){
+function initial_current_data(sensors){
   $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
     var body = JSON.parse(data);
     for (let j = 0; j < body.Count; j++) {
+      var id = body.Items[j].sensorId;
+      var type = body.Items[j].sensorType;
       if(body.Items[j].visible == 1){
-        $.get(api_url + 'api/sensors/' + body.Items[j].sensorType + '/' + body.Items[j].sensorId, function(data) {
+        $.get(api_url + 'api/sensors/' + type + '/' + id, function(data) {
           
           if (data != 'No data') {
             var value = JSON.parse(data);
             var val = value.value;
-
+            
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
               $('#current_AIR_TEMPERATURE_div').show();
               sensors.air_temp.refresh(val);
@@ -639,9 +671,12 @@ function update_current_data(sensors){
               sensors.weed_direction.refresh("無數據");
             }
           }
+
+          
         });
       }
     }
   });
 }
+
 
