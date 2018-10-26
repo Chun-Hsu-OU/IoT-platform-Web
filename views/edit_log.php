@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>編輯日誌</title>
-  <link rel="Shortcut Icon" type="image/x-icon" href="images/platform-icon.ico" />
+  <link rel="Shortcut Icon" type="image/x-icon" href="images/pagelines.ico">
   <!-- Bootstrap -->
   <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="vendors/bootstrap/dist/js/bootstrap.min.js" rel="stylesheet">
@@ -90,7 +90,10 @@
       <div class="col-md-3 left_col">
         <div class="left_col scroll-view">
           <div class="navbar nav_title" style="border: 0;">
-            <a onclick="check_admin()" class="site_title"><i class="fa fa-pagelines"></i> <span>HSNL IoT Platform</span></a>
+            <a onclick="check_admin()" class="site_title">
+              <img src="images/pagelines.png" height="45px">
+              <span>HSNL IoT Platform</span>
+            </a>
           </div>
 
           <div class="clearfix"></div>
