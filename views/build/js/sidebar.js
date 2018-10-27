@@ -397,14 +397,14 @@ function add_sensor_item() {
   var groupId = getCookie("group");
   
   $.get(api_url + 'api/sensors/num/'+ groupId +'/'+ add_type, function(data){
-    console.log(data.Count);
+    console.log(data);
 
     $.post(api_url + 'api/add/sensor', {
       "groupId": groupId,
       "name": add_name,
       "macAddr": getCookie("macAddr"),
       "sensorType": add_type,
-      "num": parseInt(data.Count)+1,
+      "num": data,
       "ownerId": getCookie("checker")
     }, function(data) {
         alert("新增感測器 '" + add_name + "'成功！");
