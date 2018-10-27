@@ -197,34 +197,34 @@
       </div>
 
       <script>
-        $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
-          var body = JSON.parse(data);
+        // $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
+        //   var body = JSON.parse(data);
 
-          for (sensor_num = 0; sensor_num < body.Count; sensor_num++) {
-            load_warnings();
+        //   for (sensor_num = 0; sensor_num < body.Count; sensor_num++) {
+        //     load_warnings();
 
-            async function load_warnings() {
-              var name = body.Items[sensor_num].name;
-              try {
-                $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
-                  if (res == "No data") {
-                    $('#top_warning').prepend('<li><a>' +
-                      '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
-                      '<span>' +
-                      '<span><strong>' + name + '</strong></span>' +
-                      '</span>' +
-                      '<span class="message">' +
-                      'No signal for atleast 1 hour' +
-                      '</span>' +
-                      '</a></li>');
-                  }
-                });
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          }
-        });
+        //     async function load_warnings() {
+        //       var name = body.Items[sensor_num].name;
+        //       try {
+        //         $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
+        //           if (res == "No data") {
+        //             $('#top_warning').prepend('<li><a>' +
+        //               '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
+        //               '<span>' +
+        //               '<span><strong>' + name + '</strong></span>' +
+        //               '</span>' +
+        //               '<span class="message">' +
+        //               'No signal for atleast 1 hour' +
+        //               '</span>' +
+        //               '</a></li>');
+        //           }
+        //         });
+        //       } catch (err) {
+        //         console.error(err);
+        //       }
+        //     }
+        //   }
+        // });
       </script>
       <!-- /top navigation -->
 
@@ -886,14 +886,14 @@
                       <option value="SOIL_HUMIDITY">土壤濕度感應器</option>
                       <option value="WIND_DIRECTION">風向感應器</option>
                     </select>
-                    <br><br>感應器編號：<br>
+                    <!-- <br><br>感應器編號：<br>
                     <select required="required" id="add_number">
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
-                    </select>
+                    </select> -->
                   </form>
                 </div>
                 <div class="modal-footer">

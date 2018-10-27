@@ -372,20 +372,44 @@ function update_area_item() {
   });
 }
 
+// function add_sensor_item() {
+//   var add_name = document.getElementById("add_sensorname").value;
+//   var add_type = document.getElementById("add_sensorType").value;
+//   var add_number = document.getElementById("add_number").value;
+  
+//   $.post(api_url + 'api/add/sensor', {
+//       "groupId": getCookie("group"),
+//       "name": add_name,
+//       "macAddr": getCookie("macAddr"),
+//       "sensorType": add_type,
+//       "num": add_number,
+//       "ownerId": getCookie("checker")
+//   }, function(data) {
+//       alert("新增感測器 '" + add_name + "'成功！");
+//       location.reload();
+//   });
+// }
+
 function add_sensor_item() {
   var add_name = document.getElementById("add_sensorname").value;
   var add_type = document.getElementById("add_sensorType").value;
-  var add_number = document.getElementById("add_number").value;
+  // var add_number = document.getElementById("add_number").value;
+  var groupId = getCookie("group");
   
-  $.post(api_url + 'api/add/sensor', {
-      "groupId": getCookie("group"),
+  $.get(api_url + 'api/sensors/num/'+ groupId +'/'+ add_type, function(data){
+    console.log(data.Count);
+
+    $.post(api_url + 'api/add/sensor', {
+      "groupId": groupId,
       "name": add_name,
       "macAddr": getCookie("macAddr"),
       "sensorType": add_type,
-      "num": add_number,
+      "num": parseInt(data.Count)+1,
       "ownerId": getCookie("checker")
-  }, function(data) {
-      alert("新增感測器 '" + add_name + "'成功！");
-      location.reload();
+    }, function(data) {
+        alert("新增感測器 '" + add_name + "'成功！");
+        location.reload();
+    });
   });
+  
 }
