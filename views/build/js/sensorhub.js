@@ -396,7 +396,7 @@ function add_sensor_item() {
 }
 
 function initial_sensor_name(){
-  document.getElementById("add_sensorname").value = document.getElementById("add_sensorType").value;
+  document.getElementById("add_sensorname").value = document.getElementById("add_sensorType").text;
 }
 
 function initial_current_chart(){
