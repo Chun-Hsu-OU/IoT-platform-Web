@@ -372,6 +372,33 @@ function initial_sensor(){
   });
 }
 
+function add_sensor_item() {
+  var add_name = document.getElementById("add_sensorname").value;
+  var add_type = document.getElementById("add_sensorType").value;
+  // var add_number = document.getElementById("add_number").value;
+  var macAddr = getCookie("macAddr");
+  
+  $.get(api_url + 'api/sensors/num/'+ macAddr +'/'+ add_type, function(data){
+    console.log(data);
+
+    $.post(api_url + 'api/add/sensor', {
+      "groupId": groupId,
+      "name": add_name,
+      "macAddr": getCookie("macAddr"),
+      "sensorType": add_type,
+      "num": data,
+      "ownerId": getCookie("checker")
+    }, function(data) {
+        alert("新增感測器 '" + add_name + "'成功！");
+        location.reload();
+    });
+  });
+}
+
+function initial_sensor_name(){
+  document.getElementById("add_sensorname").value = document.getElementById("add_sensorType").value;
+}
+
 function initial_current_chart(){
   document.addEventListener("DOMContentLoaded", function(event) {
     var sensors = {};
