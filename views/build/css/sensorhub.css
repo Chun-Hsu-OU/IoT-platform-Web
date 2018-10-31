@@ -67,7 +67,7 @@
     height: 40px;
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 1280px){
     .gauge{
         width: 50%;
     }
@@ -76,7 +76,7 @@
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 640px){
     .gauge{
         width: 100%;
     }
