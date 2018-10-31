@@ -540,7 +540,7 @@ function initial_current_chart(){
     sensors.battery = new JustGage({
         id: "current_BATTERY_VOLTAGE",
         label: "V",
-        value: 12.6,
+        value: 0,
         min: 0,
         max: 13,
         levelColors: [
