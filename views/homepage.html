@@ -37,9 +37,13 @@
   <script src="../vendors/jquery/dist/jquery.min.js"></script>
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/loading.js"></script>
+  <script src="../build/js/homepage.js"></script>
 
   <!-- d3.js -->
   <script src="http://d3js.org/d3.v3.min.js"></script>
+
+  <!-- css by CHOu -->
+  <link href="../build/css/homepage.css" rel="stylesheet">
 </head>
 <style>
   .x_title span {
@@ -77,6 +81,7 @@
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
   window.onload = load_sensor_in_modal();
+  window.onload = load_sensorhub_info();
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -189,34 +194,34 @@
       </div>
 
       <script>
-        $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
-          var body = JSON.parse(data);
+        // $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
+        //   var body = JSON.parse(data);
 
-          for (sensor_num = 0; sensor_num < body.Count; sensor_num ++) {
-            load_warnings();
+        //   for (sensor_num = 0; sensor_num < body.Count; sensor_num ++) {
+        //     load_warnings();
 
-            async function load_warnings() {
-              var name = body.Items[sensor_num].name;
-              try {
-                $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
-                  if (res == "No data") {
-                    $('#top_warning').prepend('<li><a>' +
-                      '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
-                      '<span>' +
-                        '<span><strong>' + name + '</strong></span>' +
-                      '</span>' +
-                      '<span class="message">' +
-                        'No signal for atleast 1 hour' +
-                      '</span>' +
-                      '</a></li>');
-                  }
-                });
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          }
-        });
+        //     async function load_warnings() {
+        //       var name = body.Items[sensor_num].name;
+        //       try {
+        //         $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
+        //           if (res == "No data") {
+        //             $('#top_warning').prepend('<li><a>' +
+        //               '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
+        //               '<span>' +
+        //                 '<span><strong>' + name + '</strong></span>' +
+        //               '</span>' +
+        //               '<span class="message">' +
+        //                 'No signal for atleast 1 hour' +
+        //               '</span>' +
+        //               '</a></li>');
+        //           }
+        //         });
+        //       } catch (err) {
+        //         console.error(err);
+        //       }
+        //     }
+        //   }
+        // });
       </script>
       <!-- /top navigation -->
 
@@ -225,16 +230,16 @@
         <div class="">
           <div class="page-title">
             <div class="title_left">
-              <h3>總覽 <small>資源監視器</small></h3>
+              <h3>總覽</h3>
             </div>
           </div>
 
           <div class="clearfix"></div>
 
-          <div class="col-md-24 col-sm-24 col-xs-12">
+          <div class="col-sm-7">
             <div class="x_panel">
               <div class="x_title">
-                <h2>場域-群組列表</h2>
+                <h2>感測群組資訊與狀態</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -251,64 +256,62 @@
               <div class="x_content">
                 <!-- Table row -->
                 <div class="row">
-                  <div class="col-xs-12 table">
+                  <div class="col-sm-6 table">
                     <table id="homepage_area_table" class="table table-striped">
                       <thead>
                         <tr>
                           <th>場域</th>
                           <th>位置</th>
                           <th>群組</th>
-                          <th style="width: 35%">描述說明</th>
-                          <th style="width: 13%">創建日期</th>
-                          <th>選項</th>
+                          <th>狀態</th>
                         </tr>
                       </thead>
                       <tbody>
                       </tbody>
 
                       <script>
-                        function set_group_cookie(id) {
-                          document.cookie = "group=" + id;
-                        }
+                        // function set_group_cookie(id) {
+                        //   document.cookie = "group=" + id;
+                        // }
 
-                        var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
+                        // var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
 
-                        var uuid = getCookie("checker");
-                        $.get(api_url + 'api/area/' + uuid, function(data) {
-                          var area_body = JSON.parse(data);
-                          for (let i = 0; i < area_body.Count; i++) {
-                            if (area_body.Items[i].visible == 1) {
-                              $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[i].areaId, function(data) {
-                                var group_body = JSON.parse(data);
-                                for (let j = 0; j < group_body.Count; j++) {
-                                  if (group_body.Items[j].visible == 1) {
-                                    $('tbody').append('<tr>' +
-                                      '<td>' + area_body.Items[i].name + '</td>' +
-                                      '<td>' + area_body.Items[i].location + '</td>' +
-                                      '<td>' + group_body.Items[j].name + '</td>' +
-                                      '<td>' + group_body.Items[j].description + '</td>' +
-                                      '<td>' + timeConverter(group_body.Items[j].createdtime) + '</td>' +
-                                      '<td><a onclick="set_group_cookie(\'' + group_body.Items[j].groupId + '\')" href="#" data-toggle="modal" data-target="#set_sensorgroup_modal">編輯</a></td>' +
-                                      '</tr>');
-                                  }
-                                }
-                              });
-                            }
-                          }
-                        });
+                        // var uuid = getCookie("checker");
+                        // $.get(api_url + 'api/area/' + uuid, function(data) {
+                        //   var area_body = JSON.parse(data);
+                        //   for (let i = 0; i < area_body.Count; i++) {
+                        //     if (area_body.Items[i].visible == 1) {
+                        //       $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[i].areaId, function(data) {
+                        //         var group_body = JSON.parse(data);
+                        //         for (let j = 0; j < group_body.Count; j++) {
+                        //           if (group_body.Items[j].visible == 1) {
+                        //             $('tbody').append('<tr>' +
+                        //               '<td>' + area_body.Items[i].name + '</td>' +
+                        //               '<td>' + area_body.Items[i].location + '</td>' +
+                        //               '<td>' + group_body.Items[j].name + '</td>' +
+                        //               '<td>' + group_body.Items[j].description + '</td>' +
+                        //               '<td>' + timeConverter(group_body.Items[j].createdtime) + '</td>' +
+                        //               '<td><a onclick="set_group_cookie(\'' + group_body.Items[j].groupId + '\')" href="#" data-toggle="modal" data-target="#set_sensorgroup_modal">編輯</a></td>' +
+                        //               '</tr>');
+                        //           }
+                        //         }
+                        //       });
+                        //     }
+                        //   }
+                        // });
 
-                        function timeConverter(UNIX_timestamp) {
-                          var a = new Date(UNIX_timestamp);
-                          var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                          var year = a.getFullYear();
-                          var month = months[a.getMonth()];
-                          var date = a.getDate() < 10 ? '0' + a.getDate() : a.getDate();
-                          var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();
-                          var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
-                          var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
-                          var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-                          return time;
-                        }
+                        // function timeConverter(UNIX_timestamp) {
+                        //   var a = new Date(UNIX_timestamp);
+                        //   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        //   var year = a.getFullYear();
+                        //   var month = months[a.getMonth()];
+                        //   var date = a.getDate() < 10 ? '0' + a.getDate() : a.getDate();
+                        //   var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();
+                        //   var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
+                        //   var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+                        //   var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+                        //   return time;
+                        // }
                       </script>
                     </table>
                   </div>
@@ -320,7 +323,48 @@
             </div>
           </div>
 
-          <div class="col-md-24 col-sm-24 col-xs-12">
+          <div class="col-sm-5">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>場域分佈位置</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></a>
+                    <ul class="dropdown-menu" role="menu">
+                    </ul>
+                  </li>
+                  <li><a class="close-link"><i class="fa fa-close"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content taiwan">
+                <div class="location pingtung"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location taitung"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location hualien"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location yilan"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location keelung"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location new_taipei"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location taipei"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location taoyuan"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location hsinchu"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location miaoli"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location taichung"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location nantou"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location changhua"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location yunlin"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location chiayi"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location kaohsiung"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location tainan"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location kinmen"><i class="fa fa-thumb-tack"></i></div>
+                <div class="location penghu"><i class="fa fa-thumb-tack"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
             <div class="x_panel">
               <div class="x_title">
                 <h2>場域架構圖</h2>

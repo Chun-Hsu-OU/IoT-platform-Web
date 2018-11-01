@@ -1,0 +1,116 @@
+table{
+    font-size: 14px;
+}
+
+.x_content.taiwan{
+    background-image: url("../../images/taiwan.png");
+    height: 500px;
+    background-size: cover;
+}
+
+.location{
+    position: absolute;
+    top: 55%;
+    left: 36%;
+    color: red;
+    font-size: 35px;
+}
+
+.pingtung{
+    top: 75%;
+    left: 48%;
+}
+
+.taitung{
+    top: 60%;
+    left: 60%;
+}
+
+.hualien{
+    top: 32%;
+    left: 72%;
+}
+
+.yilan{
+    top: 14%;
+    left: 80%;
+}
+
+.keelung{
+    top: 1%;
+    left: 80%;
+    font-size: 30px;
+}
+
+.new_taipei{
+    top: 2%;
+    left: 77%;
+    font-size: 30px;
+}
+
+.taipei{
+    top: 5%;
+    left: 74%;
+    font-size: 30px;
+}
+
+.taoyuan{
+    top: 10%;
+    left: 67%;
+    font-size: 30px;
+}
+
+.hsinchu{
+    top: 16%;
+    left: 67%;
+}
+
+.miaoli{
+    top: 20%;
+    left: 62%;
+}
+
+.taichung{
+    top: 25%;
+    left: 62%;
+}
+
+.nantou{
+    top: 33%;
+    left: 59%;
+}
+
+.changhua{
+    top: 30%;
+    left: 43%;
+}
+
+.yunlin{
+    top: 40%;
+    left: 46%;
+}
+
+.chiayi{
+    top: 47%;
+    left: 52%;
+}
+
+.kaohsiung{
+    top: 58%;
+    left: 50%;
+}
+
+.tainan{
+    top: 55%;
+    left: 36%;
+}
+
+.kinmen{
+    top: 25%;
+    left: 10%;
+}
+
+.penghu{
+    top: 62%;
+    left: 5%;
+}
