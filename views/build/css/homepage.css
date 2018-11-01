@@ -5,6 +5,7 @@ table{
 .x_content.taiwan{
     background-image: url("../../images/taiwan.png");
     height: 500px;
+    max-width: 432px;
     background-size: cover;
 }
 
