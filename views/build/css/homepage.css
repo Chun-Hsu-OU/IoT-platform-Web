@@ -8,6 +8,16 @@ table{
     background-size: cover;
 }
 
+.small-screen-setting{
+    /* 螢幕太小東西超出去會出現捲軸(x軸和y軸都會) */
+    overflow: auto;
+    background-color: #fff;
+}
+
+.hr-border-style{
+    border: 2px solid #E6E9ED;
+}
+
 .location{
     position: absolute;
     top: 55%;
