@@ -15,10 +15,6 @@ table{
     background-color: #fff;
 }
 
-.hr-border-style{
-    border: 2px solid #E6E9ED;
-}
-
 .location{
     position: absolute;
     top: 55%;
