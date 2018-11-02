@@ -358,6 +358,20 @@ function change_update_sensor_modal(id){
   });
 }
 
+function update_sensor_item() {
+  var update_name = document.getElementById("update_sensorname").value;
+  var update_type = document.getElementById("update_sensorType").value;
+
+  $.post(api_url + 'api/update/sensor', {
+    "groupId": getCookie("group"),
+    "sensorId": getCookie("sensor"),
+    "name": update_name,
+    "sensorType": update_type
+  }, function() {
+    window.location.replace('sensorhub.html');
+  });
+}
+
 function initial_sensor(){
   $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
     var body = JSON.parse(data);
@@ -396,7 +410,7 @@ function add_sensor_item() {
 }
 
 function initial_sensor_name(){
-  document.getElementById("add_sensorname").value = $("#add_sensorType option:selected").text();;
+  document.getElementById("add_sensorname").value = $("#add_sensorType option:selected").text();
 }
 
 function initial_current_chart(){

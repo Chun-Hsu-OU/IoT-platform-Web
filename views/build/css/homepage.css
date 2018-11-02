@@ -17,107 +17,125 @@ table{
 
 .location{
     position: absolute;
-    top: 55%;
-    left: 36%;
     color: red;
     font-size: 35px;
+    display: none;
 }
 
 .pingtung{
     top: 75%;
     left: 48%;
+    display: block;
 }
 
 .taitung{
     top: 60%;
     left: 60%;
+    display: block;
 }
 
 .hualien{
     top: 32%;
     left: 72%;
+    display: block;
 }
 
 .yilan{
     top: 14%;
     left: 80%;
+    display: block;
 }
 
 .keelung{
     top: 1%;
     left: 80%;
     font-size: 30px;
+    display: block;
 }
 
 .new_taipei{
     top: 2%;
     left: 77%;
     font-size: 30px;
+    display: block;
 }
 
 .taipei{
     top: 5%;
     left: 74%;
     font-size: 30px;
+    display: block;
 }
 
 .taoyuan{
     top: 10%;
     left: 67%;
     font-size: 30px;
+    display: block;
 }
 
 .hsinchu{
     top: 16%;
     left: 67%;
+    display: block;
 }
 
 .miaoli{
     top: 20%;
     left: 62%;
+    display: block;
 }
 
 .taichung{
     top: 25%;
     left: 62%;
+    display: block;
 }
 
 .nantou{
     top: 33%;
     left: 59%;
+    display: block;
 }
 
 .changhua{
     top: 30%;
     left: 43%;
+    display: block;
 }
 
 .yunlin{
     top: 40%;
     left: 46%;
+    display: block;
 }
 
 .chiayi{
     top: 47%;
     left: 52%;
+    display: block;
 }
 
 .kaohsiung{
     top: 58%;
     left: 50%;
+    display: block;
 }
 
 .tainan{
     top: 55%;
     left: 36%;
+    display: block;
 }
 
 .kinmen{
     top: 25%;
     left: 10%;
+    display: block;
 }
 
 .penghu{
     top: 62%;
     left: 5%;
+    display: block;
 }

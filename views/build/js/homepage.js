@@ -2,7 +2,6 @@ var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:30
 
 var uuid = getCookie("checker");
 
-
 function load_sensorhub_info(){
     
     //$.when()用途 -> 依照順序檢查sensor狀態
@@ -27,7 +26,7 @@ function load_sensorhub_info(){
                                     // group_body.Items[j].name只是為了debug用，之後可以拿掉
                                     if(k == 0){
                                         $('tbody').append('<tr>' +
-                                        '<td>' + area_body.Items[i].name + '</td>' +
+                                        '<td><a href="area_page.html" onclick="set_area_cookie(\''+ area_body.Items[i].areaId +'\')"><u>' + area_body.Items[i].name + '</u></a></td>' +
                                         '<td>' + area_body.Items[i].location + '</td>' +
                                         '<td>' + group_body.Items[j].name + '</td>' +
                                         '<td id="state" style="color: green;letter-spacing: 2px;"><i class="fa fa-check-circle"></i>正常</td>' +
@@ -54,6 +53,19 @@ function check_working(type, id, name, index, count){
             $("#state").attr("id","");
         }
         console.log(name+": "+index);
+    });
+}
+
+function set_area_cookie(Id) {
+    document.cookie = 'area=' + Id;
+}
+
+function initial_map(){
+    $.get(api_url + 'api/area/' + uuid, function(data) {
+        var area_body = JSON.parse(data);
+        for (let i = 0; i < area_body.Count; i++) {
+            $("#map").append('<div class="location '+ area_body.Items[i].city +'"><i class="fa fa-map-marker"></i></div>');   
+        }
     });
 }
 

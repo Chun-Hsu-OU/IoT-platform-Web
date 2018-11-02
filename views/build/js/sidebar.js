@@ -42,65 +42,46 @@ function load_sidebars() {
   });
 }
 
-function click_add_area_enable_map(){
-  console.log(document.getElementById("enable_map").checked);
-  if(document.getElementById("enable_map").checked){
-    document.getElementById("new_area_longitude").disabled = true;
-    document.getElementById("new_area_latitude").disabled = true;
-  }else{
-    document.getElementById("new_area_longitude").disabled = false;
-    document.getElementById("new_area_latitude").disabled = false;
-  }
-}
-
 function add_area() {
   var new_area_name = document.getElementById("new_area_name").value;
   var new_area_location = document.getElementById("new_area_location").value;
+  var city = document.getElementById("city").value;
 
-  if (new_area_name && new_area_location) {
-    if(document.getElementById("new_area_longitude").disabled && document.getElementById("new_area_latitude").disabled){
-      var new_area_longitude = "None";
-      var new_area_latitude = "None";
+  if (new_area_name) {
+    if(city != "none"){
+      var city_string = $("#city option:selected").text();
+      new_area_location = city_string + new_area_location;
     }else{
-      var new_area_longitude = document.getElementById("new_area_longitude").value;
-      var new_area_latitude = document.getElementById("new_area_latitude").value;
-      if(new_area_longitude == "" || new_area_latitude == ""){
-        alert("請確實填入所有欄位");
-        return;
+      if(!new_area_location){
+        new_area_location = "無";
       }
     }
-    console.log("add area");
+
     $.post(api_url + 'api/add/area/', {
       "ownerId": uuid,
       "name": new_area_name,
-      "location": new_area_location,
-      "longitude": new_area_longitude,
-      "latitude": new_area_latitude
+      "city": city,
+      "location": new_area_location
     },function(){
       alert("新增場域成功！");
       location.reload();
     });
   }else{
-    alert("請確實填入所有欄位");
+    alert("請確實填入必填欄位");
   }
 }
 
 function add_group() {
   var new_group_name = document.getElementById("new_group_name").value;
-  var new_group_description = document.getElementById("new_group_description").value;
-  var new_group_product_selectBox = document.getElementById("new_group_product");
-  var new_group_product = new_group_product_selectBox.options[new_group_product_selectBox.selectedIndex].value;
   var group_select_selectBox = document.getElementById("group_select");
   var group_select = group_select_selectBox.options[group_select_selectBox.selectedIndex].value;
   var macAddr = document.getElementById("macAddr").value;
 
   //檢查每個欄位都有值
-  if(new_group_name && new_group_description && new_group_product!="NoSelection" && group_select!="NoSelection" && macAddr){
+  if(new_group_name && group_select!="NoSelection" && macAddr){
     $.post(api_url + 'api/add/sensorGroup', {
       "areaId": getCookie("area"),
       "name": new_group_name,
-      "description": new_group_description,
-      "product": new_group_product,
       "macAddr": macAddr
     },function(){
       alert("感測器群組新增成功！");
@@ -321,53 +302,5 @@ function load_sensor_in_modal() {
         $('#sensor_del').append('<option value="' + sensor.sensorId + '">' + sensor.name + '</option>');
       }
     });
-  });
-}
-
-function update_sensor_item() {
-  var update_name = document.getElementById("update_sensorname").value;
-  var update_type = document.getElementById("update_sensorType").value;
-
-  $.post(api_url + 'api/update/sensor', {
-    "groupId": getCookie("group"),
-    "sensorId": getCookie("sensor"),
-    "name": update_name,
-    "sensorType": update_type
-  }, function() {
-    window.location.replace('sensorhub.html');
-  });
-}
-
-function update_sensorgroup_item() {
-  var update_name = document.getElementById("update_sensorgroup_name").value;
-  var update_description = document.getElementById("update_sensorgroup_description").value;
-  var update_product = document.getElementById("update_product").value;
-
-  $.post(api_url + 'api/update/group', {
-    "groupId": getCookie("group"),
-    "areaId": getCookie("area"),
-    "name": update_name,
-    "description": update_description,
-    "product": update_product
-  }, function() {
-    window.location.replace('homepage.html');
-  });
-}
-
-function update_area_item() {
-  var update_name = document.getElementById("update_area_name").value;
-  var update_location = document.getElementById("update_area_location").value;
-  var update_longitude = document.getElementById("update_longitude").value;
-  var update_latitude = document.getElementById("update_latitude").value;
-
-  $.post(api_url + 'api/update/area', {
-    "ownerId": getCookie("checker"),
-    "areaId": getCookie("area"),
-    "name": update_name,
-    "location": update_location,
-    "longitude": update_longitude,
-    "latitude": update_latitude
-  }, function() {
-    window.location.replace('area_page.html');
   });
 }

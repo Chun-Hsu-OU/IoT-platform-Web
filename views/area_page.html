@@ -43,6 +43,9 @@
   <script src="../build/js/area_page.js"></script>
   <script src="../build/js/loading.js"></script>
 
+  <!-- css by CHOu -->
+  <link href="../build/css/area_page.css" rel="stylesheet">
+
 </head>
 <style>
   .x_title span {
@@ -51,15 +54,6 @@
 
   .count {
     font-size: 20px;
-  }
-
-  #map {
-    height: 400px;  /* The height is 400 pixels */
-    width: 800px;  /* The width is the width of the web page */
-  }
-
-  body{
-    height: 1500px;
   }
 </style>
 
@@ -235,40 +229,14 @@
             </div>
 
             <!--The div element for the map -->
-            <div id="map"></div>
-            <script>
-              // Initialize and add the map
-              function initMap() {
-                $.get(api_url + 'api/area/' + uuid, function (data, status) {
-                  var body = JSON.parse(data);
-                  body.Items.forEach(function make(area){
-                    if(area.areaId == getCookie("area")){
-                      if(area.longitude != "None" &&  area.latitude != "None"){
-                        console.log(parseFloat(area.longitude));
-                        console.log(parseFloat(area.latitude));
-                        // The location of Uluru
-                        var uluru = {lat: parseFloat(area.latitude), lng: parseFloat(area.longitude)};
-                        // The map, centered at Uluru
-                        var map = new google.maps.Map(
-                            document.getElementById('map'), {zoom: 17, center: uluru});
-                        // The marker, positioned at Uluru
-                        var marker = new google.maps.Marker({position: uluru, map: map});
-                      }
-                      else{
-                        $("#map").hide();
-                      }
-                    }
-                  });
-                });
-              }
-            </script>
+            <div class="col-xs-12 col-sm-8" id="map"></div>
             <!--Load the API from the specified URL
             * The async attribute allows the browser to render the page while the API loads
             * The key parameter will contain your own API key (which is not needed for this tutorial)
             * The callback parameter executes the initMap() function
             -->
             <script async defer
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSFUJehUd8mqfxuFCAY9zwXOHd3-9Wlmk&callback=initMap">
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAPOAHP16VfVpgfEQiAa9oqzdXI9rjNq4&callback=initMap">
             </script>
           </div>
         </div>
@@ -287,15 +255,33 @@
               </div>
               <div class="modal-body">
                 <form>
-                  場域名稱:<br>
+                  <span style="color: red">*&nbsp;</span>場域名稱:<br>
                   <input type="text" id="new_area_name">
                   <br><br>
                   場域地址:<br>
-                  <input type="text" id="new_area_location">
-                  <br><br>
-                  場域經緯度:&nbsp;&nbsp;<input type="checkbox" id="enable_map" onclick="click_add_area_enable_map()" checked>關閉/開啟<br>
-                  經度:<input type="text" id="new_area_longitude" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  緯度:<input type="text" id="new_area_latitude" disabled>
+                  <select required="required" id="city">
+                    <option value="none">---請選擇縣市---</option>
+                    <option value="keelung">基隆市</option>
+                    <option value="new_taipei">新北市</option>
+                    <option value="taipei">台北市</option>
+                    <option value="taoyuan">桃園縣</option>
+                    <option value="hsinchu">新竹縣</option>
+                    <option value="yilan">宜蘭縣</option>
+                    <option value="miaoli">苗栗縣</option>
+                    <option value="taichung">台中市</option>
+                    <option value="changhua">彰化縣</option>
+                    <option value="nantou">南投縣</option>
+                    <option value="hualien">花蓮縣</option>
+                    <option value="yunlin">雲林縣</option>
+                    <option value="chiayi">嘉義縣</option>
+                    <option value="tainan">台南市</option>
+                    <option value="kaohsiung">高雄市</option>
+                    <option value="taitung">台東縣</option>
+                    <option value="pingtung">屏東縣</option>
+                    <option value="kinmen">金門縣</option>
+                    <option value="penghu">澎湖縣</option>
+                  </select>
+                  <input type="text" id="new_area_location" size="40">
                   <br><br>
                 </form>
               </div>
@@ -319,21 +305,13 @@
               </div>
               <div class="modal-body">
                 <form>
-                  感測器群組名稱:<br>
+                  <span style="color: red">*&nbsp;</span>感測器群組名稱:<br>
                   <input type="text" id="new_group_name">
                   <br><br>
-                  感測器群組描述:<br>
-                  <input type="text" id="new_group_description">
-                  <br><br>
-                  作物種類：<br>
-                  <select required="required" id="new_group_product">
-                    <option value="NoSelection">---請選擇---</option>
-                    <option value="Green_Onion">蔥</option>
-                    <option value="Others">其他</option>
-                  </select>
-                  <br><br>LoRa 模組 MacAddress：<br>
+                  <span style="color: red">*&nbsp;</span>LoRa 模組 MacAddress：<br>
                   <input type="text" id="macAddr" value="">
-                  <br><br> 建制於場域:<br>
+                  <br><br> 
+                  <span style="color: red">*&nbsp;</span>建制於場域:<br>
                   <select required="required" id="group_select" onchange="group_select_func(value);">
               </select>
                 </form>
@@ -348,41 +326,44 @@
       </div>
 
       <div class="container">
-          <div class="modal fade" id="new_controller_Modal" role="dialog">
-            <div class="modal-dialog">
-              <!-- Modal content-->
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">新增控制器</h4>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    控制器名稱:<br>
-                      <input type="text" id="new_controller_name">
-                      <br><br> 建制於場域:<br>
-                      <select required="required" id="controller_in_area">
-                      </select>
-                      <br><br> 傳輸協議:<br>
-                      <select required="required" id="protocol">
-                        <option value="NoSelection">---請選擇---</option>
-                        <option value="socket">socket</option>
-                        <option value="lora-p2p">lora-p2p</option>
-                        <option value="nb-iot">nb-iot</option>
-                        <option value="self-control">自控</option>
-                      </select>
-                      <br><br> 協議相關設定:<br>
-                      <input type="text" id="protocol_setting">
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_controller()">Add</button>
-                </div>
+        <div class="modal fade" id="new_controller_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">新增控制器</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <span style="color: red">*&nbsp;</span>控制器名稱:<br>
+                  <input type="text" id="new_controller_name">
+                  <br><br> 
+                  <span style="color: red">*&nbsp;</span>建制於場域:<br>
+                  <select required="required" id="controller_in_area">
+                  </select>
+                  <br><br> 
+                  傳輸協議:<br>
+                  <select required="required" id="protocol">
+                    <option value="NoSelection">---請選擇---</option>
+                    <option value="socket">socket</option>
+                    <option value="lora-p2p">lora-p2p</option>
+                    <option value="nb-iot">nb-iot</option>
+                    <option value="self-control">自控</option>
+                  </select>
+                  <br><br> 
+                  協議相關設定:<br>
+                  <input type="text" id="protocol_setting">
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_controller()">Add</button>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
       <div class="container">
         <div class="modal fade" id="Setting_Modal" role="dialog">
@@ -428,18 +409,46 @@
                 <form>
                   欲刪除場域:<br>
                   <select required id="area_del" onchange="area_del_func()">
-                  </select><br> 欲刪除感測器群組:
+              </select><br> 欲刪除感測器群組:
                   <br>
                   <select required id="group_del" onchange="group_del_func()">
-                  </select><br> 欲刪除感測器:
+              </select><br> 欲刪除感測器:
                   <br>
                   <select required id="sensor_del" onchange="sensor_del_func()">
-                  </select><br>
+              </select><br>
                 </form>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="set_sensorgroup_modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">編輯感應器群組</h4>
+              </div>
+              <div class="modal-body">
+                <form id="sensorgroup_setting_modify">
+                  感測器群組名稱：<br>
+                  <input type="text" id="update_sensorgroup_name">
+                  <br><br>
+                  LoRa 模組 MacAddress：<br>
+                  <input type="text" id="update_macAddr" value="">
+                  <br><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="update_sensorgroup_item()">Commit</button>
               </div>
             </div>
           </div>
@@ -469,10 +478,7 @@
                         $('#area_setting_modify').prepend('場域名稱：<br>' +
                           '<input type="text" id="update_area_name" value="' + body.Items[area_num].name + '">' +
                           '<br><br>場域位置：<br>' +
-                          '<input type="text" size="60" id="update_area_location" value="' + body.Items[area_num].location + '"><br><br>' +
-                          '場域經緯度:<br>' +
-                          '經度:<input type="text" id="update_longitude" value="'+ body.Items[area_num].longitude + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                          '緯度:<input type="text" id="update_latitude" value="'+ body.Items[area_num].latitude + '"><br><br>')
+                          '<input type="text" size="60" id="update_area_location" value="' + body.Items[area_num].location + '"><br><br>');
                       }
                     }
                   });

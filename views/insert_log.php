@@ -670,77 +670,87 @@
 
       <!-- /page content -->
       <div class="container">
-        <div class="modal fade" id="new_area_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">新增場域</h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  場域名稱:<br>
-                  <input type="text" id="new_area_name">
-                  <br><br>
-                  場域地址:<br>
-                  <input type="text" id="new_area_location">
-                  <br><br>
-                  場域經緯度:&nbsp;&nbsp;<input type="checkbox" id="enable_map" onclick="click_add_area_enable_map()" checked>關閉/開啟<br>
-                  經度:<input type="text" id="new_area_longitude" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  緯度:<input type="text" id="new_area_latitude" disabled>
-                  <br><br>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="modal fade" id="new_group_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">新增感測器群組</h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  感測器群組名稱:<br>
-                  <input type="text" id="new_group_name">
-                  <br><br>
-                  感測器群組描述:<br>
-                  <input type="text" id="new_group_description">
-                  <br><br>
-                  作物種類：<br>
-                  <select required="required" id="new_group_product">
-                    <option value="NoSelection">---請選擇---</option>
-                    <option value="Green_Onion">蔥</option>
-                    <option value="Others">其他</option>
-                  </select>
-                  <br><br>LoRa 模組 MacAddress：<br>
-                  <input type="text" id="macAddr" value="">
-                  <br><br> 建制於場域:<br>
-                  <select required="required" id="group_select" onchange="group_select_func(value);">
-                  </select>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <div class="modal fade" id="new_area_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">新增場域</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <span style="color: red">*&nbsp;</span>場域名稱:<br>
+                      <input type="text" id="new_area_name">
+                      <br><br>
+                      場域地址:<br>
+                      <select required="required" id="city">
+                        <option value="none">---請選擇縣市---</option>
+                        <option value="keelung">基隆市</option>
+                        <option value="new_taipei">新北市</option>
+                        <option value="taipei">台北市</option>
+                        <option value="taoyuan">桃園縣</option>
+                        <option value="hsinchu">新竹縣</option>
+                        <option value="yilan">宜蘭縣</option>
+                        <option value="miaoli">苗栗縣</option>
+                        <option value="taichung">台中市</option>
+                        <option value="changhua">彰化縣</option>
+                        <option value="nantou">南投縣</option>
+                        <option value="hualien">花蓮縣</option>
+                        <option value="yunlin">雲林縣</option>
+                        <option value="chiayi">嘉義縣</option>
+                        <option value="tainan">台南市</option>
+                        <option value="kaohsiung">高雄市</option>
+                        <option value="taitung">台東縣</option>
+                        <option value="pingtung">屏東縣</option>
+                        <option value="kinmen">金門縣</option>
+                        <option value="penghu">澎湖縣</option>
+                      </select>
+                      <input type="text" id="new_area_location" size="40">
+                      <br><br>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="container">
+          <div class="container">
+            <div class="modal fade" id="new_group_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">新增感測器群組</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <span style="color: red">*&nbsp;</span>感測器群組名稱:<br>
+                      <input type="text" id="new_group_name">
+                      <br><br>
+                      <span style="color: red">*&nbsp;</span>LoRa 模組 MacAddress：<br>
+                      <input type="text" id="macAddr" value="">
+                      <br><br> 
+                      <span style="color: red">*&nbsp;</span>建制於場域:<br>
+                      <select required="required" id="group_select" onchange="group_select_func(value);">
+                  </select>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="container">
             <div class="modal fade" id="new_controller_Modal" role="dialog">
               <div class="modal-dialog">
                 <!-- Modal content-->
@@ -751,12 +761,14 @@
                   </div>
                   <div class="modal-body">
                     <form>
-                    控制器名稱:<br>
+                      <span style="color: red">*&nbsp;</span>控制器名稱:<br>
                       <input type="text" id="new_controller_name">
-                      <br><br> 建制於場域:<br>
+                      <br><br> 
+                      <span style="color: red">*&nbsp;</span>建制於場域:<br>
                       <select required="required" id="controller_in_area">
                       </select>
-                      <br><br> 傳輸協議:<br>
+                      <br><br> 
+                      傳輸協議:<br>
                       <select required="required" id="protocol">
                         <option value="NoSelection">---請選擇---</option>
                         <option value="socket">socket</option>
@@ -764,7 +776,8 @@
                         <option value="nb-iot">nb-iot</option>
                         <option value="self-control">自控</option>
                       </select>
-                      <br><br> 協議相關設定:<br>
+                      <br><br> 
+                      協議相關設定:<br>
                       <input type="text" id="protocol_setting">
                     </form>
                   </div>
@@ -777,67 +790,67 @@
             </div>
           </div>
 
-      <div class="container">
-        <div class="modal fade" id="Setting_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">使用者資訊設定</h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  新的使用者名稱:<br>
-                  <input type="text" id="new_username">
-                  <br><br> 新的密碼:
-                  <br>
-                  <input type="text" id="new_password">
-                  <br><br> 確認新的密碼:
-                  <br>
-                  <input type="text" id="new_password_confirm">
-                  <br><br>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <div class="container">
+            <div class="modal fade" id="Setting_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">使用者資訊設定</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      新的使用者名稱:<br>
+                      <input type="text" id="new_username">
+                      <br><br> 新的密碼:
+                      <br>
+                      <input type="text" id="new_password">
+                      <br><br> 確認新的密碼:
+                      <br>
+                      <input type="text" id="new_password_confirm">
+                      <br><br>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="container">
-        <div class="modal fade" id="del_Modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">刪除項目</h4>
-              </div>
-              <div class="modal-body">
-                <form>
-                  欲刪除場域:<br>
-                  <select required id="area_del" onchange="area_del_func()">
+          <div class="container">
+            <div class="modal fade" id="del_Modal" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">刪除項目</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      欲刪除場域:<br>
+                      <select required id="area_del" onchange="area_del_func()">
                   </select><br> 欲刪除感測器群組:
-                  <br>
-                  <select required id="group_del" onchange="group_del_func()">
+                      <br>
+                      <select required id="group_del" onchange="group_del_func()">
                   </select><br> 欲刪除感測器:
-                  <br>
-                  <select required id="sensor_del" onchange="sensor_del_func()">
+                      <br>
+                      <select required id="sensor_del" onchange="sensor_del_func()">
                   </select><br>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
       <!-- jQuery -->
       <!-- Bootstrap -->
       <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>

@@ -82,6 +82,7 @@
   window.onload = load_group_in_modal();
   window.onload = load_sensor_in_modal();
   window.onload = load_sensorhub_info();
+  window.onload = initial_map();
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -342,8 +343,8 @@
                 </ul>
                 <div class="clearfix"></div>
               </div>
-              <div class="x_content taiwan">
-                <div class="location pingtung"><i class="fa fa-map-marker"></i></div>
+              <div class="x_content taiwan" id="map">
+                <!-- <div class="location pingtung"><i class="fa fa-map-marker"></i></div>
                 <div class="location taitung"><i class="fa fa-map-marker"></i></div>
                 <div class="location hualien"><i class="fa fa-map-marker"></i></div>
                 <div class="location yilan"><i class="fa fa-map-marker"></i></div>
@@ -361,7 +362,7 @@
                 <div class="location kaohsiung"><i class="fa fa-map-marker"></i></div>
                 <div class="location tainan"><i class="fa fa-map-marker"></i></div>
                 <div class="location kinmen"><i class="fa fa-map-marker"></i></div>
-                <div class="location penghu"><i class="fa fa-map-marker"></i></div>
+                <div class="location penghu"><i class="fa fa-map-marker"></i></div> -->
               </div>
             </div>
           </div>
@@ -384,15 +385,33 @@
                   </div>
                   <div class="modal-body">
                     <form>
-                      場域名稱:<br>
+                      <span style="color: red">*&nbsp;</span>場域名稱:<br>
                       <input type="text" id="new_area_name">
                       <br><br>
                       場域地址:<br>
-                      <input type="text" id="new_area_location">
-                      <br><br>
-                      場域經緯度:&nbsp;&nbsp;<input type="checkbox" id="enable_map" onclick="click_add_area_enable_map()" checked>關閉/開啟<br>
-                      經度:<input type="text" id="new_area_longitude" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      緯度:<input type="text" id="new_area_latitude" disabled>
+                      <select required="required" id="city">
+                        <option value="none">---請選擇縣市---</option>
+                        <option value="keelung">基隆市</option>
+                        <option value="new_taipei">新北市</option>
+                        <option value="taipei">台北市</option>
+                        <option value="taoyuan">桃園縣</option>
+                        <option value="hsinchu">新竹縣</option>
+                        <option value="yilan">宜蘭縣</option>
+                        <option value="miaoli">苗栗縣</option>
+                        <option value="taichung">台中市</option>
+                        <option value="changhua">彰化縣</option>
+                        <option value="nantou">南投縣</option>
+                        <option value="hualien">花蓮縣</option>
+                        <option value="yunlin">雲林縣</option>
+                        <option value="chiayi">嘉義縣</option>
+                        <option value="tainan">台南市</option>
+                        <option value="kaohsiung">高雄市</option>
+                        <option value="taitung">台東縣</option>
+                        <option value="pingtung">屏東縣</option>
+                        <option value="kinmen">金門縣</option>
+                        <option value="penghu">澎湖縣</option>
+                      </select>
+                      <input type="text" id="new_area_location" size="40">
                       <br><br>
                     </form>
                   </div>
@@ -416,21 +435,13 @@
                   </div>
                   <div class="modal-body">
                     <form>
-                      感測器群組名稱:<br>
+                      <span style="color: red">*&nbsp;</span>感測器群組名稱:<br>
                       <input type="text" id="new_group_name">
-                      <br><br> 感測器群組描述:
-                      <br>
-                      <input type="text" id="new_group_description">
-                      <br><br> 作物種類：
-                      <br>
-                      <select required="required" id="new_group_product">
-                        <option value="NoSelection">---請選擇---</option>
-                        <option value="Green_Onion">蔥</option>
-                        <option value="Others">其他</option>
-                      </select>
-                      <br><br>LoRa 模組 MacAddress：<br>
+                      <br><br>
+                      <span style="color: red">*&nbsp;</span>LoRa 模組 MacAddress：<br>
                       <input type="text" id="macAddr" value="">
-                      <br><br> 建制於場域:<br>
+                      <br><br> 
+                      <span style="color: red">*&nbsp;</span>建制於場域:<br>
                       <select required="required" id="group_select" onchange="group_select_func(value);">
                   </select>
                     </form>
@@ -455,12 +466,14 @@
                   </div>
                   <div class="modal-body">
                     <form>
-                      控制器名稱:<br>
+                      <span style="color: red">*&nbsp;</span>控制器名稱:<br>
                       <input type="text" id="new_controller_name">
-                      <br><br> 建制於場域:<br>
+                      <br><br> 
+                      <span style="color: red">*&nbsp;</span>建制於場域:<br>
                       <select required="required" id="controller_in_area">
                       </select>
-                      <br><br> 傳輸協議:<br>
+                      <br><br> 
+                      傳輸協議:<br>
                       <select required="required" id="protocol">
                         <option value="NoSelection">---請選擇---</option>
                         <option value="socket">socket</option>
@@ -468,7 +481,8 @@
                         <option value="nb-iot">nb-iot</option>
                         <option value="self-control">自控</option>
                       </select>
-                      <br><br> 協議相關設定:<br>
+                      <br><br> 
+                      協議相關設定:<br>
                       <input type="text" id="protocol_setting">
                     </form>
                   </div>
@@ -537,49 +551,6 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="container">
-            <div class="modal fade" id="set_sensorgroup_modal" role="dialog">
-              <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">編輯感應器群組</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form id="sensorgroup_setting_modify">
-                      <br><br>作物種類：<br>
-                      <select required="required" id="update_product">
-                        <option value="Green_Onion">蔥</option>
-                        <option value="Others">其他</option>
-                      </select><br>
-                    </form>
-                    <script>
-                      area = getCookie("area");
-                      group = getCookie("group");
-
-                      $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
-                        var body = JSON.parse(data);
-                        for (num = 0; num < body.Count; num++) {
-                          if (body.Items[num].groupId == group) {
-                            $('#sensorgroup_setting_modify').prepend('感測器群組名稱：<br>' +
-                              '<input type="text" id="update_sensorgroup_name" value="' + body.Items[num].name + '">' +
-                              '<br><br>感應器群組描述：<br>' +
-                              '<input type="text" id="update_sensorgroup_description" value="' + body.Items[num].description + '">')
-                          }
-                        }
-                      });
-                    </script>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="update_sensorgroup_item()">Commit</button>
                   </div>
                 </div>
               </div>

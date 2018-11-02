@@ -1,0 +1,27 @@
+#map{
+    height: 400px;
+}
+
+body{
+    height: 1500px;
+}
+
+.edit{
+    width: 45px;
+    position: absolute;
+    right: 10%;
+    top: 25%;
+    border: solid 2px #CACBCC;
+    border-radius: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.edit:hover{
+    background-color: #CACBCC;
+}
+
+.font_style{
+    font-size: 30px;
+    margin-left: 10px;
+}
