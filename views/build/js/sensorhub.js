@@ -360,13 +360,11 @@ function change_update_sensor_modal(id){
 
 function update_sensor_item() {
   var update_name = document.getElementById("update_sensorname").value;
-  var update_type = document.getElementById("update_sensorType").value;
 
   $.post(api_url + 'api/update/sensor', {
     "groupId": getCookie("group"),
     "sensorId": getCookie("sensor"),
-    "name": update_name,
-    "sensorType": update_type
+    "name": update_name
   }, function() {
     window.location.replace('sensorhub.html');
   });
