@@ -143,6 +143,12 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
+                <li><a><i class="fa fa-line-chart"></i>數據分析 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" id="showAnalysis">
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
                 <li><a href="log_list.php?checker=<?= $_SESSION["ownerId"] ?>"><i class="fa fa-calendar"></i> 日誌系統 </a>
                 </li>
               </ul>

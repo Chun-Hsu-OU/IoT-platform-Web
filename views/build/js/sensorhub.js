@@ -387,7 +387,6 @@ function initial_sensor(){
 function add_sensor_item() {
   var add_name = document.getElementById("add_sensorname").value;
   var add_type = document.getElementById("add_sensorType").value;
-  // var add_number = document.getElementById("add_number").value;
   var macAddr = getCookie("macAddr");
   
   $.get(api_url + 'api/sensors/num/'+ macAddr +'/'+ add_type, function(data){

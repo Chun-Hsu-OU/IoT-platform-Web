@@ -7,6 +7,9 @@ function del() {
     document.cookie = "cookies=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "controller=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "macAddr=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "sensorType=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "groups=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "groups_name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 function getCookie(cname) {
     var name = cname + "=";

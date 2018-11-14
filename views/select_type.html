@@ -44,7 +44,7 @@
   <script src="../build/js/loading.js"></script>
 
   <!-- css by CHOu -->
-  <link href="../build/css/area_page.css" rel="stylesheet">
+  <link href="../build/css/select_type.css" rel="stylesheet">
 
 </head>
 <style>
@@ -59,8 +59,6 @@
 
 <script>
   window.onload = load_sidebars();
-  window.onload = get_name();
-  window.onload = get_sensorhubs();
   window.onload = get_username();
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
@@ -179,37 +177,6 @@
           </nav>
         </div>
       </div>
-
-      <script>
-        $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
-          var body = JSON.parse(data);
-
-          for (sensor_num = 0; sensor_num < body.Count; sensor_num ++) {
-            load_warnings();
-
-            async function load_warnings() {
-              var name = body.Items[sensor_num].name;
-              try {
-                $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
-                  if (res == "No data") {
-                    $('#top_warning').prepend('<li><a>' +
-                      '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
-                      '<span>' +
-                        '<span><strong>' + name + '</strong></span>' +
-                      '</span>' +
-                      '<span class="message">' +
-                        'No signal for atleast 1 hour' +
-                      '</span>' +
-                      '</a></li>');
-                  }
-                });
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          }
-        });
-      </script>
       <!-- /top navigation -->
 
       <!-- page content -->
@@ -217,32 +184,53 @@
         <div class="">
           <div class="page-title">
             <div class="title_left" id="page_title">
-
+              <h1>請選擇要觀察的感測器種類：</h1>
             </div>
 
             <div class="clearfix"></div>
 
             <div class="row">
-              <div class="col-md-12">
-                <div class="">
-                  <div class="x_content">
-                    <div class="row" id="sensorhubs">
+                <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('AIR_TEMPERATURE')">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="type_box">空氣溫度</div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                </a>
 
+                <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('AIR_HUMIDITY')">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="type_box">空氣濕度</div>
+                    </div>
+                </a>
+
+                <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('SOIL_TEMPERATURE')">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="type_box">土壤溫度</div>
+                    </div>
+                </a>
+
+                <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('SOIL_HUMIDITY')">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="type_box">土壤濕度</div>
+                    </div>
+                </a>
+
+                <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('SOIL_EC')">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="type_box">土壤電導度</div>
+                    </div>
+                </a>
+
+                <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('LIGHT_INTENSITY')">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="type_box">光照度</div>
+                    </div>
+                </a>
             </div>
 
-            <!--The div element for the map -->
-            <div class="col-xs-12 col-sm-8" id="map"></div>
-            <!--Load the API from the specified URL
-            * The async attribute allows the browser to render the page while the API loads
-            * The key parameter will contain your own API key (which is not needed for this tutorial)
-            * The callback parameter executes the initMap() function
-            -->
-            <script async defer
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAPOAHP16VfVpgfEQiAa9oqzdXI9rjNq4&callback=initMap">
+            <script>
+                function set_sensortype_cookie(type){
+                    document.cookie = "sensorType=" + type;
+                }
             </script>
           </div>
         </div>
@@ -433,71 +421,6 @@
         </div>
       </div>
 
-      <div class="container">
-        <div class="modal fade" id="set_sensorgroup_modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">編輯感應器群組</h4>
-              </div>
-              <div class="modal-body">
-                <form id="sensorgroup_setting_modify">
-                  感測器群組名稱：<br>
-                  <input type="text" id="update_sensorgroup_name">
-                  <br><br>
-                  LoRa 模組 MacAddress：<br>
-                  <input type="text" id="update_macAddr" value="">
-                  <br><br>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="update_sensorgroup_item()">Commit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="modal fade" id="set_area_modal" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">編輯場域特徵</h4>
-              </div>
-              <div class="modal-body">
-                <form id="area_setting_modify">
-                </form>
-                <script>
-                  area = getCookie("area");
-                  uuid = getCookie("checker");
-
-                  $.get(api_url + 'api/area/' + uuid, function(data) {
-                    var body = JSON.parse(data);
-                    for (area_num = 0; area_num < body.Count; area_num++) {
-                      if (body.Items[area_num].areaId == area) {
-                        $('#area_setting_modify').prepend('場域名稱：<br>' +
-                          '<input type="text" id="update_area_name" value="' + body.Items[area_num].name + '">' +
-                          '<br><br>場域位置：<br>' +
-                          '<input type="text" size="60" id="update_area_location" value="' + body.Items[area_num].location + '"><br><br>');
-                      }
-                    }
-                  });
-                </script>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="update_area_item()">Commit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <!-- jQuery -->
       <!-- Bootstrap -->
       <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>

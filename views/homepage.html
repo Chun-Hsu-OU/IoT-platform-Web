@@ -145,6 +145,12 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
+                <li><a><i class="fa fa-line-chart"></i>數據分析 <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" id="showAnalysis">
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav side-menu">
                 <li><a id="agri-log"><i class="fa fa-calendar"></i> 日誌系統 </a>
                   <script>
                     $("#agri-log").attr("href", "http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com/IoT-platform-Web/views/log_list.php?checker=" + getCookie("checker"));
@@ -344,25 +350,6 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content taiwan" id="map">
-                <!-- <div class="location pingtung"><i class="fa fa-map-marker"></i></div>
-                <div class="location taitung"><i class="fa fa-map-marker"></i></div>
-                <div class="location hualien"><i class="fa fa-map-marker"></i></div>
-                <div class="location yilan"><i class="fa fa-map-marker"></i></div>
-                <div class="location keelung"><i class="fa fa-map-marker"></i></div>
-                <div class="location new_taipei"><i class="fa fa-map-marker"></i></div>
-                <div class="location taipei"><i class="fa fa-map-marker"></i></div>
-                <div class="location taoyuan"><i class="fa fa-map-marker"></i></div>
-                <div class="location hsinchu"><i class="fa fa-map-marker"></i></div>
-                <div class="location miaoli"><i class="fa fa-map-marker"></i></div>
-                <div class="location taichung"><i class="fa fa-map-marker"></i></div>
-                <div class="location nantou"><i class="fa fa-map-marker"></i></div>
-                <div class="location changhua"><i class="fa fa-map-marker"></i></div>
-                <div class="location yunlin"><i class="fa fa-map-marker"></i></div>
-                <div class="location chiayi"><i class="fa fa-map-marker"></i></div>
-                <div class="location kaohsiung"><i class="fa fa-map-marker"></i></div>
-                <div class="location tainan"><i class="fa fa-map-marker"></i></div>
-                <div class="location kinmen"><i class="fa fa-map-marker"></i></div>
-                <div class="location penghu"><i class="fa fa-map-marker"></i></div> -->
               </div>
             </div>
           </div>

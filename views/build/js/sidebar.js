@@ -37,6 +37,7 @@ function load_sidebars() {
       if (area.visible == 1) {
         $('#showPlace').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/area_page.html">' + area.name + '</a></li>');
         $('#showController').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/show_controllers.html">' + area.name + '</a></li>');
+        $('#showAnalysis').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/select_type.html">' + area.name + '</a></li>');
       }
     });
   });
