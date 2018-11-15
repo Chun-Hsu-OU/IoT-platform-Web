@@ -156,7 +156,11 @@ function draw_sensor_data(data, chart, group_num) {
   
     async function parseData(data) {
       return Promise.all(data.Items.map(function(set) {
-        return Number(set.value.toFixed(1));
+        if(set.value != null){
+            return Number(set.value.toFixed(1));
+        }else{
+            return null;
+        }
       }));
     }
   
