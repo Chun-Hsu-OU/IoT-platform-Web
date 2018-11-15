@@ -352,7 +352,6 @@ function change_update_sensor_modal(id){
     for (group_num = 0; group_num < body.Count; group_num++) {
       if (body.Items[group_num].sensorId == id) {
         document.getElementById('update_sensorname').value = body.Items[group_num].name;
-        document.getElementById('update_sensorType').value = body.Items[group_num].sensorType;
       }
     }
   });
