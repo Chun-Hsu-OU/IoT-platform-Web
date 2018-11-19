@@ -6,12 +6,19 @@ var toDate = new Date();
 var toEpoch = toDate.getTime();
 var fromEpoch = toEpoch - 86400000;
 
-//先儲存所有sensorhub時間陣列，用來挑出全部時間最長的來做X軸
-var compare_dates = [];
-
 $(function(){
     /*-------------------設定highchart參數-------------------*/
+    Highcharts.setOptions({
+        time: {
+          useUTC: false
+        }
+    });
+
     var options = {
+        chart: {
+            type: 'spline'
+        },
+
         title: {
             text: select_type
         },
@@ -20,10 +27,21 @@ $(function(){
             text: '不同感測器群組數值比較'
         },
 
+        xAxis: {
+            type: 'datetime',
+            labels: {
+              format: '{value:%m/%d/%Y<br>%H:%M}'
+            }
+        },
+
         yAxis: {
             title: {
                 text: '數值'
             }
+        },
+
+        tooltip: {
+            xDateFormat: '%m/%d/%Y<br>%H:%M'
         },
 
         legend: {
@@ -96,8 +114,6 @@ $(function(){
     $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
         //重新設定highchart參數
         var chart = Highcharts.chart('container', options);
-        //清空才能再比較時間陣列長度
-        compare_dates = [];
 
         var fromDate = new Date(picker.startDate.format('YYYY-MM-DD HH:mm'));
         var fromEpoch = fromDate.getTime();
@@ -131,18 +147,9 @@ function draw_sensor_data(data, chart, group_num) {
       var body = JSON.parse(data);
       try {
         var dataset = await parseData(body);
-        var date = await parseDate(body);
+        console.log(dataset);
         //有資料才畫圖
         if (dataset.length != 0) {
-            //一個一個比較出最長的時間陣列並更新X軸
-            if(compare_dates.length < date.length){
-                compare_dates = date;
-                chart.xAxis[0].update({
-                    tickInterval: Math.floor((compare_dates.length) / 6),
-                    categories: compare_dates
-                });
-            }
-
             //新增一條線
             chart.addSeries({
                 name: groups_name[group_num],
@@ -156,19 +163,10 @@ function draw_sensor_data(data, chart, group_num) {
   
     async function parseData(data) {
       return Promise.all(data.Items.map(function(set) {
-        if(set.value != null){
-            return Number(set.value.toFixed(1));
-        }else{
-            return null;
-        }
-      }));
-    }
-  
-    async function parseDate(data) {
-      return Promise.all(data.Items.map(function(set) {
-        var date = new Date(Number(set.timestamp));
-        var formattedDate = '<br>' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2) + '/' + date.getFullYear() + '<br>' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-        return formattedDate;
+        var data_and_date = [];
+        data_and_date.push(set.timestamp);
+        data_and_date.push(set.value);
+        return data_and_date;
       }));
     }
 }
