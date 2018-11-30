@@ -78,6 +78,12 @@ section#section_intro .content-wrap{
     height: 250px;
 }
 
+@media screen and (max-width: 768px){
+    section#section_intro .content-wrap{
+        height: 300px;
+    }
+}
+
 section#section_intro .icon{
     font-size: 50px;
     color: #B08115;
