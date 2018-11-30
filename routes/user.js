@@ -31,7 +31,7 @@ users.get('/login', function(req, res) {
 });
 
 users.get('/', function(req, res) {
-    res.render('login.html');
+    res.render('introduction.html');
     res.end();
 });
 
