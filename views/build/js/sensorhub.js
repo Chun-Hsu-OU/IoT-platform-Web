@@ -642,10 +642,10 @@ function initial_current_chart(){
       label: "噸",
       value: 0,
       min: 0,
-      max: 3,
+      max: 10,
       levelColors: [
-          "#CCF7CB",
-          "#098205"
+        "#C8EDFA",
+        "#145CE0"
       ],
       humanFriendly: true,
       gaugeWidthScale: 0.7,
