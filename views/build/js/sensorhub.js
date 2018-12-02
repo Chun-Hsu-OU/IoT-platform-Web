@@ -636,6 +636,28 @@ function initial_current_chart(){
       counter: true,
       relativeGaugeSize: true
     });
+
+    sensors.meter = new JustGage({
+      id: "current_METER",
+      label: "噸",
+      value: 0,
+      min: 0,
+      max: 3,
+      levelColors: [
+          "#CCF7CB",
+          "#098205"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
     console.log(sensors);
     initial_current_data(sensors);
   });
@@ -681,6 +703,9 @@ function initial_current_data(sensors){
             } else if (body.Items[j].sensorType == "WIND_DIRECTION") {
               $('#current_WIND_DIRECTION_div').show();
               sensors.weed_direction.refresh(val);
+            } else if (body.Items[j].sensorType == "METER") {
+              $('#current_METER_div').show();
+              sensors.meter.refresh(val);
             }
           } else{
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
@@ -710,6 +735,9 @@ function initial_current_data(sensors){
             } else if (body.Items[j].sensorType == "WIND_DIRECTION") {
               $('#current_WIND_DIRECTION_div').show();
               sensors.weed_direction.refresh("無數據");
+            } else if (body.Items[j].sensorType == "METER") {
+              $('#current_METER_div').show();
+              sensors.meter.refresh("無數據");
             }
           }
 
