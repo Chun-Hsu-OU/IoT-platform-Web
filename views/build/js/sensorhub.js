@@ -467,10 +467,10 @@ function draw_sensor_data(data, type) {
       $('#current_METER_now_div').show();
       var meter_now = new JustGage({
         id: "current_METER_now",
-        label: "公斤",
+        label: "公升",
         value: meter_once[meter_once.length-1],
         min: 0,
-        max: 10000,
+        max: 10,
         levelColors: [
           "#C8EDFA",
           "#145CE0"
@@ -783,7 +783,7 @@ function initial_current_chart(){
 
     sensors.meter = new JustGage({
       id: "current_METER",
-      label: "公斤",
+      label: "公升",
       value: 0,
       min: 0,
       max: 10000,
