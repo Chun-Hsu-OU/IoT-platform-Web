@@ -70,7 +70,7 @@ function import_sensor_data() {
         draw_sensor_data(data, sensor.sensorType);
       });
     });
-
+    
     $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
 
       var fromDate = new Date(picker.startDate.format('YYYY-MM-DD HH:mm'));
@@ -157,11 +157,13 @@ function draw_sensor_data(data, type) {
       var sensor_type = sensor_type.capitalize();
     }
 
-    console.log("type:"+type);
-    console.log(dataset);
     if (type != "WIND_DIRECTION") {
+      var title = type;
+      if(type == "METER"){
+        title = "累積用水量";
+      }
+
       var temp = Highcharts.chart(type + '_div', {
-        //console.log(dataset);
         chart: {
           scrollablePlotArea: {
             minWidth: 300
@@ -177,14 +179,14 @@ function draw_sensor_data(data, type) {
           }
         },
 
-        yAxis: {
-          title: {
-            text: sensor_type
-          }
-        },
+        // yAxis: {
+        //   title: {
+        //     text: sensor_type
+        //   }
+        // },
 
         title: {
-          text: sensor_type
+          text: title
         },
 
         legend: {
@@ -219,7 +221,7 @@ function draw_sensor_data(data, type) {
         exporting: false,
 
         series: [{
-          name: sensor_type,
+          name: title,
           data: dataset
         }]
       });
@@ -348,6 +350,142 @@ function draw_sensor_data(data, type) {
           data: dataset
         }]
       });
+    }
+
+    //顯示每次用水量歷史數據圖並計算每次用水量
+    if(type == "METER"){
+      console.log("type:"+type);
+      console.log(dataset);
+      var meter_once = [];
+      for(let i=0;i<dataset.length;i++){
+        if(i != dataset.length-1){
+            meter_once.push(dataset[i+1]-dataset[i]);
+        }
+      }
+      console.log(meter_once);
+      /* <歷史數據圖> */
+      $('#METER_NOW').show();
+      var temp = Highcharts.chart('meter_now_div', {
+        //console.log(dataset);
+        chart: {
+          scrollablePlotArea: {
+            minWidth: 300
+          },
+          height: 400
+        },
+
+        xAxis: {
+          tickInterval: Math.floor((date.length) / 6),
+          categories: date,
+          labels: {
+            enabled: true,
+          }
+        },
+
+        title: {
+          text: "本次用水量"
+        },
+
+        legend: {
+          align: 'left',
+          verticalAlign: 'top',
+          borderWidth: 0
+        },
+
+        tooltip: {
+          shared: true,
+          crosshairs: true,
+          style: {
+            fontSize: 15
+          }
+        },
+
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            label: {
+              connectorAllowed: false
+            },
+            marker: {
+              lineWidth: 1
+            },
+            label: {
+              enabled: false,
+            }
+          }
+        },
+
+        exporting: false,
+
+        series: [{
+          name: "本次用水量",
+          data: meter_once
+        }]
+      });
+
+      temp.yAxis[0].addPlotLine({
+        value: avg,
+        color: 'green',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: '平均 : ' + avg,
+          style: {
+            color: 'white'
+          }
+        }
+      });
+
+      temp.yAxis[0].addPlotLine({
+        value: min,
+        color: 'red',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: '最低 : ' + min,
+          style: {
+            color: 'white'
+          }
+        }
+      });
+
+      temp.yAxis[0].addPlotLine({
+        value: max,
+        color: 'red',
+        dashStyle: 'shortdash',
+        width: 2,
+        label: {
+          text: '最高 : ' + max,
+          style: {
+            color: 'white'
+          }
+        }
+      });
+      /* </歷史數據圖> */
+
+      /* <即時數據圖> */
+      $('#current_METER_now_div').show();
+      var meter_now = new JustGage({
+        id: "current_METER_now",
+        label: "公斤",
+        value: meter_once[meter_once.length-1],
+        min: 0,
+        max: 10000,
+        levelColors: [
+          "#C8EDFA",
+          "#145CE0"
+        ],
+        gaugeWidthScale: 0.7,
+        pointer: true,
+        pointerOptions: {
+            toplength: 10,
+            bottomlength: 10,
+            bottomwidth: 2
+        },
+        counter: true,
+        relativeGaugeSize: true
+      });
+      /* </即時數據圖> */
     }
   }
 }

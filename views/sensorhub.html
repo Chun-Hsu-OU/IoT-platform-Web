@@ -344,13 +344,23 @@
               </div>
               <div class="gauge" id="current_METER_div">
                   <center>
-                      <div class="font_style" id="name">水錶</div>
+                      <div class="font_style" id="name">累積用水量</div>
                       <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
                         <img class="edit" src="images/edit.png">
                       </a>
                   </center>
                   <br>
                   <div id="current_METER"></div>
+              </div>
+              <div class="gauge" id="current_METER_now_div">
+                <center>
+                    <div class="font_style" id="name">本次用水量</div>
+                    <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                      <img class="edit" src="images/edit.png">
+                    </a>
+                </center>
+                <br>
+                <div id="current_METER_now"></div>
               </div>
 
             </div>
@@ -514,6 +524,10 @@
                 <div class="diagram" id="METER">
                   <div id="METER_div"></div>
                 </div>
+
+                <div class="diagram" id="METER_NOW">
+                  <div id="meter_now_div"></div>
+                </div>
             </div>
           </div>
         </div>
@@ -531,6 +545,7 @@
         $('#current_REALTIME_WIND_SPEED_div').hide();
         $('#current_WIND_DIRECTION_div').hide();
         $('#current_METER_div').hide();
+        $('#current_METER_now_div').hide();
 
         //歷史數據圖
         $('#AIR_TEMPERATURE').hide();
@@ -548,6 +563,7 @@
         $('#SOIL_EC').hide();
         $('#WIND_DIRECTION').hide();
         $('#METER').hide();
+        $('#METER_NOW').hide();
       </script>
 
       <!-- /page content -->
