@@ -112,7 +112,12 @@ function draw_sensor_data(data, type) {
   async function parseData(data) {
     return Promise.all(data.Items.map(function(set) {
       if(set.value != null){
-        return Number(set.value.toFixed(1));
+        if(type == "METER"){
+          var value = set.value * 1000;
+          return value;
+        }else{
+          return Number(set.value.toFixed(1));
+        }
       }else{
         return null;
       }
@@ -152,6 +157,8 @@ function draw_sensor_data(data, type) {
       var sensor_type = sensor_type.capitalize();
     }
 
+    console.log("type:"+type);
+    console.log(dataset);
     if (type != "WIND_DIRECTION") {
       var temp = Highcharts.chart(type + '_div', {
         //console.log(dataset);
@@ -255,7 +262,7 @@ function draw_sensor_data(data, type) {
           }
         }
       });
-    } else {
+    } else{
       var temp = Highcharts.chart(type + '_div', {
         //console.log(dataset);
         chart: {
@@ -342,7 +349,6 @@ function draw_sensor_data(data, type) {
         }]
       });
     }
-    //console.log(dataset);
   }
 }
 
@@ -639,15 +645,14 @@ function initial_current_chart(){
 
     sensors.meter = new JustGage({
       id: "current_METER",
-      label: "噸",
+      label: "公斤",
       value: 0,
       min: 0,
-      max: 10,
+      max: 10000,
       levelColors: [
         "#C8EDFA",
         "#145CE0"
       ],
-      humanFriendly: true,
       gaugeWidthScale: 0.7,
       pointer: true,
       pointerOptions: {
@@ -705,6 +710,8 @@ function initial_current_data(sensors){
               sensors.weed_direction.refresh(val);
             } else if (body.Items[j].sensorType == "METER") {
               $('#current_METER_div').show();
+              val = parseFloat(val) * 1000;//改為公斤
+              console.log(val);
               sensors.meter.refresh(val);
             }
           } else{
