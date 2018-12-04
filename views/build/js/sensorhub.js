@@ -351,6 +351,9 @@ function draw_sensor_data(data, type) {
       // console.log("type:"+type);
       // console.log(dataset);
       var meter_once = [];
+      //在做運算時，null會自動轉成0
+      //因為是前後兩個數據相減，最後會少一個，所以一開始要先補一個
+      meter_once.push(0);
       for(let i=0;i<dataset.length;i++){
         if(i != dataset.length-1){
             meter_once.push(dataset[i+1]-dataset[i]);
