@@ -356,7 +356,10 @@ function draw_sensor_data(data, type) {
       meter_once.push(0);
       for(let i=0;i<dataset.length;i++){
         if(i != dataset.length-1){
-            meter_once.push(dataset[i+1]-dataset[i]);
+            //後面是null就不要減
+            if(dataset[i+1] != null){
+              meter_once.push(dataset[i+1]-dataset[i]);
+            }
         }
       }
       // console.log(meter_once);
