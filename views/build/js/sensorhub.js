@@ -359,6 +359,8 @@ function draw_sensor_data(data, type) {
             //後面是null就不要減
             if(dataset[i+1] != null){
               meter_once.push(dataset[i+1]-dataset[i]);
+            }else{
+              meter_once.push(0);
             }
         }
       }
