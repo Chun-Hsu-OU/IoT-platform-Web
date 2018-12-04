@@ -179,12 +179,6 @@ function draw_sensor_data(data, type) {
           }
         },
 
-        // yAxis: {
-        //   title: {
-        //     text: sensor_type
-        //   }
-        // },
-
         title: {
           text: title
         },
@@ -352,17 +346,18 @@ function draw_sensor_data(data, type) {
       });
     }
 
-    //顯示每次用水量歷史數據圖並計算每次用水量
+    //計算並顯示每次用水量歷史數據圖
     if(type == "METER"){
-      console.log("type:"+type);
-      console.log(dataset);
+      // console.log("type:"+type);
+      // console.log(dataset);
       var meter_once = [];
       for(let i=0;i<dataset.length;i++){
         if(i != dataset.length-1){
             meter_once.push(dataset[i+1]-dataset[i]);
         }
       }
-      console.log(meter_once);
+      // console.log(meter_once);
+
       /* <歷史數據圖> */
       $('#METER_NOW').show();
       var temp = Highcharts.chart('meter_now_div', {
@@ -462,30 +457,6 @@ function draw_sensor_data(data, type) {
         }
       });
       /* </歷史數據圖> */
-
-      /* <即時數據圖> */
-      $('#current_METER_now_div').show();
-      var meter_now = new JustGage({
-        id: "current_METER_now",
-        label: "公升",
-        value: meter_once[meter_once.length-1],
-        min: 0,
-        max: 10,
-        levelColors: [
-          "#C8EDFA",
-          "#145CE0"
-        ],
-        gaugeWidthScale: 0.7,
-        pointer: true,
-        pointerOptions: {
-            toplength: 10,
-            bottomlength: 10,
-            bottomwidth: 2
-        },
-        counter: true,
-        relativeGaugeSize: true
-      });
-      /* </即時數據圖> */
     }
   }
 }
@@ -781,6 +752,7 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
+    //累積澆水量
     sensors.meter = new JustGage({
       id: "current_METER",
       label: "公升",
@@ -801,6 +773,29 @@ function initial_current_chart(){
       counter: true,
       relativeGaugeSize: true
     });
+
+    //本次澆水量
+    sensors.meter_now = new JustGage({
+      id: "current_METER_now",
+      label: "公升",
+      value: 0,
+      min: 0,
+      max: 10,
+      levelColors: [
+        "#C8EDFA",
+        "#145CE0"
+      ],
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
     console.log(sensors);
     initial_current_data(sensors);
   });
@@ -848,9 +843,15 @@ function initial_current_data(sensors){
               sensors.weed_direction.refresh(val);
             } else if (body.Items[j].sensorType == "METER") {
               $('#current_METER_div').show();
-              val = parseFloat(val) * 1000;//改為公斤
-              console.log(val);
+              val = val * 1000;//改為公升
               sensors.meter.refresh(val);
+
+              //顯示即時水表數據
+              $('#current_METER_now_div').show();
+              $.get(api_url + 'api/meter/new/' + id, function(data) {
+                var amount = JSON.parse(data);
+                sensors.meter_now.refresh(amount);
+              });
             }
           } else{
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
