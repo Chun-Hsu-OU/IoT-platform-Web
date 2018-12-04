@@ -356,8 +356,8 @@ function draw_sensor_data(data, type) {
       meter_once.push(0);
       for(let i=0;i<dataset.length;i++){
         if(i != dataset.length-1){
-            //後面是null就不要減
-            if(dataset[i+1] != null){
+            //前面和後面都不是null才計算，否則都是0
+            if(dataset[i]!=null && dataset[i+1]!=null){
               meter_once.push(dataset[i+1]-dataset[i]);
             }else{
               meter_once.push(0);
@@ -793,6 +793,7 @@ function initial_current_chart(){
         "#C8EDFA",
         "#145CE0"
       ],
+      humanFriendly: true,
       gaugeWidthScale: 0.7,
       pointer: true,
       pointerOptions: {
@@ -858,7 +859,7 @@ function initial_current_data(sensors){
               $('#current_METER_now_div').show();
               $.get(api_url + 'api/meter/new/' + id, function(data) {
                 var amount = JSON.parse(data);
-                sensors.meter_now.refresh(amount);
+                sensors.meter_now.refresh(amount.toFixed(2));
               });
             }
           } else{
