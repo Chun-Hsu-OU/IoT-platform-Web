@@ -378,7 +378,7 @@ function draw_sensor_data(data, type) {
         },
 
         title: {
-          text: "本次用水量"
+          text: "每次用水量"
         },
 
         legend: {
@@ -413,7 +413,7 @@ function draw_sensor_data(data, type) {
         exporting: false,
 
         series: [{
-          name: "本次用水量",
+          name: "每次用水量",
           data: meter_once
         }]
       });
