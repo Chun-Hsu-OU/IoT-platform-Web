@@ -92,7 +92,7 @@ function import_sensor_data() {
   });
 }
 
-
+//歷史數據處理
 function draw_sensor_data(data, type) {
   main();
 
@@ -421,7 +421,7 @@ function draw_sensor_data(data, type) {
         exporting: false,
 
         series: [{
-          name: "每次用水量",
+          name: "本次用水量",
           data: meter_once
         }]
       });
@@ -536,6 +536,8 @@ function initial_sensor_name(){
   document.getElementById("add_sensorname").value = $("#add_sensorType option:selected").text();
 }
 
+
+//即時數據處理
 function initial_current_chart(){
   document.addEventListener("DOMContentLoaded", function(event) {
     var sensors = {};
