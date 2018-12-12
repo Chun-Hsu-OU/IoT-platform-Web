@@ -342,6 +342,7 @@
                   <br>
                   <div id="current_WIND_DIRECTION"></div>
               </div>
+
               <div class="gauge" id="current_METER_div">
                   <center>
                       <div class="font_style" id="name">累積用水量</div>
@@ -352,6 +353,7 @@
                   <br>
                   <div id="current_METER"></div>
               </div>
+
               <div class="gauge" id="current_METER_now_div">
                 <center>
                     <div class="font_style" id="name">本次用水量</div>
@@ -361,6 +363,17 @@
                 </center>
                 <br>
                 <div id="current_METER_now"></div>
+              </div>
+
+              <div class="gauge" id="current_ELECTRIC_METER_div">
+                <center>
+                    <div class="font_style" id="name">累積用電量</div>
+                    <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                      <img class="edit" src="images/edit.png">
+                    </a>
+                </center>
+                <br>
+                <div id="current_ELECTRIC_METER"></div>
               </div>
 
             </div>
@@ -528,6 +541,10 @@
                 <div class="diagram" id="METER_NOW">
                   <div id="meter_now_div"></div>
                 </div>
+
+                <div class="diagram" id="ELECTRIC_METER">
+                  <div id="ELECTRIC_METER_div"></div>
+                </div>
             </div>
           </div>
         </div>
@@ -546,6 +563,7 @@
         $('#current_WIND_DIRECTION_div').hide();
         $('#current_METER_div').hide();
         $('#current_METER_now_div').hide();
+        $('#current_ELECTRIC_METER_div').hide();
 
         //歷史數據圖
         $('#AIR_TEMPERATURE').hide();
@@ -564,6 +582,7 @@
         $('#WIND_DIRECTION').hide();
         $('#METER').hide();
         $('#METER_NOW').hide();
+        $('#ELECTRIC_METER').hide();
       </script>
 
       <!-- /page content -->
@@ -800,6 +819,7 @@
                       <option value="REALTIME_WIND_SPEED">即時風速</option>
                       <option value="WIND_DIRECTION">風向</option>
                       <option value="METER">水錶</option>
+                      <option value="ELECTRIC_METER">電錶</option>
                     </select>
                   </form>
                 </div>

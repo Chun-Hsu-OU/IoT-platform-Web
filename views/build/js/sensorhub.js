@@ -348,8 +348,6 @@ function draw_sensor_data(data, type) {
 
     //計算並顯示每次用水量歷史數據圖
     if(type == "METER"){
-      // console.log("type:"+type);
-      // console.log(dataset);
       var meter_once = [];
       //在做運算時，null會自動轉成0
       //因為是前後兩個數據相減，最後會少一個，所以一開始要先補一個
@@ -358,18 +356,18 @@ function draw_sensor_data(data, type) {
         if(i != dataset.length-1){
             //前面和後面都不是null才計算，否則都是0
             if(dataset[i]!=null && dataset[i+1]!=null){
-              meter_once.push(dataset[i+1]-dataset[i]);
+              var meter_read = dataset[i+1]-dataset[i];
+              meter_once.push( Number(meter_read.toFixed(2)) );
             }else{
               meter_once.push(0);
             }
         }
       }
-      // console.log(meter_once);
+      console.log(meter_once);
 
       /* <歷史數據圖> */
       $('#METER_NOW').show();
       var temp = Highcharts.chart('meter_now_div', {
-        //console.log(dataset);
         chart: {
           scrollablePlotArea: {
             minWidth: 300
@@ -807,6 +805,28 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
+    //累積用電量
+    sensors.electric_meter = new JustGage({
+      id: "current_ELECTRIC_METER",
+      label: "Wh",
+      value: 0,
+      min: 0,
+      max: 10000,
+      levelColors: [
+        "#CCF7CB",
+        "#098205"
+      ],
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
     console.log(sensors);
     initial_current_data(sensors);
   });
@@ -863,6 +883,9 @@ function initial_current_data(sensors){
                 var amount = JSON.parse(data);
                 sensors.meter_now.refresh(amount.toFixed(2));
               });
+            }else if(body.Items[j].sensorType == "ELECTRIC_METER"){
+              $('#current_ELECTRIC_METER_div').show();
+              sensors.electric_meter.refresh(val);
             }
           } else{
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
