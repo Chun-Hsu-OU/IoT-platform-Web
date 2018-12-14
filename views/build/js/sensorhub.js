@@ -988,11 +988,23 @@ function initial_current_data(sensors){
               $('#current_AIR_HUMIDITY' + body.Items[j].num + '_div').show();
               sensors.air_hum1.refresh("無數據");
             } else if(body.Items[j].sensorType=="SOIL_TEMPERATURE"){
+
               $('#current_SOIL_TEMPERATURE' + body.Items[j].num + '_div').show();
-              sensors.soil_temp1.refresh("無數據");
+              if(body.Items[j].num == "1"){
+                sensors.soil_temp1.refresh("無數據");
+              }else if(body.Items[j].num == "2"){
+                sensors.soil_temp2.refresh("無數據");
+              }
+
             } else if(body.Items[j].sensorType=="SOIL_HUMIDITY"){
+
               $('#current_SOIL_HUMIDITY' + body.Items[j].num + '_div').show();
-              sensors.soil_hum1.refresh("無數據");
+              if(body.Items[j].num == "1"){
+                sensors.soil_hum1.refresh("無數據");
+              }else if(body.Items[j].num == "2"){
+                sensors.soil_hum2.refresh("無數據");
+              }
+
             } else if(body.Items[j].sensorType=="LIGHT_INTENSITY"){
               $('#current_LIGHT_INTENSITY' + body.Items[j].num + '_div').show();
               sensors.light1.refresh("無數據");
@@ -1000,8 +1012,14 @@ function initial_current_data(sensors){
               $('#current_BATTERY_VOLTAGE' + body.Items[j].num + '_div').show();
               sensors.battery1.refresh("無數據");
             } else if(body.Items[j].sensorType=="SOIL_EC"){
+
               $('#current_SOIL_EC' + body.Items[j].num + '_div').show();
-              sensors.soil_ec1.refresh("無數據");
+              if(body.Items[j].num == "1"){
+                sensors.soil_ec1.refresh("無數據");
+              }else if(body.Items[j].num == "2"){
+                sensors.soil_ec2.refresh("無數據");
+              }
+
             } else if(body.Items[j].sensorType=="REALTIME_WIND_SPEED"){
               $('#current_REALTIME_WIND_SPEED' + body.Items[j].num + '_div').show();
               sensors.wind_speed1.refresh("無數據");
@@ -1011,6 +1029,9 @@ function initial_current_data(sensors){
             } else if (body.Items[j].sensorType == "METER") {
               $('#current_METER' + body.Items[j].num + '_div').show();
               sensors.meter1.refresh("無數據");
+            } else if (body.Items[j].sensorType == "ELECTRIC_METER"){
+              $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
+              sensors.electric_meter1.refresh("無數據");
             }
           }
 
