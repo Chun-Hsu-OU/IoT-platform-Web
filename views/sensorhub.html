@@ -322,7 +322,7 @@
               <div class="gauge" id="current_SOIL_EC1_div">
                   <center>
                       <embed class="image_size" src="images/flash.svg"/>
-                      <div class="font_style" id="name">電導度1</div>
+                      <div class="font_style" id="name">土壤電導度1</div>
                       <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
                         <img class="edit" src="images/edit.png">
                       </a>
@@ -334,7 +334,7 @@
               <div class="gauge" id="current_SOIL_EC2_div">
                   <center>
                       <embed class="image_size" src="images/flash.svg"/>
-                      <div class="font_style" id="name">電導度2</div>
+                      <div class="font_style" id="name">土壤電導度2</div>
                       <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
                         <img class="edit" src="images/edit.png">
                       </a>
@@ -410,6 +410,17 @@
                 </center>
                 <br>
                 <div id="current_ELECTRIC_METER1"></div>
+              </div>
+
+              <div class="gauge" id="current_PM2_51_div">
+                <center>
+                    <div class="font_style" id="name">PM2.5</div>
+                    <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                      <img class="edit" src="images/edit.png">
+                    </a>
+                </center>
+                <br>
+                <div id="current_PM2_51"></div>
               </div>
 
             </div>
@@ -579,6 +590,10 @@
                 <div class="diagram" id="ELECTRIC_METER1">
                   <div id="ELECTRIC_METER1_div"></div>
                 </div>
+
+                <div class="diagram" id="PM2_51">
+                  <div id="PM2_51_div"></div>
+                </div>
             </div>
           </div>
         </div>
@@ -607,6 +622,7 @@
         $('#current_METER1_div').hide();
         $('#current_METER_now_div').hide();
         $('#current_ELECTRIC_METER1_div').hide();
+        $('#current_PM2_51_div').hide();
 
         /* 歷史數據圖 */
         $('#AIR_TEMPERATURE1').hide();
@@ -630,6 +646,7 @@
         $('#METER1').hide();
         $('#METER_NOW').hide();
         $('#ELECTRIC_METER1').hide();
+        $('#PM2_51').hide();
       </script>
 
       <!-- /page content -->
@@ -867,6 +884,7 @@
                       <option value="WIND_DIRECTION">風向</option>
                       <option value="METER">水錶</option>
                       <option value="ELECTRIC_METER">電錶</option>
+                      <option value="PM2_5">PM2.5</option>
                     </select>
                   </form>
                 </div>

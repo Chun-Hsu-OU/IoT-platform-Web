@@ -92,7 +92,12 @@ function import_sensor_data() {
 }
 
 //歷史數據處理
-function draw_sensor_data(data, type, num, name) {
+/*
+  參數：
+  num -> 感測器編號
+  title -> 圖表名稱
+*/
+function draw_sensor_data(data, type, num, title) {
   main();
 
   async function main() {
@@ -141,28 +146,216 @@ function draw_sensor_data(data, type, num, name) {
     var avg = (sum / dataset.length).toFixed(1);
 
 
-    String.prototype.capitalize = function() {
-      return this.replace(/(?:^|\s)\S/g, function(a) {
-        return a.toUpperCase();
+    // String.prototype.capitalize = function() {
+    //   return this.replace(/(?:^|\s)\S/g, function(a) {
+    //     return a.toUpperCase();
+    //   });
+    // };
+
+    // if (type == "CO2") {
+    //   var sensor_type = "CO2";
+    // } else if (type == "SOIL_EC") {
+    //   var sensor_type = "Soil EC";
+    // } else {
+    //   var sensor_type = type.replace("_", " ").toLowerCase();
+    //   var sensor_type = sensor_type.capitalize();
+    // }
+
+    /*
+      繪製圖表，分三類:
+      1.一般數據(空氣溫濕、土壤溫濕、光照度、電導度、電池電壓...等)
+      2.風向(每個數值都要轉成方位)
+      3.PM2.5(每個數值都要判斷是在哪個空氣品質等級)
+    */
+    if (type == "WIND_DIRECTION") { //風向
+      var temp = Highcharts.chart(type + num + '_div', {
+        //console.log(dataset);
+        chart: {
+          scrollablePlotArea: {
+            minWidth: 300
+          },
+          height: 550
+        },
+
+        xAxis: {
+          tickInterval: Math.floor((date.length) / 6),
+          categories: date,
+          labels: {
+            enabled: true,
+          }
+        },
+
+        yAxis: {
+          categories: ["北", "東北", "東", "東南", "南", "西南", "西", "西北"]
+        },
+
+        title: {
+          text: title
+        },
+
+        legend: {
+          align: 'left',
+          verticalAlign: 'top',
+          borderWidth: 0
+        },
+
+        tooltip: {
+          shared: true,
+          crosshairs: true,
+          formatter: function() {
+            if (this.y == 0) {
+              var dir = "北";
+            } else if (this.y == 1) {
+              var dir = "東北";
+            } else if (this.y == 2) {
+              var dir = "東";
+            } else if (this.y == 3) {
+              var dir = "東南";
+            } else if (this.y == 4) {
+              var dir = "南";
+            } else if (this.y == 5) {
+              var dir = "西南";
+            } else if (this.y == 6) {
+              var dir = "西";
+            } else if (this.y == 7) {
+              var dir = "西北";
+            }
+            return '<b>' + this.x +
+              '</b><br>風向：<b>' + dir + '</b>';
+          },
+          style: {
+            fontSize: 15
+          }
+        },
+
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            label: {
+              connectorAllowed: false
+            },
+            marker: {
+              lineWidth: 1
+            },
+            label: {
+              enabled: false,
+            }
+          }
+        },
+
+        exporting: false,
+
+        series: [{
+          name: title,
+          data: dataset
+        }]
       });
-    };
+    }else if(type == "PM2_5"){ //PM2.5
+      var temp = Highcharts.chart(type + num + '_div', {
+        //console.log(dataset);
+        chart: {
+          scrollablePlotArea: {
+            minWidth: 300
+          },
+          height: 550
+        },
 
-    if (type == "CO2") {
-      var sensor_type = "CO2";
-    } else if (type == "SOIL_EC") {
-      var sensor_type = "Soil EC";
-    } else {
-      var sensor_type = type.replace("_", " ").toLowerCase();
-      var sensor_type = sensor_type.capitalize();
-    }
+        xAxis: {
+          tickInterval: Math.floor((date.length) / 6),
+          categories: date,
+          labels: {
+            enabled: true,
+          }
+        },
 
-    if (type != "WIND_DIRECTION") {
-      var title = name;
+        yAxis: {
+          labels: {
+            formatter: function () {
+                var level = "";
+                if(this.value == 0){
+                  level = "良好";
+                }else if (this.value == 50) {
+                  level = "普通";
+                } else if (this.value == 100) {
+                  level = "對敏感族群<br>不健康";
+                } else if (this.value == 150) {
+                  level = "對所有族群<br>不健康";
+                }else if (this.value == 200) {
+                  level = "非常不健康";
+                }else if (this.value == 300) {
+                  level = "危害";
+                }
+                return level+'<br>'+this.value;
+            }
+          }
+        },
+
+        title: {
+          text: title
+        },
+
+        legend: {
+          align: 'left',
+          verticalAlign: 'top',
+          borderWidth: 0
+        },
+
+        tooltip: {
+          shared: true,
+          crosshairs: true,
+          formatter: function() {
+            var level = "";
+            if(this.y <= 50){
+              level = "良好";
+            }else if (this.y <= 100) {
+              level = "普通";
+            } else if (this.y <= 150) {
+              level = "對敏感族群不健康";
+            } else if (this.y <= 200) {
+              level = "對所有族群不健康";
+            }else if (this.y <= 300) {
+              level = "非常不健康";
+            }else if (this.y <= 500) {
+              level = "危害";
+            }
+            return '<b>' + 
+              this.x + 
+              '<br>等級：' + level +
+              '<br>數值：' + this.y +
+              '</b>';
+          },
+          style: {
+            fontSize: 15
+          }
+        },
+
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            label: {
+              connectorAllowed: false
+            },
+            marker: {
+              lineWidth: 1
+            },
+            label: {
+              enabled: false,
+            }
+          }
+        },
+
+        exporting: false,
+
+        series: [{
+          name: title,
+          data: dataset
+        }]
+      });
+    }else{  //一般數據
       if(type == "METER"){
         title = "累積用水量";
       }
 
-      console.log(type + num + '_div');
       var temp = Highcharts.chart(type + num + '_div', {
         chart: {
           scrollablePlotArea: {
@@ -257,92 +450,6 @@ function draw_sensor_data(data, type, num, name) {
             color: 'white'
           }
         }
-      });
-    } else{
-      var temp = Highcharts.chart(type + num + '_div', {
-        //console.log(dataset);
-        chart: {
-          scrollablePlotArea: {
-            minWidth: 300
-          },
-          height: 550
-        },
-
-        xAxis: {
-          tickInterval: Math.floor((date.length) / 6),
-          categories: date,
-          labels: {
-            enabled: true,
-          }
-        },
-
-        yAxis: {
-          title: {
-            text: sensor_type
-          },
-          categories: ["北", "東北", "東", "東南", "南", "西南", "西", "西北"]
-        },
-
-        title: {
-          text: title
-        },
-
-        legend: {
-          align: 'left',
-          verticalAlign: 'top',
-          borderWidth: 0
-        },
-
-        tooltip: {
-          shared: true,
-          crosshairs: true,
-          formatter: function() {
-            if (this.y == 0) {
-              var dir = "北";
-            } else if (this.y == 1) {
-              var dir = "東北";
-            } else if (this.y == 2) {
-              var dir = "東";
-            } else if (this.y == 3) {
-              var dir = "東南";
-            } else if (this.y == 4) {
-              var dir = "南";
-            } else if (this.y == 5) {
-              var dir = "西南";
-            } else if (this.y == 6) {
-              var dir = "西";
-            } else if (this.y == 7) {
-              var dir = "西北";
-            }
-            return '<b>' + this.x +
-              '</b><br>風向：<b>' + dir + '</b>';
-          },
-          style: {
-            fontSize: 15
-          }
-        },
-
-        plotOptions: {
-          series: {
-            cursor: 'pointer',
-            label: {
-              connectorAllowed: false
-            },
-            marker: {
-              lineWidth: 1
-            },
-            label: {
-              enabled: false,
-            }
-          }
-        },
-
-        exporting: false,
-
-        series: [{
-          name: sensor_type,
-          data: dataset
-        }]
       });
     }
 
@@ -900,6 +1007,49 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
+    sensors.pm2_51 = new JustGage({
+      id: "current_PM2_51",
+      label: "",
+      value: 0,
+      min: 0,
+      max: 500,
+      levelColors: [
+          "#1EC918",
+          "#FFFF00",
+          "#FF8C00",
+          "#FF0000",
+          "#800080",
+          "#8B0000"
+      ],
+      textRenderer: function(val) {
+        var level = "";
+        if(val <= 50){
+          level = "良好";
+        }else if (val <= 100) {
+          level = "普通";
+        } else if (val <= 150) {
+          level = "對敏感族群不健康";
+        } else if (val <= 200) {
+          level = "對所有族群不健康";
+        }else if (val <= 300) {
+          level = "非常不健康";
+        }else if (val <= 500) {
+          level = "危害";
+        }
+        return level + '\n' + val;
+      },
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
     console.log(sensors);
     initial_current_data(sensors);
   });
@@ -916,6 +1066,8 @@ function initial_current_data(sensors){
 
       if(body.Items[j].visible == 1){
         $.get(api_url + 'api/sensors/' + type + '/' + id, function(data) {
+
+          /* 有數據 */
           if (data != 'No data') {
             var value = JSON.parse(data);
             var val = value.value;
@@ -979,8 +1131,11 @@ function initial_current_data(sensors){
             }else if(body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
               sensors.electric_meter1.refresh(val);
+            }else if(body.Items[j].sensorType == "PM2_5"){
+              $('#current_PM2_5' + body.Items[j].num + '_div').show();
+              sensors.pm2_51.refresh(val);
             }
-          } else{
+          } else{  /* 無數據 */
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
               $('#current_AIR_TEMPERATURE' + body.Items[j].num + '_div').show();
               sensors.air_temp1.refresh("無數據");
@@ -1032,6 +1187,9 @@ function initial_current_data(sensors){
             } else if (body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
               sensors.electric_meter1.refresh("無數據");
+            } else if (body.Items[j].sensorType == "PM2_5"){
+              $('#current_PM2_5' + body.Items[j].num + '_div').show();
+              sensors.pm2_51.refresh("無數據");
             }
           }
 
