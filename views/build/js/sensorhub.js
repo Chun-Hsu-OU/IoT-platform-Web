@@ -49,6 +49,7 @@ function import_sensor_data() {
   $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
     var body = JSON.parse(data);
 
+    //初始化，預設顯示一天
     body.Items.forEach(function make(sensor) {
       if (sensor.visible == 0) {
         return;
@@ -70,6 +71,7 @@ function import_sensor_data() {
       });
     });
     
+    //更改時間區段，重新畫圖
     $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
 
       var fromDate = new Date(picker.startDate.format('YYYY-MM-DD HH:mm'));

@@ -42,6 +42,7 @@
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/area_page.js"></script>
   <script src="../build/js/loading.js"></script>
+  <script src="../build/js/select_type.js"></script>
 
   <!-- css by CHOu -->
   <link href="../build/css/select_type.css" rel="stylesheet">
@@ -190,7 +191,64 @@
             <div class="clearfix"></div>
 
             <div class="row">
-                <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('AIR_TEMPERATURE')">
+                <div class="col-xs-12"> 
+                    <div class="check_all">
+                    <input type="checkbox" id="all" onclick="select_all()">
+                    <label for="all">全選</label>
+                    </div>
+                </div>
+                <br>
+                <br>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="checkbox_div">
+                        <input type="checkbox" name="type" id="AIR_TEMPERATURE">
+                        <label for="AIR_TEMPERATURE">空氣溫度</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="checkbox_div">
+                        <input type="checkbox" name="type" id="AIR_HUMIDITY">
+                        <label for="AIR_HUMIDITY">空氣濕度</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="checkbox_div">
+                        <input type="checkbox" name="type" id="SOIL_TEMPERATURE">
+                        <label for="SOIL_TEMPERATURE">土壤溫度</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="checkbox_div">
+                        <input type="checkbox" name="type" id="SOIL_HUMIDITY">
+                        <label for="SOIL_HUMIDITY">土壤濕度</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="checkbox_div">
+                        <input type="checkbox" name="type" id="SOIL_EC">
+                        <label for="SOIL_EC">土壤電導度</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="checkbox_div">
+                        <input type="checkbox" name="type" id="LIGHT_INTENSITY">
+                        <label for="LIGHT_INTENSITY">光照度</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                    <div class="checkbox_div">
+                        <input type="checkbox" name="type" id="BATTERY_VOLTAGE">
+                        <label for="BATTERY_VOLTAGE">電池電壓</label>
+                    </div>
+                </div>
+                <!-- <a href="select_sensorhubs.html" onclick="set_sensortype_cookie('AIR_TEMPERATURE')">
                     <div class="col-xs-12 col-sm-6">
                         <div class="type_box">空氣溫度</div>
                     </div>
@@ -230,14 +288,15 @@
                     <div class="col-xs-12 col-sm-6">
                         <div class="type_box">電池電壓</div>
                     </div>
-                </a>
+                </a> -->
             </div>
+            <a href="#" class="btn btn-success btn-lg" role="button" onclick="submit()">選擇群組</a>
 
-            <script>
+            <!-- <script>
                 function set_sensortype_cookie(type){
                     document.cookie = "sensorType=" + type;
                 }
-            </script>
+            </script> -->
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 var groups = JSON.parse(getCookie("groups"));
-var select_type = getCookie("sensorType");
+var select_type = JSON.parse(getCookie("sensorType"));
 var groups_name = JSON.parse(getCookie("groups_name"));
 
 var toDate = new Date();
@@ -82,24 +82,40 @@ $(function(){
     /*-------------------設定highchart參數-------------------*/
 
     /*-------------------初始化(預設一天)-------------------*/
-    var chart = Highcharts.chart('container', options);
+    //放創好的圖表
+    var charts = [];
 
-    for(let group_num=0; group_num<groups.length; group_num++){
-        var group_id = groups[group_num];
-
-        $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
-            var body = JSON.parse(data);
+    // 先創之後要畫的圖表
+    for(let i=0; i<select_type.length; i++){
+        //創圖表的html
+        $('#result').append('<div class="col-xs-12" style="overflow: auto; margin-bottom: 10px;">' +
+                '<div id="'+ select_type[i] +'" style="min-width:400px; height:500px;"></div>' +
+            '</div>');
         
-            body.Items.forEach(function make(sensor) {
-                if(sensor.sensorType == select_type){
-                    $.get(api_url + 'api/sensors_in_timeinterval/' + select_type + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
-                        draw_sensor_data(data, chart, group_num);
-                    });
-                }
-            });
-        });
+        //改圖表名稱
+        options.title.text = select_type[i];
+        charts.push(Highcharts.chart(select_type[i], options));
     }
+
+    for(let i=0; i<select_type.length; i++){
+        //判斷每個 sensorhub 有無此 sensorType 的 sensor，再畫圖
+        for(let group_num=0; group_num<groups.length; group_num++){
+            var group_id = groups[group_num];
     
+            $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
+                var body = JSON.parse(data);
+            
+                body.Items.forEach(function make(sensor) {
+                    if(sensor.sensorType == select_type[i]){
+                        $.get(api_url + 'api/sensors_in_timeinterval/' + select_type[i] + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
+                            draw_sensor_data(data, charts[i], group_num, sensor.num);
+                        });
+                    }
+                });
+            });
+        }
+    }
+
     /*-------------------初始化(預設一天)-------------------*/
 
     /*-------------------選擇時間-------------------*/
@@ -112,35 +128,45 @@ $(function(){
     });
 
     $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
-        //重新設定highchart參數
-        var chart = Highcharts.chart('container', options);
+        // 清空所有圖表
+        charts = [];
+
+        // 重新設定之後要畫的圖表
+        for(let i=0; i<select_type.length; i++){
+            //改圖表名稱
+            options.title.text = select_type[i];
+            charts.push(Highcharts.chart(select_type[i], options));
+        }
 
         var fromDate = new Date(picker.startDate.format('YYYY-MM-DD HH:mm'));
         var fromEpoch = fromDate.getTime();
         var toDate = new Date(picker.endDate.format('YYYY-MM-DD HH:mm'));
         var toEpoch = toDate.getTime();
 
-        for(let group_num=0; group_num<groups.length; group_num++){
-            var group_id = groups[group_num];
-    
-            $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
-                var body = JSON.parse(data);
-            
-                body.Items.forEach(function make(sensor) {
-                    if(sensor.sensorType == select_type){
-                        $.get(api_url + 'api/sensors_in_timeinterval/' + select_type + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
-                            draw_sensor_data(data, chart, group_num);
-                        });
-                    }
+        for(let i=0; i<select_type.length; i++){
+            //判斷每個 sensorhub 有無此 sensorType 的 sensor，再畫圖
+            for(let group_num=0; group_num<groups.length; group_num++){
+                var group_id = groups[group_num];
+        
+                $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
+                    var body = JSON.parse(data);
+                
+                    body.Items.forEach(function make(sensor) {
+                        if(sensor.sensorType == select_type[i]){
+                            $.get(api_url + 'api/sensors_in_timeinterval/' + select_type[i] + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
+                                draw_sensor_data(data, charts[i], group_num, sensor.num);
+                            });
+                        }
+                    });
                 });
-            });
+            }
         }
     });
     /*-------------------選擇時間-------------------*/
 });
 
 
-function draw_sensor_data(data, chart, group_num) {
+function draw_sensor_data(data, chart, group_num, serial_num) {
     main();
   
     async function main() {
@@ -152,7 +178,7 @@ function draw_sensor_data(data, chart, group_num) {
         if (dataset.length != 0) {
             //新增一條線
             chart.addSeries({
-                name: groups_name[group_num],
+                name: groups_name[group_num] + " " + serial_num,
                 data: dataset
             });
         }
