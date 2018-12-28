@@ -16,7 +16,11 @@ $(function(){
 
     var options = {
         chart: {
-            type: 'spline'
+            type: 'spline',
+            scrollablePlotArea: {
+                minWidth: 700,
+                scrollPositionX: 0
+            }
         },
 
         title: {

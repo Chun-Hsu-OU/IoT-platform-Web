@@ -174,7 +174,8 @@ function draw_sensor_data(data, type, num, title) {
         //console.log(dataset);
         chart: {
           scrollablePlotArea: {
-            minWidth: 300
+            minWidth: 700,
+            scrollPositionX: 0
           },
           height: 550
         },
@@ -257,7 +258,8 @@ function draw_sensor_data(data, type, num, title) {
         //console.log(dataset);
         chart: {
           scrollablePlotArea: {
-            minWidth: 300
+            minWidth: 700,
+            scrollPositionX: 0
           },
           height: 550
         },
@@ -361,7 +363,8 @@ function draw_sensor_data(data, type, num, title) {
       var temp = Highcharts.chart(type + num + '_div', {
         chart: {
           scrollablePlotArea: {
-            minWidth: 300
+            minWidth: 700,
+            scrollPositionX: 0
           },
           height: 400
         },
@@ -479,7 +482,8 @@ function draw_sensor_data(data, type, num, title) {
       var temp = Highcharts.chart('meter_now_div', {
         chart: {
           scrollablePlotArea: {
-            minWidth: 300
+            minWidth: 700,
+            scrollPositionX: 0
           },
           height: 400
         },
