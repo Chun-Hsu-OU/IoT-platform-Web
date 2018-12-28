@@ -17,10 +17,10 @@ $(function(){
     var options = {
         chart: {
             type: 'spline',
-            scrollablePlotArea: {
-                minWidth: 700,
-                scrollPositionX: 0
-            }
+            // scrollablePlotArea: {
+            //     minWidth: 700,
+            //     scrollPositionX: 0
+            // }
         },
 
         title: {
@@ -45,7 +45,8 @@ $(function(){
         },
 
         tooltip: {
-            xDateFormat: '%m/%d/%Y<br>%H:%M'
+            xDateFormat: '%m/%d/%Y<br>%H:%M',
+            crosshairs: true
         },
 
         legend: {
@@ -92,7 +93,7 @@ $(function(){
     // 先創之後要畫的圖表
     for(let i=0; i<select_type.length; i++){
         //創圖表的html
-        $('#result').append('<div class="col-xs-12" style="overflow: auto; margin-bottom: 10px;">' +
+        $('#result').append('<div class="col-xs-12" style="overflow-x: auto; overflow-y:hidden; margin-bottom: 20px;">' +
                 '<div id="'+ select_type[i] +'" style="min-width:400px; height:500px;"></div>' +
             '</div>');
         
