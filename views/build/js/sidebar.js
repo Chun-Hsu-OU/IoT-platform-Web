@@ -1,5 +1,3 @@
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-
 var uuid = getCookie("checker");
 var areaId = getCookie("area");
 var groupId = getCookie("group");
@@ -30,14 +28,14 @@ function set_controller_cookie(Id) {
 }
 
 function load_sidebars() {
-  $.get(api_url + 'api/area/' + uuid, function(data, status) {
+  $.get(api_url + 'api/area/' + uuid + '?token=' + token, function(data, status) {
     var body = JSON.parse(data);
 
     body.Items.forEach(function make(area) {
       if (area.visible == 1) {
-        $('#showPlace').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/area_page.html">' + area.name + '</a></li>');
-        $('#showController').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/show_controllers.html">' + area.name + '</a></li>');
-        $('#showAnalysis').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/select_type.html">' + area.name + '</a></li>');
+        $('#showPlace').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://nthu-smart-farming.kits.tw:8080/area_page.html">' + area.name + '</a></li>');
+        $('#showController').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://nthu-smart-farming.kits.tw:8080/show_controllers.html">' + area.name + '</a></li>');
+        $('#showAnalysis').append('<li id=' + area['name'] + '><a onclick="set_area_cookie(\'' + area.areaId + '\')" href="http://nthu-smart-farming.kits.tw:8080/select_type.html">' + area.name + '</a></li>');
       }
     });
   });
@@ -58,7 +56,7 @@ function add_area() {
       }
     }
 
-    $.post(api_url + 'api/add/area/', {
+    $.post(api_url + 'api/add/area/' + '?token=' + token, {
       "ownerId": uuid,
       "name": new_area_name,
       "city": city,
@@ -80,7 +78,7 @@ function add_group() {
 
   //檢查每個欄位都有值
   if(new_group_name && group_select!="NoSelection" && macAddr){
-    $.post(api_url + 'api/add/sensorGroup', {
+    $.post(api_url + 'api/add/sensorGroup' + '?token=' + token, {
       "areaId": getCookie("area"),
       "name": new_group_name,
       "macAddr": macAddr
@@ -100,7 +98,7 @@ function add_controller() {
   var setting = document.getElementById("protocol_setting").value;
   //檢查每個欄位都有值
   if(new_controller_name && controller_in_area!="NoSelection" && protocol!="NoSelection" && setting){
-    $.post(api_url + 'api/add/control', {
+    $.post(api_url + 'api/add/control' + '?token=' + token, {
       "ownerId": getCookie("checker"),
       "areaId": controller_in_area,
       "name": new_controller_name,
@@ -137,7 +135,7 @@ function del_from_db() {
     console.log("error");
     alert("錯誤！\n請確實填入所有選項");
   } else if (group == "blank") {
-    $.post(api_url + 'api/delete_item/area', {
+    $.post(api_url + 'api/delete_item/area' + '?token=' + token, {
       "ownerId": uuid,
       "areaId": area
     }, function() {
@@ -145,7 +143,7 @@ function del_from_db() {
       location.reload();
     });
   } else if (sensor == "blank") {
-    $.post(api_url + 'api/delete_item/group', {
+    $.post(api_url + 'api/delete_item/group' + '?token=' + token, {
       "areaId": area,
       "groupId": group
     }, function() {
@@ -153,7 +151,7 @@ function del_from_db() {
       location.reload();
     });
   } else {
-    $.post(api_url + 'api/delete_item/sensor', {
+    $.post(api_url + 'api/delete_item/sensor' + '?token=' + token, {
       "groupId": group,
       "sensorId": sensor
     }, function() {
@@ -208,14 +206,14 @@ function sensor_del_func() {
 function check_admin() {
   admin = getCookie("admin");
   if (admin == "aDmiN") {
-    window.location.replace('http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/homepage_admin.html');
+    window.location.replace('http://nthu-smart-farming.kits.tw:8080/homepage_admin.html');
   } else {
-    window.location.replace('http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/homepage.html');
+    window.location.replace('http://nthu-smart-farming.kits.tw:8080/homepage.html');
   }
 }
 
 function initial_setting(){
-  $.get(api_url + 'api/account/single/' + uuid, function(data) {
+  $.get(api_url + 'api/account/single/' + uuid + '?token=' + token, function(data) {
     document.getElementById("new_username").value = data.name;
     document.getElementById("new_password").value = "";
     document.getElementById("new_password_confirm").value = "";
@@ -230,7 +228,7 @@ function settings() {
     if (new_username && new_password && new_password_confirm) {
       //檢查密碼和確認密碼是否一樣
       if(new_password == new_password_confirm){
-        $.post(api_url + 'api/account/settings', {
+        $.post(api_url + 'api/account/settings' + '?token=' + token, {
           "uuid": uuid,
           "name": new_username,
           "password": new_password
@@ -250,7 +248,7 @@ function load_area_in_modal() {
   $('#area_del').empty();
   $('#group_select').empty();
   $('#controller_in_area').empty();
-  $.get(api_url + 'api/area/' + uuid, function(data) {
+  $.get(api_url + 'api/area/' + uuid + '?token=' + token, function(data) {
     var body = JSON.parse(data);
 
     $('#area_del').append('<option selected value="NoSelection">---請選擇---</option>');
@@ -272,12 +270,9 @@ function load_area_in_modal() {
 
 function load_group_in_modal() {
   $('#group_del').empty();
-  //console.log(areaId);
   var areaId = getCookie("area");
-  console.log(api_url + 'api/sensorgroup_in_area/' + areaId);
-  $.get(api_url + 'api/sensorgroup_in_area/' + areaId, function(data) {
+  $.get(api_url + 'api/sensorgroup_in_area/' + areaId + '?token=' + token, function(data) {
     var body = JSON.parse(data);
-    //console.log(body);
 
     $('#group_del').append('<option selected value="NoSelection">---請選擇---</option>');
     $('#group_del').append('<option value="None">None</option>');
@@ -293,7 +288,7 @@ function load_group_in_modal() {
 function load_sensor_in_modal() {
   $('#sensor_del').empty();
   var groupId = getCookie("group");
-  $.get(api_url + 'api/sensors_in_group/' + groupId, function(data) {
+  $.get(api_url + 'api/sensors_in_group/' + groupId + '?token=' + token, function(data) {
     var body = JSON.parse(data);
 
     $('#sensor_del').append('<option selected value="NoSelection">---請選擇---</option>');

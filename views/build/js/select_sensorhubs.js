@@ -43,7 +43,7 @@ function list_groups(){
     var sensorType = getCookie("sensorType");
     var areaId = getCookie("area");
 
-    $.get(api_url + 'api/sensorgroup_in_area/' + areaId, function(data) {
+    $.get(api_url + 'api/sensorgroup_in_area/' + areaId + '?token=' + token, function(data) {
         var group_body = JSON.parse(data);
         // for (let j = 0; j < group_body.Count; j++) {
         //     $.get(api_url + 'api/sensors_in_group/' + group_body.Items[j].groupId, function(data){

@@ -1,5 +1,3 @@
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -89,7 +87,7 @@ function change_rules() {
     }
   }
 
-  $.post(api_url + 'api/control/rules', {
+  $.post(api_url + 'api/control/rules' + '?token=' + token, {
     "controllerId": controller,
     "status": rules
   }, function(){
@@ -181,7 +179,7 @@ function add_rule_block(block_num = 0, duration = 0) {
 }
 
 function load_groups_in_select_rule(block_num){
-  $.get(api_url + 'api/sensorgroup_in_area/' + getCookie("area"), function(data) {
+  $.get(api_url + 'api/sensorgroup_in_area/' + getCookie("area") + '?token=' + token, function(data) {
     var groups = JSON.parse(data);
     for (let group_num = 0; group_num < groups.Count; group_num++) {
       $("#show_groups_block_"+block_num).append('<option value="' + groups.Items[group_num].groupId + '">' + groups.Items[group_num].name + '</option>');
@@ -195,7 +193,7 @@ function load_groups_in_select_rule(block_num){
 
 function load_sensors_in_select_rule(block_num, groupId){
   $("#show_sensors_block_"+block_num).empty();
-  $.get(api_url + 'api/sensors_in_group/' + groupId, function(data) {
+  $.get(api_url + 'api/sensors_in_group/' + groupId + '?token=' + token, function(data) {
     var sensors = JSON.parse(data);
     for (let sensor_num = 0; sensor_num < sensors.Count; sensor_num++) {
       console.log(sensors.Items[sensor_num].sensorId);
@@ -335,7 +333,7 @@ function submit_clock(){
   }
   console.log(clocks);
   //將鬧鐘設定傳到資料庫
-  $.post(api_url + 'api/control/clock_setting', {
+  $.post(api_url + 'api/control/clock_setting' + '?token=' + token, {
     "controllerId": getCookie("controller"),
     "status": clocks
   },function(){
@@ -347,12 +345,12 @@ function submit_clock(){
 //------ 手動 ------
 function submit_duration(){
   console.log(document.getElementById("manual_items").children[0].value);
-  $.post(api_url + 'api/control/mode', {
+  $.post(api_url + 'api/control/mode' + '?token=' + token, {
     "controllerId": getCookie("controller"),
     "status": "power"
   });
 
-  $.post(api_url + 'api/control/work_cycle', {
+  $.post(api_url + 'api/control/work_cycle' + '?token=' + token, {
     "controllerId": getCookie("controller"),
     "status": document.getElementById("manual_items").children[0].value
   },function(){

@@ -1,5 +1,3 @@
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-
 var uuid = getCookie("checker");
 var group_id = getCookie("group");
 
@@ -32,7 +30,7 @@ String.prototype.capitalize = function() {
 };
 
 function load_sensorhub_descriptions() {
-  $.get(api_url + 'api/sensorgroup_in_area/' + area, function(data) {
+  $.get(api_url + 'api/sensorgroup_in_area/' + area + '?token=' + token, function(data) {
     var body = JSON.parse(data);
     body.Items.forEach(function(hub) {
       if (hub.groupId == group_id) {
@@ -46,7 +44,7 @@ function load_sensorhub_descriptions() {
 
 function import_sensor_data() {
 
-  $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
+  $.get(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token, function(data) {
     var body = JSON.parse(data);
 
     //初始化，預設顯示一天
@@ -56,7 +54,7 @@ function import_sensor_data() {
       }
       // all graphs are default hidden, and only the ones with data would be shown
       $('#' + sensor.sensorType + sensor.num).show();
-      console.log('#' + sensor.sensorType + sensor.num);
+      // console.log('#' + sensor.sensorType + sensor.num);
 
       $('input[name="daterange_picker"]').daterangepicker({
         timePicker: true,
@@ -66,7 +64,7 @@ function import_sensor_data() {
         }
       });
 
-      $.get(api_url + 'api/sensors_in_timeinterval/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
+      $.get(api_url + 'api/sensors_in_timeinterval/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
         draw_sensor_data(data, sensor.sensorType, sensor.num, sensor.name);
       });
     });
@@ -79,11 +77,11 @@ function import_sensor_data() {
       var toDate = new Date(picker.endDate.format('YYYY-MM-DD HH:mm'));
       var toEpoch = toDate.getTime();
 
-      $.get(api_url + 'api/sensors_in_group/' + group_id, function(data) {
+      $.get(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token, function(data) {
         var body = JSON.parse(data);
         for (let i = 0; i < body.Count; i++) {
           if (body.Items[i].visible == 1) {
-            $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch, function(data) {
+            $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
               draw_sensor_data(data, body.Items[i].sensorType, body.Items[i].num, body.Items[i].name);
             });
           }
@@ -171,7 +169,6 @@ function draw_sensor_data(data, type, num, title) {
     */
     if (type == "WIND_DIRECTION") { //風向
       var temp = Highcharts.chart(type + num + '_div', {
-        //console.log(dataset);
         chart: {
           scrollablePlotArea: {
             minWidth: 700,
@@ -255,7 +252,6 @@ function draw_sensor_data(data, type, num, title) {
       });
     }else if(type == "PM2_5"){ //PM2.5
       var temp = Highcharts.chart(type + num + '_div', {
-        //console.log(dataset);
         chart: {
           scrollablePlotArea: {
             minWidth: 700,
@@ -585,7 +581,7 @@ function set_sensors_cookie(id) {
 }
 
 function change_update_sensor_modal(id){
-  $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
+  $.get(api_url + 'api/sensors_in_group/' + getCookie("group") + '?token=' + token, function(data) {
     var body = JSON.parse(data);
     for (group_num = 0; group_num < body.Count; group_num++) {
       if (body.Items[group_num].sensorId == id) {
@@ -598,7 +594,7 @@ function change_update_sensor_modal(id){
 function update_sensor_item() {
   var update_name = document.getElementById("update_sensorname").value;
 
-  $.post(api_url + 'api/update/sensor', {
+  $.post(api_url + 'api/update/sensor' + '?token=' + token, {
     "groupId": getCookie("group"),
     "sensorId": getCookie("sensor"),
     "name": update_name
@@ -608,7 +604,7 @@ function update_sensor_item() {
 }
 
 function initial_sensor(){
-  $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
+  $.get(api_url + 'api/sensors_in_group/' + getCookie("group") + '?token=' + token, function(data) {
     var body = JSON.parse(data);
     for (group_num = 0; group_num < body.Count; group_num++) {
         // sensor種類
@@ -632,10 +628,10 @@ function add_sensor_item() {
   var add_type = document.getElementById("add_sensorType").value;
   var macAddr = getCookie("macAddr");
   
-  $.get(api_url + 'api/sensors/num/'+ macAddr +'/'+ add_type, function(data){
+  $.get(api_url + 'api/sensors/num/'+ macAddr +'/'+ add_type + '?token=' + token, function(data){
     console.log(data);
 
-    $.post(api_url + 'api/add/sensor', {
+    $.post(api_url + 'api/add/sensor' + '?token=' + token, {
       "groupId": groupId,
       "name": add_name,
       "macAddr": getCookie("macAddr"),
@@ -1003,7 +999,7 @@ function initial_current_chart(){
     //土壤電導度
     sensors.soil_ec1 = new JustGage({
         id: "current_SOIL_EC1",
-        label: "S/m",
+        label: "μS/cm",
         value: 0,
         min: 0,
         max: 1000,
@@ -1025,7 +1021,7 @@ function initial_current_chart(){
 
     sensors.soil_ec2 = new JustGage({
         id: "current_SOIL_EC2",
-        label: "S/m",
+        label: "μS/cm",
         value: 0,
         min: 0,
         max: 1000,
@@ -1047,7 +1043,7 @@ function initial_current_chart(){
 
     sensors.soil_ec3 = new JustGage({
       id: "current_SOIL_EC3",
-      label: "S/m",
+      label: "μS/cm",
       value: 0,
       min: 0,
       max: 1000,
@@ -1069,7 +1065,7 @@ function initial_current_chart(){
 
     sensors.soil_ec4 = new JustGage({
         id: "current_SOIL_EC4",
-        label: "S/m",
+        label: "μS/cm",
         value: 0,
         min: 0,
         max: 1000,
@@ -1091,7 +1087,7 @@ function initial_current_chart(){
 
     sensors.soil_ec5 = new JustGage({
         id: "current_SOIL_EC5",
-        label: "S/m",
+        label: "μS/cm",
         value: 0,
         min: 0,
         max: 1000,
@@ -1113,7 +1109,7 @@ function initial_current_chart(){
 
     sensors.soil_ec6 = new JustGage({
         id: "current_SOIL_EC6",
-        label: "S/m",
+        label: "μS/cm",
         value: 0,
         min: 0,
         max: 1000,
@@ -1336,7 +1332,7 @@ function initial_current_chart(){
 }
 
 function initial_current_data(sensors){
-  $.get(api_url + 'api/sensors_in_group/' + getCookie("group"), function(data) {
+  $.get(api_url + 'api/sensors_in_group/' + getCookie("group") + '?token=' + token, function(data) {
     var body = JSON.parse(data);
     for (let j = 0; j < body.Count; j++) {
       // sensor id
@@ -1345,7 +1341,7 @@ function initial_current_data(sensors){
       var type = body.Items[j].sensorType;
 
       if(body.Items[j].visible == 1){
-        $.get(api_url + 'api/sensors/' + type + '/' + id, function(data) {
+        $.get(api_url + 'api/sensors/' + type + '/' + id + '?token=' + token, function(data) {
 
           /* 有數據 */
           if (data != 'No data') {
@@ -1428,7 +1424,7 @@ function initial_current_data(sensors){
 
               //顯示即時水表數據
               $('#current_METER_now_div').show();
-              $.get(api_url + 'api/meter/new/' + id, function(data) {
+              $.get(api_url + 'api/meter/new/' + id + '?token=' + token, function(data) {
                 var amount = JSON.parse(data);
                 sensors.meter_now.refresh(amount.toFixed(2));
               });

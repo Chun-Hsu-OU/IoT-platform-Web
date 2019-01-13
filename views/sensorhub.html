@@ -56,12 +56,13 @@
   <script src="../vendors/justgage-master/raphael-2.1.4.min.js"></script>
   <script src="../vendors/justgage-master/justgage.js"></script>
 
-  <!-- Scripts by CTLiu -->
+  <!-- Scripts -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/sensorhub.js"></script>
   <script src="../build/js/loading.js"></script>
+  <script src="../build/js/config.js"></script>
 
-  <!-- css by CHOu -->
+  <!-- CSS -->
   <link href="../build/css/sensorhub.css" rel="stylesheet">
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
@@ -155,7 +156,7 @@
               <ul class="nav side-menu">
                 <li><a id="agri-log"><i class="fa fa-calendar"></i> 日誌系統 </a>
                   <script>
-                    $("#agri-log").attr("href", "http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com/IoT-platform-Web/views/log_list.php?checker=" + getCookie("checker"));
+                    $("#agri-log").attr("href", "http://nthu-smart-farming.kits.tw/IoT-platform-Web/views/log_system/log_list.php?checker=" + getCookie("checker"));
                   </script>
                 </li>
               </ul>
@@ -578,9 +579,6 @@
         </div>
 
         <script>
-          // var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-          // var group = getCookie("group");
-
           // function timeConverter(UNIX_timestamp) {
           //   var a = new Date(UNIX_timestamp);
           //   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -593,60 +591,6 @@
           //   var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
           //   return time;
           // }
-
-          // $.get(api_url + 'api/sensors_in_group/' + group, function(data) {
-          //   var body = JSON.parse(data);
-          //   for (let j = 0; j < body.Count; j++) {
-          //     if(body.Items[j].visible == 1){
-          //       $.get(api_url + 'api/sensors/' + body.Items[j].sensorType + '/' + body.Items[j].sensorId, function(data) {
-          //         if (data != 'No data') {
-          //           var value = JSON.parse(data);
-
-          //           if (body.Items[j].sensorType == "WIND_DIRECTION") {
-          //             if (value.value == 0) {
-          //               var val = "北";
-          //             } else if (value.value == 1) {
-          //               var val = "東北";
-          //             } else if (value.value == 2) {
-          //               var val = "東";
-          //             } else if (value.value == 3) {
-          //               var val = "東南";
-          //             } else if (value.value == 4) {
-          //               var val = "南";
-          //             } else if (value.value == 5) {
-          //               var val = "西南";
-          //             } else if (value.value == 6) {
-          //               var val = "西";
-          //             } else if (value.value == 7) {
-          //               var val = "西北";
-          //             }
-          //           } else {
-          //             var val = value.value;
-          //           }
-          //           $('#current_sensor_data').append('<div class="mail_list">' +
-          //             '<div class="left">' +
-          //             '<a onclick="set_sensors_cookie(\'' + body.Items[j].sensorId + '\')" href="#" data-toggle="modal" data-target="#set_sensor_modal"><i class="fa fa-cog"></a></i>' +
-          //             '</div>' +
-          //             '<div class="right">' +
-          //             '<h3>' + body.Items[j].name + '<small>' + timeConverter(value.timestamp) + '</small></h3>' +
-          //             '<p>' + sensor_type + ' : ' + val + '</p>' +
-          //             '</div>' +
-          //             '</div>');
-          //         } else {
-          //           $('#current_sensor_data').append('<div class="mail_list">' +
-          //             '<div class="left">' +
-          //             '<a onclick="set_sensors_cookie(\'' + body.Items[j].sensorId + '\')" href="#" data-toggle="modal" data-target="#set_sensor_modal"><i class="fa fa-cog"></a></i>' +
-          //             '</div>' +
-          //             '<div class="right">' +
-          //             '<h3>' + body.Items[j].name + '<small>' + 'No Signal' + '</small></h3>' +
-          //             '<p>' + sensor_type + ' : ' + 'No Signal' + '</p>' +
-          //             '</div>' +
-          //             '</div>');
-          //         }
-          //       });
-          //     }
-          //   }
-          // });
         </script>
 
         <div class="row">

@@ -10,6 +10,7 @@ function del() {
     document.cookie = "sensorType=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "groups=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "groups_name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 function getCookie(cname) {
     var name = cname + "=";

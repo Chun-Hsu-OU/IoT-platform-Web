@@ -1,6 +1,6 @@
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
 function get_users(){
-  $.get(api_url + 'api/account/all', function(data) {
+
+  $.get(api_url + 'api/account/all' + '?token=' + token, function(data) {
     var body = JSON.parse(data);
     // console.log("data = " + data);
     body.Items.forEach(function make(users){

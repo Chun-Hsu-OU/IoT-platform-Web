@@ -9,39 +9,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>NTHU智慧農業平台</title>
-  <link rel="Shortcut Icon" type="image/x-icon" href="images/agronomy.ico">
+  <link rel="Shortcut Icon" type="image/x-icon" href="../images/agronomy.ico">
+
   <!-- Bootstrap -->
-  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="vendors/bootstrap/dist/js/bootstrap.min.js" rel="stylesheet">
+  <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendors/bootstrap/dist/js/bootstrap.min.js" rel="stylesheet">
   <!-- Font Awesome -->
-  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!-- Font Awesome v4.7 -->
-  <link href="vendors/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../vendors/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <!-- Weather icon -->
-  <link href="vendors/weather-icons-master/css/weather-icons.min.css" rel="stylesheet">
-  <link href="vendors/weather-icons-master/css/weather-icons-wind.min.css" rel="stylesheet">
+  <link href="../vendors/weather-icons-master/css/weather-icons.min.css" rel="stylesheet">
+  <link href="../vendors/weather-icons-master/css/weather-icons-wind.min.css" rel="stylesheet">
   <!-- NProgress -->
-  <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+  <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
   <!-- iCheck -->
-  <link href="vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+  <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
 
   <!-- bootstrap-progressbar -->
-  <link href="vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+  <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
   <!-- JQVMap -->
-  <link href="vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+  <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
   <!-- bootstrap-daterangepicker -->
-  <link href="vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+  <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
   <!-- Custom Theme Style -->
-  <link href="build/css/custom.min.css" rel="stylesheet">
+  <link href="../build/css/custom.min.css" rel="stylesheet">
 
-  <script src="vendors/jquery/dist/jquery.min.js"></script>
+  <script src="../vendors/jquery/dist/jquery.min.js"></script>
 
   <!-- Scripts by CTLiu -->
-  <script src="build/js/sidebar.js"></script>
-  <script src="build/js/area_page.js"></script>
-  <script src="build/js/loading.js"></script>
-
+  <script src="../build/js/sidebar.js"></script>
+  <script src="../build/js/area_page.js"></script>
+  <script src="../build/js/loading.js"></script>
+  <script src="../build/js/config.js"></script>
   <!-- css by CHOu -->
   <link rel="stylesheet" href="mystyle.css">
   <script>
@@ -54,6 +55,8 @@
     //設定時區
     date_default_timezone_set('Asia/Taipei');
     session_start();
+    $_SESSION["ownerId"] = $_GET["checker"];
+    $public = include('config.php');
   ?>
 </head>
 <style>
@@ -84,7 +87,7 @@
         <div class="left_col scroll-view">
           <div class="navbar nav_title" style="border: 0;">
             <a onclick="check_admin()" class="site_title">
-              <img src="images/agronomy.png" height="45px">
+              <img src="../images/agronomy.png" height="45px">
               <span style="font-size: 18px">NTHU智慧農業平台</span>
             </a>
           </div>
@@ -94,7 +97,7 @@
           <!-- menu profile quick info -->
           <div class="profile clearfix">
             <div class="profile_pic">
-              <img src="images/farmer.png" height="50px" alt="..." class="img-circle profile_img">
+              <img src="../images/farmer.png" height="50px" alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
               <span>Welcome,</span>
@@ -110,7 +113,7 @@
             <div class="menu_section">
               <h3></h3>
               <ul class="nav side-menu">
-                <li><a href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/homepage.html"><i class="fa fa-home"></i> 首頁 </a>
+                <li><a href="http://nthu-smart-farming.kits.tw:8080/homepage.html"><i class="fa fa-home"></i> 首頁 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
@@ -150,7 +153,7 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a onclick="del()" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
+                <li><a onclick="del()" href="http://nthu-smart-farming.kits.tw:8080/login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
                 </li>
               </ul>
             </div>
@@ -229,143 +232,194 @@
       <!-- page content -->
       <div class="right_col" role="main">
         <div class="">
-        <?php
-              function view_log($url){
-                  $ch			= curl_init();
-                  $options    = array(
-                                          CURLOPT_URL				=>    $url,
-                                          // CURLOPT_HEADER			=>    false,
-                                          CURLOPT_RETURNTRANSFER  =>    true,
-                                          CURLOPT_CUSTOMREQUEST   =>    "GET", //啟用GET
-                                          CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json')
-                                      );
-                  
-                  curl_setopt_array($ch,$options) ; //把陣列放入設定
-                  $result = curl_exec($ch); //開始執行
-                  curl_close($ch);
-                  return $result;
-              }
+            <?php
+                $ownerId = $_GET["checker"];
+            ?>
+            <div class="container">
+                <h1 class="text">日誌列表</h1>
+                <a href="insert_log.php?ownerId=<?= $ownerId ?>" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span>新增日誌
+                </a>
+            </div>
+            <form>
+            <div style="width: 450px">
+              <div class="form-group col-md-6 col-sm-6 col-xs-6">
+                <label for="month"><h4>查詢年份:</h4></label>
+                <select class="form-control" id="select_year">
+                </select>
+              </div>
 
-              function view_file($url){
-                $ch			= curl_init();
-                $options    = array(
-                                        CURLOPT_URL				=>    $url,
-                                        // CURLOPT_HEADER			=>    false,
-                                        CURLOPT_RETURNTRANSFER  =>    true,
-                                        CURLOPT_CUSTOMREQUEST   =>    "GET", //啟用get
-                                        CURLOPT_HTTPHEADER      =>    array('Content-Type: octet-stream')
-                                        // CURLOPT_POSTFIELDS		=>    $data
-                                    );
-                
-                curl_setopt_array($ch,$options) ; //把陣列放入設定
-                $result = curl_exec($ch); //開始執行
-                curl_close($ch);
-                return $result;
-              }
-              $ownerId = $_GET["ownerId"];
-              $timestamp = $_GET["timestamp"];
-              $str = view_log("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/search/log/ownerId/$ownerId");
+              <div class="form-group col-md-6 col-sm-6 col-xs-6">
+                <label for="month"><h4>查詢月份:</h4></label>
+                <select class="form-control" id="select_month">
+                  <option value="1">1月</option>
+                  <option value="2">2月</option>
+                  <option value="3">3月</option>
+                  <option value="4">4月</option>
+                  <option value="5">5月</option>
+                  <option value="6">6月</option>
+                  <option value="7">7月</option>
+                  <option value="8">8月</option>
+                  <option value="9">9月</option>
+                  <option value="10">10月</option>
+                  <option value="11">11月</option>
+                  <option value="12">12月</option>
+                </select>
+              </div>
+            </div>
+            </form>
+            <!-- 調整月份 -->
+            <script>
               
-              $str = json_decode($str);  
-              for($i=0;$i<count($str->Items);$i++){
-                  if($str->Items[$i]->timestamp==$timestamp){
-        ?>
-          <div class="right">
-            <a href="log_list.php?checker=<?=$ownerId?>" class="btn btn-primary" role="button">
-              <span class="glyphicon glyphicon-home"></span>回日誌列表
-            </a>
-          </div>
-          <div>
-              <h1>查看日誌資訊</h1>
-              <table border="3" width="1000px">
-                  <colgroup span="1" bgcolor="F2F2F2"></colgroup>
-                  <colgroup span="1" bgcolor="F9F9F9"></colgroup>
-                  <tr>
-                      <td width="20%" align="right"><h3>記錄者:</h3></td>
-                      <td align="center"><h3><?= $str->Items[$i]->author ?></h3></td>
-                  </tr>
-                  <tr>
-                      <td width="20%" align="right"><h3>場域:</h3></td>
-                      <td align="center"><h3><?= $str->Items[$i]->area ?></h3></td>
-                  </tr>
-                  <tr>
-                      <td width="20%" align="right"><h3>作物:</h3></td>
-                      <td align="center"><h3><?= $str->Items[$i]->crop ?></h3></td>
-                  </tr>
-                  <tr>
-                      <td width="20%" align="right"><h3>工作事項:</h3></td>
-                      <td align="center"><h3><?= $str->Items[$i]->type ?></h3></td>
-                  </tr>
-                  <tr>
-                      <td width="20%" align="right"><h3>農機具:</h3></td>
-                      <td align="center"><h3><?= $str->Items[$i]->machine ?></h3></td>
-                  </tr>
-                  <tr>
-                      <td width="20%" align="right"><h3>病蟲害:</h3></td>
-                      <td align="center"><h3><?= $str->Items[$i]->diseases ?></h3></td>
-                  </tr>
-                  <tr>
-                      <td width="20%" align="right"><h3>備忘錄:</h3></td>
-                      <td align="center"><h3><?= $str->Items[$i]->memo ?></h3></td>
-                  </tr>
-                  <tr>
-                      <td width="20%" align="right"><h3>記錄時間:</h3></td>
-                      <td align="center"><h3><?= date("Y/m/d H:i:s",$str->Items[$i]->set_time) ?></h3></td>
-                  </tr>
 
-                  <?php
-                        $files = $str->Items[$i]->files;
-                        $image_num = 1;
-                        $video_num = 1;
-                        if(!empty($files)){
-                          for($j=0;$j<count($files);$j++){
-                            $name_part = explode(".",$files[$j]);
-                            $form = $name_part[1];
-                            if(strtolower($form)=="jpeg" || strtolower($form)=="jpg" || strtolower($form)=="png"){
-                  ?>
-                  <tr>
-                      <td width="20%" align="right"><h3>照片<?= $image_num ?>:</h3></td>
-                      <td align="center">
-                        <?php 
-                            $result = urlencode($files[$j]);
-                            $rawData = view_file("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/search/file/$ownerId/$timestamp/$result");
-                            if(strtolower($form)=="jpeg" || strtolower($form)=="jpg"){
-                              echo "<img width='800px' height='500px' src='data:image/jpeg;base64, $rawData' />";
-                            }else{
-                              echo "<img width='800px' height='500px' src='data:image/png;base64, $rawData' />";
-                            }
-                            $image_num++;
-                        ?>
-                      </td>
-                  </tr>
-          
-                  <?php
-                            }elseif(strtolower($form)=="mp4"){
-                  ?>
-                      <tr>
-                        <td width="20%" align="right"><h3>影片<?= $video_num ?>:</h3></td>
-                        <td align="center">
-                          <?php 
-                              $result = urlencode($files[$j]);
-                              $rawData = view_file("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/search/file/$ownerId/$timestamp/$result");
-                              // echo "<img width='800px' height='500px' src='data:image/png;base64, $rawData' />";
-                              echo "<video width='800px' height='500px' controls>
-                                <source src='data:video/mp4;base64, $rawData' />
-                                影片載入錯誤，請重新整理.
-                              </video>";
-                              $video_num++;
-                          ?>
-                        </td>
-                      </tr>
-                  <?php            
-                            }
-                          }
+              $(document).ready(function(){
+                var d = new Date();
+                for(let i=2018;i<=d.getFullYear();i++){
+                  $("#select_year").append("<option value="+ i +">"+ i +"年</option>");
+                }
+
+                $("#select_year").val(d.getFullYear());
+                $("#select_month").val(d.getMonth()+1);
+                $("#select_month,#select_year").change(function(){
+                  $("#list").empty();
+                  $("#noData").remove();
+                  $.ajax({
+                    type: "POST",
+                    url: "adjust_date.php",
+                    data: {
+                      ownerId: "<?= $ownerId ?>",
+                      year: $("#select_year").val(),
+                      month: $("#select_month").val()
+                    },
+                    success: function(result){
+                      // alert(result);
+                      var data = JSON.parse(result);
+                      $("#list").append('<tr style="background-color: #CCDDFF"><th width="15%">場域</th><th width="15%">作物</th><th width="15%">工作項目</th><th width="15%">日期</th><th>功能</th></tr>');
+                      if(data.length == 0){
+                        $("#list").after("<div id='noData' style='text-align: center;font-size: 25px;color: red'>目前尚無資料</div>");
+                      }
+                      for(let i=0;i<data.length;i++){
+                        // console.log(data[i].area);
+                        var date = new Date(Number(data[i].set_time * 1000));
+                        var month = (Number(date.getMonth()+1) < 10 ? '0' : '')+(date.getMonth()+1);
+                        var day = (Number(date.getDate()) < 10 ? '0' : '')+date.getDate();
+                        //工作事項用圖來顯示
+                        if(data[i].type == "灌溉"){
+                          var type_imgORname = '<img src="../images/irrigation.png">';
+                        }else if(data[i].type == "定植"){
+                          var type_imgORname = '<img src="../images/field_planting.png">';
+                        }else if(data[i].type == "播種"){
+                          var type_imgORname = '<img src="../images/sowing.png">';
+                        }else if(data[i].type == "施肥"){
+                          var type_imgORname = '<img src="../images/fertilize.png">';
+                        }else{
+                          var type_imgORname = "";
                         }
+                        
+                        var type_html = type_imgORname + "<div style='text-align: center;width: 50px'>" + data[i].type + "</div>";
+                        //作物沒資料就顯示"未設定作物名稱"
+                        if(typeof(data[i].crop) == "undefined"){
+                          var crop = "未設定作物名稱";
+                        }else{
+                          var crop = data[i].crop;
+                        }
+
+                        $("#list").append("<tr><td>" + data[i].area + "</td><td>" + crop + "</td>" + 
+                        "<td>" + type_html + "</td><td>" + month + "/" + day + "</td>" + 
+                        "<td><a href='view_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-success'>" + 
+                        "<span class='glyphicon glyphicon-search'></span>查看</a>" + 
+                        "<a href='edit_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-primary'>" + 
+                        "<span class='glyphicon glyphicon-pencil'></span>編輯</a>" + 
+                        "<a href='delete_log.php?ownerId=" + "<?= $ownerId ?>" + "&timestamp=" + data[i].timestamp + "' class='btn btn-danger' onClick='return check();'>" + 
+                        "<span class='glyphicon glyphicon-remove'></span>刪除</a></td></tr>");
                       }
                     }
-                  ?>
-              </table>
-          </div>
+                  })
+                });
+                  
+              });
+            </script>
+
+            <div style="margin-top: 20px">
+                <div class="container">
+                    <table class="table table-hover" id="list">
+                        <tr style="background-color: #CCDDFF">
+                            <th width="15%">場域</th>
+                            <th width="15%">作物</th>
+                            <th width="15%">工作項目</th>
+                            <th width="15%">日期</th>
+                            <th>功能</th>
+                        </tr>
+                        <?php
+                            function view_log($url){
+                                $ch			= curl_init();
+                                $options    = array(
+                                                        CURLOPT_URL				=>    $url,
+                                                        // CURLOPT_HEADER			=>    false,
+                                                        CURLOPT_RETURNTRANSFER  =>    true,
+                                                        CURLOPT_CUSTOMREQUEST   =>    "GET", //啟用GET
+                                                        CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json',
+                                                                                            'token: '.$_COOKIE['token']
+                                                                                      ),
+                                                    );
+                                
+                                curl_setopt_array($ch,$options) ; //把陣列放入設定
+                                $result = curl_exec($ch); //開始執行
+                                curl_close($ch);
+                                return $result;
+                            }
+                            $str = view_log($public['api_url']."api/search/log/ownerId/$ownerId");
+            
+                            $str = json_decode($str);
+                            // echo count($str->Items);
+                            for($i=0;$i<count($str->Items);$i++){
+                                $year = substr(date("Y/m/d H:i:s",$str->Items[$i]->set_time), 0, 4);
+                                $month = substr(date("Y/m/d H:i:s",$str->Items[$i]->set_time), 5, 2);
+                                
+                                if($str->Items[$i]->visible==1 && $month==date("m") && $year==date("Y")){
+                        ?>
+                        <tr>
+                            <td><?= $str->Items[$i]->area ?></td>
+                            <td><?= $str->Items[$i]->crop ?></td>
+                            <td><?php
+                              if($str->Items[$i]->type == "灌溉"){
+                                $type_imgORname = '<img src="../images/irrigation.png">';
+                              }else if($str->Items[$i]->type == "定植"){
+                                $type_imgORname = '<img src="../images/field_planting.png">';
+                              }else if($str->Items[$i]->type == "播種"){
+                                $type_imgORname = '<img src="../images/sowing.png">';
+                              }else if($str->Items[$i]->type == "施肥"){
+                                $type_imgORname = '<img src="../images/fertilize.png">';
+                              }else{
+                                $type_imgORname = "";
+                              }
+
+                              echo $type_imgORname;
+                              echo "<div style='text-align: center;width: 50px' >";
+                              echo $str->Items[$i]->type;
+                              echo "</div>";
+                             ?>
+                            </td>
+                            <td><?= substr(date("Y/m/d H:i:s",$str->Items[$i]->set_time), 5, 5) ?></td>
+                            <td>
+                                <a href="view_log.php?ownerId=<?= $ownerId ?>&timestamp=<?= $str->Items[$i]->timestamp ?>" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-search"></span>查看
+                                </a>
+                                <a href="edit_log.php?ownerId=<?= $ownerId ?>&timestamp=<?= $str->Items[$i]->timestamp ?>" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-pencil"></span>編輯
+                                </a>
+                                <a href="delete_log.php?ownerId=<?= $ownerId ?>&timestamp=<?= $str->Items[$i]->timestamp ?>" class="btn btn-danger" onClick="return check();">
+                                    <span class="glyphicon glyphicon-remove"></span>刪除
+                                </a>
+                            </td>
+                        </tr>
+                        <?php
+                                }
+                            }
+                        ?>
+                    </table>
+                </div>
+            </div>
         </div>
       </div>
 
@@ -555,47 +609,47 @@
           </div>
       <!-- jQuery -->
       <!-- Bootstrap -->
-      <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
       <!-- FastClick -->
-      <script src="vendors/fastclick/lib/fastclick.js"></script>
+      <script src="../vendors/fastclick/lib/fastclick.js"></script>
       <!-- NProgress -->
-      <script src="vendors/nprogress/nprogress.js"></script>
+      <script src="../vendors/nprogress/nprogress.js"></script>
       <!-- Chart.js -->
-      <script src="vendors/Chart.js/dist/Chart.min.js"></script>
+      <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
       <!-- gauge.js -->
-      <script src="vendors/gauge.js/dist/gauge.min.js"></script>
+      <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
       <!-- bootstrap-progressbar -->
-      <script src="vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+      <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
       <!-- iCheck -->
-      <script src="vendors/iCheck/icheck.min.js"></script>
+      <script src="../vendors/iCheck/icheck.min.js"></script>
       <!-- Skycons -->
-      <script src="vendors/skycons/skycons.js"></script>
+      <script src="../vendors/skycons/skycons.js"></script>
       <!-- Flot -->
-      <script src="vendors/Flot/jquery.flot.js"></script>
-      <script src="vendors/Flot/jquery.flot.pie.js"></script>
-      <script src="vendors/Flot/jquery.flot.time.js"></script>
-      <script src="vendors/Flot/jquery.flot.stack.js"></script>
-      <script src="vendors/Flot/jquery.flot.resize.js"></script>
+      <script src="../vendors/Flot/jquery.flot.js"></script>
+      <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+      <script src="../vendors/Flot/jquery.flot.time.js"></script>
+      <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+      <script src="../vendors/Flot/jquery.flot.resize.js"></script>
       <!-- Flot plugins -->
-      <script src="vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-      <script src="vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-      <script src="vendors/flot.curvedlines/curvedLines.js"></script>
+      <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+      <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+      <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
       <!-- DateJS -->
-      <script src="vendors/DateJS/build/date.js"></script>
+      <script src="../vendors/DateJS/build/date.js"></script>
       <!-- JQVMap -->
-      <script src="vendors/jqvmap/dist/jquery.vmap.js"></script>
-      <script src="vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-      <script src="vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+      <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+      <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+      <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
       <!-- bootstrap-daterangepicker -->
-      <script src="vendors/moment/min/moment.min.js"></script>
-      <script src="vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+      <script src="../vendors/moment/min/moment.min.js"></script>
+      <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
       <!-- ECharts -->
-      <script src="vendors/echarts/dist/echarts.min.js"></script>
+      <script src="../vendors/echarts/dist/echarts.min.js"></script>
 
       <!-- Custom Theme Scripts -->
-      <script src="build/js/custom.js"></script>
+      <script src="../build/js/custom.js"></script>
       <!-- Scripts by CTL -->
-      <script src="build/js/cookie.js"></script>
+      <script src="../build/js/cookie.js"></script>
 </body>
 
 </html>

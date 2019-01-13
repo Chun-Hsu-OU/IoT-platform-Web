@@ -2,6 +2,9 @@
     //設定時區
     date_default_timezone_set('Asia/Taipei');
     require_once('PHPMailer-master/PHPMailer-master/PHPMailerAutoload.php');
+
+    $public = include('config.php');
+
     function insert_log($url,$postdataarray){
         $ch			= curl_init();
         $options    = array(
@@ -9,7 +12,9 @@
                                 // CURLOPT_HEADER			=>    false,
                                 CURLOPT_RETURNTRANSFER  =>    true,
                                 CURLOPT_CUSTOMREQUEST   =>    "POST", //啟用post
-                                CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json'),
+                                CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json',
+                                                                    'token: '.$_COOKIE['token']
+                                                                ),
                                 CURLOPT_POSTFIELDS		=>    $postdataarray
                             );
         
@@ -31,7 +36,7 @@
                                 // CURLOPT_HEADER			=>    false,
                                 CURLOPT_RETURNTRANSFER  =>    true,
                                 CURLOPT_CUSTOMREQUEST   =>    "POST", //啟用post
-                                // CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json'),
+                                CURLOPT_HTTPHEADER      =>    array('token: '.$_COOKIE['token']),
                                 CURLOPT_POSTFIELDS		=>    $data
                             );
         
@@ -143,7 +148,7 @@
         );
         $data = json_encode($data);
                         
-        $str_insert_log = insert_log("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/add/log",$data);
+        $str_insert_log = insert_log($public['api_url']."api/add/log",$data);
         $str_insert_log = explode(" ",$str_insert_log);
         //最後一個元素是timestamp
         $timestamp = $str_insert_log[count($str_insert_log)-1];
@@ -159,7 +164,7 @@
             $file_name = $_FILES['image']['name'][$i];
             // echo $file_name."<br>";
             $file_path = $_FILES['image']['tmp_name'][$i];
-            file_upload("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/add/file",$file_name,$file_path,$file_route);
+            file_upload($public['api_url']."api/add/file",$file_name,$file_path,$file_route);
             // echo "<script type='text/javascript'>";
             // echo "console.log('".$result."')";
             // echo "</script>";
@@ -171,7 +176,7 @@
             $file_name = $_FILES['video']['name'][$i];
             // echo $file_name."<br>";
             $file_path = $_FILES['video']['tmp_name'][$i];
-            file_upload("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/add/file",$file_name,$file_path,$file_route);
+            file_upload($public['api_url']."api/add/file",$file_name,$file_path,$file_route);
         }
 
         //提醒新增成功

@@ -1,6 +1,8 @@
 <?php
     //設定時區
     date_default_timezone_set('Asia/Taipei');
+    $public = include('config.php');
+
     function view_log($url){
         $ch			= curl_init();
         $options    = array(
@@ -8,7 +10,9 @@
                                 // CURLOPT_HEADER			=>    false,
                                 CURLOPT_RETURNTRANSFER  =>    true,
                                 CURLOPT_CUSTOMREQUEST   =>    "GET", //啟用GET
-                                CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json'),
+                                CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json',
+                                                                    'token: '.$_COOKIE['token']
+                                                                ),
                             );
         
         curl_setopt_array($ch,$options) ; //把陣列放入設定
@@ -21,7 +25,7 @@
     $year = $_POST["year"];
     $month = str_pad($_POST["month"],2,'0',STR_PAD_LEFT);
     
-    $str = view_log("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/search/log/ownerId/$ownerId");
+    $str = view_log($public['api_url']."api/search/log/ownerId/$ownerId");
     $str = json_decode($str);
 
     $data = [];

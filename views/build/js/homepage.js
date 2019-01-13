@@ -1,5 +1,3 @@
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-
 var uuid = getCookie("checker");
 
 function load_sensorhub_info(){
@@ -7,14 +5,14 @@ function load_sensorhub_info(){
     //$.when()用途 -> 依照順序檢查sensor狀態
     var promise = $.when(); 
 
-    $.get(api_url + 'api/area/' + uuid, function(data) {
+    $.get(api_url + 'api/area/' + uuid + '?token=' + token, function(data) {
         var area_body = JSON.parse(data);
         for (let i = 0; i < area_body.Count; i++) {
             if (area_body.Items[i].visible == 1) {
-                $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[i].areaId, function(data) {
+                $.get(api_url + 'api/sensorgroup_in_area/' + area_body.Items[i].areaId + '?token=' + token, function(data) {
                     var group_body = JSON.parse(data);
                     for (let j = 0; j < group_body.Count; j++) {
-                        $.get(api_url + 'api/sensors_in_group/' + group_body.Items[j].groupId, function(data){
+                        $.get(api_url + 'api/sensors_in_group/' + group_body.Items[j].groupId + '?token=' + token, function(data){
                             var sensor_body = JSON.parse(data);
                             
                             for (let k = 0; k < sensor_body.Count; k++) {
@@ -44,7 +42,7 @@ function load_sensorhub_info(){
 }
 
 function check_working(type, id, name, index, count){
-    return $.get(api_url + 'api/sensors/'+ type +'/'+ id, function(data){
+    return $.get(api_url + 'api/sensors/'+ type +'/'+ id + '?token=' + token, function(data){
         if (data == 'No data'){
             $("#state").html('<div style="color: red;letter-spacing: 2px;"><i class="fa fa-exclamation-circle"></i>故障</div>');
         }
@@ -52,7 +50,7 @@ function check_working(type, id, name, index, count){
         if(index == count){
             $("#state").attr("id","");
         }
-        console.log(name+": "+index);
+        // console.log(name+": "+index);
     });
 }
 
@@ -61,7 +59,7 @@ function set_area_cookie(Id) {
 }
 
 function initial_map(){
-    $.get(api_url + 'api/area/' + uuid, function(data) {
+    $.get(api_url + 'api/area/' + uuid + '?token=' + token, function(data) {
         var area_body = JSON.parse(data);
         for (let i = 0; i < area_body.Count; i++) {
             $("#map").append('<div class="location '+ area_body.Items[i].city +'"><i class="fa fa-map-marker"></i></div>');   

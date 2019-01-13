@@ -1,8 +1,6 @@
 var uuid = getCookie("checker");
 var area_id = getCookie("area");
 
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -21,7 +19,7 @@ function getCookie(cname) {
 
 function get_name() {
   // console.log(typeof area_id);
-  $.get(api_url + 'api/area/' + uuid, function (data, status) {
+  $.get(api_url + 'api/area/' + uuid + '?token=' + token, function (data, status) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(area){
       if(area.areaId == area_id){
@@ -33,7 +31,7 @@ function get_name() {
 
 function get_sensorhubs(){
   // console.log("I'll get all sensorhubs in an area");
-  $.get(api_url + 'api/sensorgroup_in_area/' + area_id, function (data, status) {
+  $.get(api_url + 'api/sensorgroup_in_area/' + area_id + '?token=' + token, function (data, status) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(sensorgroup){
       if(sensorgroup.visible == 1){
@@ -57,7 +55,7 @@ function get_sensorhubs(){
 }
 
 function change_update_group_modal(id){
-  $.get(api_url + 'api/sensorgroup_in_area/' + getCookie("area"), function(data) {
+  $.get(api_url + 'api/sensorgroup_in_area/' + getCookie("area") + '?token=' + token, function(data) {
     var body = JSON.parse(data);
     for (group_num = 0; group_num < body.Count; group_num++) {
       if (body.Items[group_num].groupId == id) {
@@ -72,7 +70,7 @@ function update_sensorgroup_item() {
   var update_name = document.getElementById("update_sensorgroup_name").value;
   var update_macAddr = document.getElementById("update_macAddr").value;
 
-  $.post(api_url + 'api/update/group', {
+  $.post(api_url + 'api/update/group' + '?token=' + token, {
     "groupId": getCookie("group"),
     "areaId": getCookie("area"),
     "name": update_name,
@@ -86,7 +84,7 @@ function update_area_item() {
   var update_name = document.getElementById("update_area_name").value;
   var update_location = document.getElementById("update_area_location").value;
 
-  $.post(api_url + 'api/update/area', {
+  $.post(api_url + 'api/update/area' + '?token=' + token, {
     "ownerId": getCookie("checker"),
     "areaId": getCookie("area"),
     "name": update_name,
@@ -116,7 +114,7 @@ function initMap() {
 }
 
 function geocodeAddress(geocoder, resultsMap, infowindow) {
-  $.get(api_url + 'api/area/' + uuid, function (data, status) {
+  $.get(api_url + 'api/area/' + uuid + '?token=' + token, function (data, status) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(area){
       if(area.areaId == area_id){

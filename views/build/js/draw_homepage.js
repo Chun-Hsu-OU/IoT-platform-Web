@@ -1,5 +1,3 @@
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-
 var uuid = getCookie("checker");
 
 var tree_data = [];
@@ -115,14 +113,14 @@ function make_config(root) {
 
 function draw_tree() {
   var tree_data = [];
-  $.get(api_url + 'api/account/single/' + uuid, function(account_body) {
+  $.get(api_url + 'api/account/single/' + uuid + '?token=' + token, function(account_body) {
     tree_data.push({
       "name": account_body.name,
       "parent": "null",
       "children": []
     });
 
-    $.get(api_url + 'api/area/' + uuid, function(data) {
+    $.get(api_url + 'api/area/' + uuid + '?token=' + token, function(data) {
       var area_body = JSON.parse(data);
 
       var area_visible = [];
@@ -144,7 +142,7 @@ function draw_tree() {
           "children": []
         });
 
-        $.get(api_url + 'api/sensorgroup_in_area/' + current_area.areaId, function(data) {
+        $.get(api_url + 'api/sensorgroup_in_area/' + current_area.areaId + '?token=' + token, function(data) {
           var group_body = JSON.parse(data);
 
           var group_visible = [];
@@ -167,7 +165,7 @@ function draw_tree() {
               "children": []
             });
 
-            $.get(api_url + 'api/sensors_in_group/' + current_group.groupId, function(data) {
+            $.get(api_url + 'api/sensors_in_group/' + current_group.groupId + '?token=' + token, function(data) {
               var sensor_body = JSON.parse(data);
               for (let sensor_count = 0; sensor_count < sensor_body.Count; sensor_count++) {
                 if (sensor_body.Items[sensor_count].visible) {

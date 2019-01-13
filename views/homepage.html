@@ -35,14 +35,17 @@
   <link href="../build/css/custom.min.css" rel="stylesheet">
   <script type="text/javascript" src="https://cdn.rawgit.com/ricmoo/aes-js/e27b99df/index.js"></script>
   <script src="../vendors/jquery/dist/jquery.min.js"></script>
+
+  <!-- Scripts -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/loading.js"></script>
   <script src="../build/js/homepage.js"></script>
+  <script src="../build/js/config.js"></script>
 
   <!-- d3.js -->
   <script src="http://d3js.org/d3.v3.min.js"></script>
 
-  <!-- css by CHOu -->
+  <!-- CSS -->
   <link href="../build/css/homepage.css" rel="stylesheet">
 </head>
 <style>
@@ -153,7 +156,7 @@
               <ul class="nav side-menu">
                 <li><a id="agri-log"><i class="fa fa-calendar"></i> 日誌系統 </a>
                   <script>
-                    $("#agri-log").attr("href", "http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com/IoT-platform-Web/views/log_list.php?checker=" + getCookie("checker"));
+                    $("#agri-log").attr("href", "http://nthu-smart-farming.kits.tw/IoT-platform-Web/views/log_system/log_list.php?checker=" + getCookie("checker"));
                   </script>
                 </li>
               </ul>

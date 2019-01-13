@@ -11,43 +11,44 @@
   <title>NTHU智慧農業平台</title>
   <link rel="Shortcut Icon" type="image/x-icon" href="images/agronomy.ico">
   <!-- Bootstrap -->
-  <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="vendors/bootstrap/dist/js/bootstrap.min.js" rel="stylesheet">
+  <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendors/bootstrap/dist/js/bootstrap.min.js" rel="stylesheet">
   <!-- Font Awesome -->
-  <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!-- Font Awesome v4.7 -->
-  <link href="vendors/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../vendors/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <!-- Font Awesome v5.0.13 -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
   <!-- Weather icon -->
-  <link href="vendors/weather-icons-master/css/weather-icons.min.css" rel="stylesheet">
-  <link href="vendors/weather-icons-master/css/weather-icons-wind.min.css" rel="stylesheet">
+  <link href="../vendors/weather-icons-master/css/weather-icons.min.css" rel="stylesheet">
+  <link href="../vendors/weather-icons-master/css/weather-icons-wind.min.css" rel="stylesheet">
   <!-- NProgress -->
-  <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+  <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
   <!-- iCheck -->
-  <link href="vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+  <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
 
   <!-- bootstrap-progressbar -->
-  <link href="vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+  <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
   <!-- JQVMap -->
-  <link href="vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+  <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
   <!-- bootstrap-daterangepicker -->
-  <link href="vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+  <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
   <!-- Custom Theme Style -->
-  <link href="build/css/custom.min.css" rel="stylesheet">
+  <link href="../build/css/custom.min.css" rel="stylesheet">
 
-  <script src="vendors/jquery/dist/jquery.min.js"></script>
+  <script src="../vendors/jquery/dist/jquery.min.js"></script>
 
   <!-- Scripts by CTLiu -->
-  <script src="build/js/sidebar.js"></script>
-  <script src="build/js/area_page.js"></script>
-  <script src="build/js/loading.js"></script>
+  <script src="../build/js/sidebar.js"></script>
+  <script src="../build/js/area_page.js"></script>
+  <script src="../build/js/loading.js"></script>
+  <script src="../build/js/config.js"></script>
 
   <!-- css by CHOu -->
   <link rel="stylesheet" href="mystyle.css">
-    <!-- dateRangePicker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+  <!-- datetimepicker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
   <script>
@@ -60,6 +61,7 @@
     //設定時區
     date_default_timezone_set('Asia/Taipei');
     session_start(); 
+    $public = include('config.php');
   ?>
 </head>
 <style>
@@ -91,7 +93,7 @@
         <div class="left_col scroll-view">
           <div class="navbar nav_title" style="border: 0;">
             <a onclick="check_admin()" class="site_title">
-              <img src="images/agronomy.png" height="45px">
+              <img src="../images/agronomy.png" height="45px">
               <span style="font-size: 18px">NTHU智慧農業平台</span>
             </a>
           </div>
@@ -101,7 +103,7 @@
           <!-- menu profile quick info -->
           <div class="profile clearfix">
             <div class="profile_pic">
-              <img src="images/farmer.png" height="50px" alt="..." class="img-circle profile_img">
+              <img src="../images/farmer.png" height="50px" alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
               <span>Welcome,</span>
@@ -117,7 +119,7 @@
             <div class="menu_section">
               <h3></h3>
               <ul class="nav side-menu">
-                <li><a href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/homepage.html"><i class="fa fa-home"></i> 首頁 </a>
+                <li><a href="http://nthu-smart-farming.kits.tw:8080/homepage.html"><i class="fa fa-home"></i> 首頁 </a>
                 </li>
               </ul>
               <ul class="nav side-menu">
@@ -157,7 +159,7 @@
                 </li>
               </ul>
               <ul class="nav side-menu">
-                <li><a onclick="del()" href="http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:8080/login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
+                <li><a onclick="del()" href="http://nthu-smart-farming.kits.tw:8080/login.html"><i class="fa fa-sign-out"></i> 使用者登出 </a>
                 </li>
               </ul>
             </div>
@@ -245,7 +247,9 @@
                                           // CURLOPT_HEADER			=>    false,
                                           CURLOPT_RETURNTRANSFER  =>    true,
                                           CURLOPT_CUSTOMREQUEST   =>    "GET", //啟用GET
-                                          CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json')
+                                          CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json',
+                                                                              'token: '.$_COOKIE['token']
+                                                                        )
                                       );
                   
                   curl_setopt_array($ch,$options) ; //把陣列放入設定
@@ -261,7 +265,9 @@
                                           // CURLOPT_HEADER			=>    false,
                                           CURLOPT_RETURNTRANSFER  =>    true,
                                           CURLOPT_CUSTOMREQUEST   =>    "POST", //啟用post
-                                          CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json'),
+                                          CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json',
+                                                                              'token: '.$_COOKIE['token']
+                                                                        ),
                                           CURLOPT_POSTFIELDS		=>    $postdataarray
                                       );
                   
@@ -283,7 +289,7 @@
                                           // CURLOPT_HEADER			=>    false,
                                           CURLOPT_RETURNTRANSFER  =>    true,
                                           CURLOPT_CUSTOMREQUEST   =>    "POST", //啟用post
-                                          // CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json'),
+                                          CURLOPT_HTTPHEADER      =>    array('token: '.$_COOKIE['token']),
                                           CURLOPT_POSTFIELDS		=>    $data
                                       );
                   
@@ -301,7 +307,7 @@
 
               /*    編輯表單，表單還未送出    */
               if(empty($_POST)){
-                  $str = view_log("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/search/log/ownerId/$ownerId");
+                  $str = view_log($public['api_url']."api/search/log/ownerId/$ownerId");
               
                   $str = json_decode($str);
                   // print_r($str);
@@ -805,7 +811,7 @@
                   );
 
                   $data = json_encode($data);
-                  edit_log("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/update/log",$data);
+                  edit_log($public['api_url']."api/update/log",$data);
               
                   /*    上傳檔案    */
                   //串接file_route(給aws s3 API 使用)
@@ -817,7 +823,7 @@
                       $file_name = $_FILES['image']['name'][$i];
                       // echo $file_name."<br>";
                       $file_path = $_FILES['image']['tmp_name'][$i];
-                      file_upload("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/add/file",$file_name,$file_path,$file_route);
+                      file_upload($public['api_url']."api/add/file",$file_name,$file_path,$file_route);
                   }
 
                   //上傳影片
@@ -826,7 +832,7 @@
                       $file_name = $_FILES['video']['name'][$i];
                       // echo $file_name."<br>";
                       $file_path = $_FILES['video']['tmp_name'][$i];
-                      file_upload("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/add/file",$file_name,$file_path,$file_route);
+                      file_upload($public['api_url']."api/add/file",$file_name,$file_path,$file_route);
                   }
 
                   //提醒編輯成功
@@ -1031,47 +1037,47 @@
           </div>
       <!-- jQuery -->
       <!-- Bootstrap -->
-      <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
       <!-- FastClick -->
-      <script src="vendors/fastclick/lib/fastclick.js"></script>
+      <script src="../vendors/fastclick/lib/fastclick.js"></script>
       <!-- NProgress -->
-      <script src="vendors/nprogress/nprogress.js"></script>
+      <script src="../vendors/nprogress/nprogress.js"></script>
       <!-- Chart.js -->
-      <script src="vendors/Chart.js/dist/Chart.min.js"></script>
+      <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
       <!-- gauge.js -->
-      <script src="vendors/gauge.js/dist/gauge.min.js"></script>
+      <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
       <!-- bootstrap-progressbar -->
-      <script src="vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+      <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
       <!-- iCheck -->
-      <script src="vendors/iCheck/icheck.min.js"></script>
+      <script src="../vendors/iCheck/icheck.min.js"></script>
       <!-- Skycons -->
-      <script src="vendors/skycons/skycons.js"></script>
+      <script src="../vendors/skycons/skycons.js"></script>
       <!-- Flot -->
-      <script src="vendors/Flot/jquery.flot.js"></script>
-      <script src="vendors/Flot/jquery.flot.pie.js"></script>
-      <script src="vendors/Flot/jquery.flot.time.js"></script>
-      <script src="vendors/Flot/jquery.flot.stack.js"></script>
-      <script src="vendors/Flot/jquery.flot.resize.js"></script>
+      <script src="../vendors/Flot/jquery.flot.js"></script>
+      <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+      <script src="../vendors/Flot/jquery.flot.time.js"></script>
+      <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+      <script src="../vendors/Flot/jquery.flot.resize.js"></script>
       <!-- Flot plugins -->
-      <script src="vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-      <script src="vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-      <script src="vendors/flot.curvedlines/curvedLines.js"></script>
+      <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+      <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+      <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
       <!-- DateJS -->
-      <script src="vendors/DateJS/build/date.js"></script>
+      <script src="../vendors/DateJS/build/date.js"></script>
       <!-- JQVMap -->
-      <script src="vendors/jqvmap/dist/jquery.vmap.js"></script>
-      <script src="vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-      <script src="vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+      <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
+      <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+      <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
       <!-- bootstrap-daterangepicker -->
-      <script src="vendors/moment/min/moment.min.js"></script>
-      <script src="vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+      <script src="../vendors/moment/min/moment.min.js"></script>
+      <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
       <!-- ECharts -->
-      <script src="vendors/echarts/dist/echarts.min.js"></script>
+      <script src="../vendors/echarts/dist/echarts.min.js"></script>
 
       <!-- Custom Theme Scripts -->
-      <script src="build/js/custom.js"></script>
+      <script src="../build/js/custom.js"></script>
       <!-- Scripts by CTL -->
-      <script src="build/js/cookie.js"></script>
+      <script src="../build/js/cookie.js"></script>
 </body>
 
 </html>

@@ -37,10 +37,11 @@
 
   <script src="../vendors/jquery/dist/jquery.min.js"></script>
 
-  <!-- Scripts by CTLiu -->
+  <!-- Scripts -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/show_controllers.js"></script>
   <script src="../build/js/loading.js"></script>
+  <script src="../build/js/config.js"></script>
 
 </head>
 <style>
@@ -135,7 +136,7 @@
               <ul class="nav side-menu">
                 <li><a id="agri-log"><i class="fa fa-calendar"></i> 日誌系統 </a>
                   <script>
-                    $("#agri-log").attr("href", "http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com/IoT-platform-Web/views/log_list.php?checker=" + getCookie("checker"));
+                    $("#agri-log").attr("href", "http://nthu-smart-farming.kits.tw/IoT-platform-Web/views/log_system/log_list.php?checker=" + getCookie("checker"));
                   </script>
                 </li>
               </ul>
@@ -181,36 +182,6 @@
         </div>
       </div>
 
-      <script>
-        $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
-          var body = JSON.parse(data);
-
-          for (sensor_num = 0; sensor_num < body.Count; sensor_num ++) {
-            load_warnings();
-
-            async function load_warnings() {
-              var name = body.Items[sensor_num].name;
-              try {
-                $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
-                  if (res == "No data") {
-                    $('#top_warning').prepend('<li><a>' +
-                      '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
-                      '<span>' +
-                        '<span><strong>' + name + '</strong></span>' +
-                      '</span>' +
-                      '<span class="message">' +
-                        'No signal for atleast 1 hour' +
-                      '</span>' +
-                      '</a></li>');
-                  }
-                });
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          }
-        });
-      </script>
       <!-- /top navigation -->
 
       <!-- page content -->

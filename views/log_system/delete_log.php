@@ -1,4 +1,6 @@
 <?php
+    $public = include('config.php');
+
     function delete_log($url,$postdataarray){
         $ch			= curl_init();
         $options    = array(
@@ -6,7 +8,9 @@
                                 // CURLOPT_HEADER			=>    false,
                                 CURLOPT_RETURNTRANSFER  =>    true,
                                 CURLOPT_CUSTOMREQUEST   =>    "POST", //啟用post
-                                CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json'),
+                                CURLOPT_HTTPHEADER      =>    array('Content-Type: application/json',
+                                                                    'token: '.$_COOKIE['token']
+                                                                ),
                                 CURLOPT_POSTFIELDS		=>    $postdataarray
                             );
         
@@ -23,7 +27,7 @@
 
     $data = json_encode($data);
                     
-    delete_log("http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/api/delete_item/log",$data);
+    delete_log($public['api_url']."api/delete_item/log",$data);
 
     echo "<script>
             alert('刪除日誌成功！');

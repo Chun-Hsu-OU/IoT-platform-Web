@@ -1,8 +1,6 @@
 var uuid = getCookie("checker");
 var area_id = getCookie("area");
 
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -21,7 +19,7 @@ function getCookie(cname) {
 
 function get_name() {
   // console.log(typeof area_id);
-  $.get(api_url + 'api/area/' + uuid, function (data, status) {
+  $.get(api_url + 'api/area/' + uuid + '?token=' + token, function (data, status) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(area){
       if(area.areaId == area_id){
@@ -33,7 +31,7 @@ function get_name() {
 
 function get_controllers(){
   // console.log("I'll get all sensorhubs in an area");
-  $.get(api_url + 'api/search/control/area/' + area_id, function (data, status) {
+  $.get(api_url + 'api/search/control/area/' + area_id + '?token=' + token, function (data, status) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(controller){
       if(controller.visible == 1){
@@ -60,7 +58,7 @@ function check(id){
   if (!confirm("確定要刪除此控制器?"))
   return false;
 
-  $.post(api_url + 'api/delete_item/control', {
+  $.post(api_url + 'api/delete_item/control' + '?token=' + token, {
     "controllerId": id
   }, function(){
       alert("已刪除控制器！");

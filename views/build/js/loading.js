@@ -1,4 +1,3 @@
-var api_url = 'http://ec2-13-125-253-199.ap-northeast-2.compute.amazonaws.com:3000/';
 // Loads user name
 var uuid = getCookie("checker");
 
@@ -22,7 +21,7 @@ function getCookie(cname) {
 }
 
 function get_username() {
-  $.get(api_url + 'api/account/single/' + uuid, function(data) {
+  $.get(api_url + 'api/account/single/' + uuid + '?token=' + token, function(data) {
     //console.log(data);
     //var body = JSON.parse(data);
     document.getElementById("username").innerHTML = data.name;
@@ -31,7 +30,7 @@ function get_username() {
 
 //日誌下拉式選單抓使用者有哪些場域
 function get_area_name(){
-    $.get(api_url + 'api/area/' + uuid, function(data) {
+    $.get(api_url + 'api/area/' + uuid + '?token=' + token, function(data) {
         //console.log(data);
         var body = JSON.parse(data);
         for(let i=0; i<body.Items.length; i++){
