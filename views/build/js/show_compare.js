@@ -191,21 +191,21 @@ $(function(){
                     });
                 });
 
-                var data = httpGet(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token);
+                // var data = httpGet(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token);
 
-                var body = JSON.parse(data);
-                for(let j=0; j<body.Items.length; j++){
-                    var sensor = body.Items[j];
-                    if(sensor.sensorType == select_type[i]){
-                        var temp = httpGet(api_url + 'api/linear/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token);
-                        var one_line_slopes = JSON.parse(temp);
+                // var body = JSON.parse(data);
+                // for(let j=0; j<body.Items.length; j++){
+                //     var sensor = body.Items[j];
+                //     if(sensor.sensorType == select_type[i]){
+                //         var temp = httpGet(api_url + 'api/linear/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token);
+                //         var one_line_slopes = JSON.parse(temp);
 
-                        add_name_and_num(one_line_slopes, group_name, sensor.num);
-                        multi_line_slopes.push(one_line_slopes);
-                    }
-                }
+                //         add_name_and_num(one_line_slopes, group_name, sensor.num);
+                //         multi_line_slopes.push(one_line_slopes);
+                //     }
+                // }
             }
-            detect_abnormal(multi_line_slopes, charts[i]);
+            // detect_abnormal(multi_line_slopes, charts[i]);
         }
     });
     /*-------------------選擇時間-------------------*/
