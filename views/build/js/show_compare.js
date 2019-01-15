@@ -122,24 +122,26 @@ $(function(){
                 });
             });
 
-            // var data = httpGet(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token);
+            var data = httpGet(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token);
 
-            // var body = JSON.parse(data);
-            // for(let j=0; j<body.Items.length; j++){
-            //     var sensor = body.Items[j];
-            //     if(sensor.sensorType == select_type[i]){
-            //         var temp = httpGet(api_url + 'api/linear/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token);
-            //         var one_line_slopes = JSON.parse(temp);
+            var body = JSON.parse(data);
+            for(let j=0; j<body.Items.length; j++){
+                var sensor = body.Items[j];
+                if(sensor.sensorType == select_type[i]){
+                    var temp = httpGet(api_url + 'api/linear/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token);
+                    var one_line_slopes = JSON.parse(temp);
 
-            //         add_name_and_num(one_line_slopes, group_name, sensor.num);
-            //         multi_line_slopes.push(one_line_slopes);
-            //     }
-            // }
+                    add_name_and_num(one_line_slopes, group_name, sensor.num);
+                    multi_line_slopes.push(one_line_slopes);
+                }
+            }
+
+            console.log(getCookie("groups_name"));
         }
         // console.log(multi_line_slopes);
         // console.log(multi_line_slopes.length);
 
-        // detect_abnormal(multi_line_slopes, charts[i]);
+        detect_abnormal(multi_line_slopes, charts[i]);
     }
 
     /*-------------------初始化(預設一天)-------------------*/
@@ -191,21 +193,21 @@ $(function(){
                     });
                 });
 
-                // var data = httpGet(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token);
+                var data = httpGet(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token);
 
-                // var body = JSON.parse(data);
-                // for(let j=0; j<body.Items.length; j++){
-                //     var sensor = body.Items[j];
-                //     if(sensor.sensorType == select_type[i]){
-                //         var temp = httpGet(api_url + 'api/linear/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token);
-                //         var one_line_slopes = JSON.parse(temp);
+                var body = JSON.parse(data);
+                for(let j=0; j<body.Items.length; j++){
+                    var sensor = body.Items[j];
+                    if(sensor.sensorType == select_type[i]){
+                        var temp = httpGet(api_url + 'api/linear/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token);
+                        var one_line_slopes = JSON.parse(temp);
 
-                //         add_name_and_num(one_line_slopes, group_name, sensor.num);
-                //         multi_line_slopes.push(one_line_slopes);
-                //     }
-                // }
+                        add_name_and_num(one_line_slopes, group_name, sensor.num);
+                        multi_line_slopes.push(one_line_slopes);
+                    }
+                }
             }
-            // detect_abnormal(multi_line_slopes, charts[i]);
+            detect_abnormal(multi_line_slopes, charts[i]);
         }
     });
     /*-------------------選擇時間-------------------*/
@@ -281,6 +283,7 @@ function detect_abnormal(array, chart){
         
         //計算標準差
         var std = Math.stDeviation(same_time_interval_slopes);
+        console.log("標準差: "+std);
         
         //常態分佈上限
         var top_normal_limit = median + 2.698*std;
@@ -328,7 +331,7 @@ function timeConverter(UNIX_timestamp){
     var sec = a.getSeconds();
     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     return time;
-  }
+}
 
 /*-------------------------------------
 功用: call API 的 GET 方法 (改js是因為jquery資料傳不出來，垃圾jquery)

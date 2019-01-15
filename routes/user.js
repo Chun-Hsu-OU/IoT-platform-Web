@@ -66,7 +66,8 @@ users.post('/login', unlencodedParser, function(req, res) {
       res.cookie('sensor', "blank");
       res.cookie('admin', "blank");
       res.cookie('controller', "blank");
-      if (body == "false") {
+
+      if (login_info.token == "false") {
           res.render('page_404_sign_in.html');
       } else {
           res.redirect('homepage.html');
