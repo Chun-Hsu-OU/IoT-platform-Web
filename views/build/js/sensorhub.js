@@ -1186,11 +1186,13 @@ function initial_current_chart(){
           "#F0F2F2"
       ],
       textRenderer: function(val) {
-          if (val == 0) {
+          if(val == -1){
+              return '無數據';
+          }else if (val == 0) {
               return '北';
-          } else if (val == 1) {
+          }else if (val == 1) {
               return '東北';
-          } else if (val == 2) {
+          }else if (val == 2) {
               return '東';
           }else if (val == 3) {
               return '東南';
@@ -1326,6 +1328,37 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
+    sensors.switch1 = new JustGage({
+      id: "current_SWITCH1",
+      label: "",
+      value: 0,
+      min: 0,
+      max: 1,
+      levelColors: [
+        "#CCF7CB",
+        "#098205"
+      ],
+      textRenderer: function(val) {
+          if (val == -1) {
+              return '無數據';
+          } else if (val == 0) {
+              return '關閉';
+          } else if (val == 1) {
+              return '開啟';
+          }
+      },
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
     console.log(sensors);
     initial_current_data(sensors);
   });
@@ -1434,6 +1467,9 @@ function initial_current_data(sensors){
             }else if(body.Items[j].sensorType == "PM2_5"){
               $('#current_PM2_5' + body.Items[j].num + '_div').show();
               sensors.pm2_51.refresh(val);
+            }else if(body.Items[j].sensorType == "SWITCH"){
+              $('#current_SWITCH' + body.Items[j].num + '_div').show();
+              sensors.switch1.refresh(val);
             }
           } else{  /* 無數據 */
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
@@ -1504,7 +1540,7 @@ function initial_current_data(sensors){
               sensors.wind_speed1.refresh("無數據");
             } else if (body.Items[j].sensorType == "WIND_DIRECTION") {
               $('#current_WIND_DIRECTION' + body.Items[j].num + '_div').show();
-              sensors.weed_direction1.refresh("無數據");
+              sensors.weed_direction1.refresh(-1);
             } else if (body.Items[j].sensorType == "METER") {
               $('#current_METER' + body.Items[j].num + '_div').show();
               sensors.meter1.refresh("無數據");
@@ -1514,6 +1550,9 @@ function initial_current_data(sensors){
             } else if (body.Items[j].sensorType == "PM2_5"){
               $('#current_PM2_5' + body.Items[j].num + '_div').show();
               sensors.pm2_51.refresh("無數據");
+            } else if (body.Items[j].sensorType == "SWITCH"){
+              $('#current_SWITCH' + body.Items[j].num + '_div').show();
+              sensors.switch1.refresh(-1);
             }
           }
 

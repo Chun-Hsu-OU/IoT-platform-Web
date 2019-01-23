@@ -574,6 +574,17 @@
                 <div id="current_PM2_51"></div>
               </div>
 
+              <div class="gauge" id="current_SWITCH1_div">
+                <center>
+                    <div class="font_style" id="name">開關</div>
+                    <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                      <img class="edit" src="images/edit.png">
+                    </a>
+                </center>
+                <br>
+                <div id="current_SWITCH1"></div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -777,6 +788,7 @@
         $('#current_METER_now_div').hide();
         $('#current_ELECTRIC_METER1_div').hide();
         $('#current_PM2_51_div').hide();
+        $('#current_SWITCH1_div').hide();
 
         /* 歷史數據圖 */
         $('#AIR_TEMPERATURE1').hide();
@@ -1051,6 +1063,7 @@
                       <option value="METER">水錶</option>
                       <option value="ELECTRIC_METER">電錶</option>
                       <option value="PM2_5">PM2.5</option>
+                      <option value="SWITCH">開關</option>
                     </select>
                   </form>
                 </div>
