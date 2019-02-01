@@ -38,6 +38,11 @@
 
   <script src="../vendors/jquery/dist/jquery.min.js"></script>
 
+  <!-- bootstrap-daterangepicker -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.js"></script>
+
   <!-- Scripts by CTLiu -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/area_page.js"></script>
@@ -240,7 +245,13 @@
                 <a href="insert_log.php?ownerId=<?= $ownerId ?>" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus"></span>新增日誌
                 </a>
+                <div style="float: right">
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#export_logs">
+                    <span class="glyphicon glyphicon-share"></span>&nbsp;匯出日誌
+                  </button>
+                </div>
             </div>
+            <!-- 調整月份 -->
             <form>
             <div style="width: 450px">
               <div class="form-group col-md-6 col-sm-6 col-xs-6">
@@ -268,10 +279,8 @@
               </div>
             </div>
             </form>
-            <!-- 調整月份 -->
+            
             <script>
-              
-
               $(document).ready(function(){
                 var d = new Date();
                 for(let i=2018;i<=d.getFullYear();i++){
@@ -426,187 +435,243 @@
 
       <!-- /page content -->
       <div class="container">
-            <div class="modal fade" id="new_area_Modal" role="dialog">
-              <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">新增場域</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <span style="color: red">*&nbsp;</span>場域名稱:<br>
-                      <input type="text" id="new_area_name">
-                      <br><br>
-                      場域地址:<br>
-                      <select required="required" id="city">
-                        <option value="none">---請選擇縣市---</option>
-                        <option value="keelung">基隆市</option>
-                        <option value="new_taipei">新北市</option>
-                        <option value="taipei">台北市</option>
-                        <option value="taoyuan">桃園縣</option>
-                        <option value="hsinchu">新竹縣</option>
-                        <option value="yilan">宜蘭縣</option>
-                        <option value="miaoli">苗栗縣</option>
-                        <option value="taichung">台中市</option>
-                        <option value="changhua">彰化縣</option>
-                        <option value="nantou">南投縣</option>
-                        <option value="hualien">花蓮縣</option>
-                        <option value="yunlin">雲林縣</option>
-                        <option value="chiayi">嘉義縣</option>
-                        <option value="tainan">台南市</option>
-                        <option value="kaohsiung">高雄市</option>
-                        <option value="taitung">台東縣</option>
-                        <option value="pingtung">屏東縣</option>
-                        <option value="kinmen">金門縣</option>
-                        <option value="penghu">澎湖縣</option>
-                      </select>
-                      <input type="text" id="new_area_location" size="40">
-                      <br><br>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
-                  </div>
-                </div>
+        <div class="modal fade" id="export_logs" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">匯出日誌</h4>
               </div>
+              
+                <div class="modal-body">
+                  <form action="export_logs.php" method="post">
+                      <span style="color: red">*&nbsp;</span>選擇要匯出的時間範圍:<br>
+                      <div class="input-prepend input-group" style="width: 60%">
+                          <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                          <input id="daterange_picker" type="text" class="form-control" name="daterange_picker" value="" />
+                      </div>
+                      <span style="color: red">*&nbsp;</span>檔案名稱: <br>
+                      <input type="text" name="filename" size="40" placeholder="輸入檔名(不用加副檔名)"><br>
+                      <input type="hidden" name="ownerId" value="<?= $ownerId ?>"><br>
+                      <input type="hidden" name="fromDate" id="fromDate">
+                      <input type="hidden" name="toDate" id="toDate">
+                      <input type="submit" value="匯出Excel">
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                  <button type="submit" class="btn btn-success" data-dismiss="modal">匯出Excel</button>
+                </div>
+
+              <script>
+                $('input[name="daterange_picker"]').daterangepicker({
+                    timePicker: true,
+                    timePickerIncrement: 5,
+                    locale: {
+                        format: 'MM/DD/YYYY HH:mm'
+                    }
+                });
+
+                $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
+                    
+                    var fromDate = new Date(picker.startDate.format('YYYY-MM-DD HH:mm'));
+                    var fromEpoch = fromDate.getTime();
+                    var toDate = new Date(picker.endDate.format('YYYY-MM-DD HH:mm'));
+                    var toEpoch = toDate.getTime();
+
+                    document.getElementById("fromDate").value = fromEpoch;
+                    document.getElementById("toDate").value = toEpoch;
+                });
+              </script>
+
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="container">
-            <div class="modal fade" id="new_group_Modal" role="dialog">
-              <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">新增感測器群組</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <span style="color: red">*&nbsp;</span>感測器群組名稱:<br>
-                      <input type="text" id="new_group_name">
-                      <br><br>
-                      <span style="color: red">*&nbsp;</span>LoRa 模組 MacAddress：<br>
-                      <input type="text" id="macAddr" value="">
-                      <br><br> 
-                      <span style="color: red">*&nbsp;</span>建制於場域:<br>
-                      <select required="required" id="group_select" onchange="group_select_func(value);">
+      <div class="container">
+        <div class="modal fade" id="new_area_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">新增場域</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <span style="color: red">*&nbsp;</span>場域名稱:<br>
+                  <input type="text" id="new_area_name">
+                  <br><br>
+                  場域地址:<br>
+                  <select required="required" id="city">
+                    <option value="none">---請選擇縣市---</option>
+                    <option value="keelung">基隆市</option>
+                    <option value="new_taipei">新北市</option>
+                    <option value="taipei">台北市</option>
+                    <option value="taoyuan">桃園縣</option>
+                    <option value="hsinchu">新竹縣</option>
+                    <option value="yilan">宜蘭縣</option>
+                    <option value="miaoli">苗栗縣</option>
+                    <option value="taichung">台中市</option>
+                    <option value="changhua">彰化縣</option>
+                    <option value="nantou">南投縣</option>
+                    <option value="hualien">花蓮縣</option>
+                    <option value="yunlin">雲林縣</option>
+                    <option value="chiayi">嘉義縣</option>
+                    <option value="tainan">台南市</option>
+                    <option value="kaohsiung">高雄市</option>
+                    <option value="taitung">台東縣</option>
+                    <option value="pingtung">屏東縣</option>
+                    <option value="kinmen">金門縣</option>
+                    <option value="penghu">澎湖縣</option>
                   </select>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
-                  </div>
-                </div>
+                  <input type="text" id="new_area_location" size="40">
+                  <br><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_area()">Add</button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="container">
-            <div class="modal fade" id="new_controller_Modal" role="dialog">
-              <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">新增控制器</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <span style="color: red">*&nbsp;</span>控制器名稱:<br>
-                      <input type="text" id="new_controller_name">
-                      <br><br> 
-                      <span style="color: red">*&nbsp;</span>建制於場域:<br>
-                      <select required="required" id="controller_in_area">
-                      </select>
-                      <br><br> 
-                      傳輸協議:<br>
-                      <select required="required" id="protocol">
-                        <option value="NoSelection">---請選擇---</option>
-                        <option value="socket">socket</option>
-                        <option value="lora-p2p">lora-p2p</option>
-                        <option value="nb-iot">nb-iot</option>
-                        <option value="self-control">自控</option>
-                      </select>
-                      <br><br> 
-                      協議相關設定:<br>
-                      <input type="text" id="protocol_setting">
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_controller()">Add</button>
-                  </div>
-                </div>
+      <div class="container">
+        <div class="modal fade" id="new_group_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">新增感測器群組</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <span style="color: red">*&nbsp;</span>感測器群組名稱:<br>
+                  <input type="text" id="new_group_name">
+                  <br><br>
+                  <span style="color: red">*&nbsp;</span>LoRa 模組 MacAddress：<br>
+                  <input type="text" id="macAddr" value="">
+                  <br><br> 
+                  <span style="color: red">*&nbsp;</span>建制於場域:<br>
+                  <select required="required" id="group_select" onchange="group_select_func(value);">
+              </select>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_group()">Add</button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="container">
-            <div class="modal fade" id="Setting_Modal" role="dialog">
-              <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">使用者資訊設定</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      新的使用者名稱:<br>
-                      <input type="text" id="new_username">
-                      <br><br> 新的密碼:
-                      <br>
-                      <input type="text" id="new_password">
-                      <br><br> 確認新的密碼:
-                      <br>
-                      <input type="text" id="new_password_confirm">
-                      <br><br>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
-                  </div>
-                </div>
+      <div class="container">
+        <div class="modal fade" id="new_controller_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">新增控制器</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <span style="color: red">*&nbsp;</span>控制器名稱:<br>
+                  <input type="text" id="new_controller_name">
+                  <br><br> 
+                  <span style="color: red">*&nbsp;</span>建制於場域:<br>
+                  <select required="required" id="controller_in_area">
+                  </select>
+                  <br><br> 
+                  傳輸協議:<br>
+                  <select required="required" id="protocol">
+                    <option value="NoSelection">---請選擇---</option>
+                    <option value="socket">socket</option>
+                    <option value="lora-p2p">lora-p2p</option>
+                    <option value="nb-iot">nb-iot</option>
+                    <option value="self-control">自控</option>
+                  </select>
+                  <br><br> 
+                  協議相關設定:<br>
+                  <input type="text" id="protocol_setting">
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="add_controller()">Add</button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="container">
-            <div class="modal fade" id="del_Modal" role="dialog">
-              <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">刪除項目</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      欲刪除場域:<br>
-                      <select required id="area_del" onchange="area_del_func()">
-                  </select><br> 欲刪除感測器群組:
-                      <br>
-                      <select required id="group_del" onchange="group_del_func()">
-                  </select><br> 欲刪除感測器:
-                      <br>
-                      <select required id="sensor_del" onchange="sensor_del_func()">
-                  </select><br>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
-                  </div>
-                </div>
+      <div class="container">
+        <div class="modal fade" id="Setting_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">使用者資訊設定</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  新的使用者名稱:<br>
+                  <input type="text" id="new_username">
+                  <br><br> 新的密碼:
+                  <br>
+                  <input type="text" id="new_password">
+                  <br><br> 確認新的密碼:
+                  <br>
+                  <input type="text" id="new_password_confirm">
+                  <br><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="settings()">Admit</button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="modal fade" id="del_Modal" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">刪除項目</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  欲刪除場域:<br>
+                  <select required id="area_del" onchange="area_del_func()">
+              </select><br> 欲刪除感測器群組:
+                  <br>
+                  <select required id="group_del" onchange="group_del_func()">
+              </select><br> 欲刪除感測器:
+                  <br>
+                  <select required id="sensor_del" onchange="sensor_del_func()">
+              </select><br>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="del_from_db()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- jQuery -->
       <!-- Bootstrap -->
       <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
