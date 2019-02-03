@@ -43,12 +43,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.js"></script>
 
-  <!-- Scripts by CTLiu -->
+  <!--使用JS-XLSX操作xlsx-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.2/xlsx.full.min.js"></script>
+
+  <!--使用FileSaver下載資料成為檔案-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+
+  <!-- Scripts -->
   <script src="../build/js/sidebar.js"></script>
   <script src="../build/js/area_page.js"></script>
   <script src="../build/js/loading.js"></script>
   <script src="../build/js/config.js"></script>
-  <!-- css by CHOu -->
+  <script src="js/export_logs.js"></script>
+
+  <!-- css -->
   <link rel="stylesheet" href="mystyle.css">
   <script>
     function check(){
@@ -445,23 +453,23 @@
               </div>
               
                 <div class="modal-body">
-                  <form action="export_logs.php" method="post">
+                  <!-- <form action="export_logs.php" method="post"> -->
                       <span style="color: red">*&nbsp;</span>選擇要匯出的時間範圍:<br>
                       <div class="input-prepend input-group" style="width: 60%">
                           <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                           <input id="daterange_picker" type="text" class="form-control" name="daterange_picker" value="" />
                       </div>
                       <span style="color: red">*&nbsp;</span>檔案名稱: <br>
-                      <input type="text" name="filename" size="40" placeholder="輸入檔名(不用加副檔名)"><br>
-                      <input type="hidden" name="ownerId" value="<?= $ownerId ?>"><br>
+                      <input type="text" name="filename" size="40" id="filename" placeholder="輸入檔名(不用加副檔名)"><br>
+                      <input type="hidden" name="ownerId" id="export_id" value="<?= $ownerId ?>"><br>
                       <input type="hidden" name="fromDate" id="fromDate">
                       <input type="hidden" name="toDate" id="toDate">
-                      <input type="submit" value="匯出Excel">
-                  </form>
+                      <!-- <input type="submit" value="匯出Excel"> -->
+                  <!-- </form> -->
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                  <button type="submit" class="btn btn-success" data-dismiss="modal">匯出Excel</button>
+                  <button type="submit" class="btn btn-success" data-dismiss="modal" onclick="export_logs()">匯出Excel</button>
                 </div>
 
               <script>
