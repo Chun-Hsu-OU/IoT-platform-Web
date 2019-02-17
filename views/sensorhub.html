@@ -236,10 +236,11 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
+              <!-- 空氣溫度 -->
               <div class="gauge" id="current_AIR_TEMPERATURE1_div">
                   <center>
                       <embed class="image_size" src="images/thermometer.svg"/>
-                      <div class="font_style" id="name">空氣溫度</div>
+                      <div class="font_style" id="name">空氣溫度1</div>
                       <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
                         <img class="edit" src="images/edit.png">
                       </a>
@@ -247,11 +248,36 @@
                   <br>
                   <div id="current_AIR_TEMPERATURE1"></div>
               </div>
-          
+
+              <div class="gauge" id="current_AIR_TEMPERATURE2_div">
+                  <center>
+                      <embed class="image_size" src="images/thermometer.svg"/>
+                      <div class="font_style" id="name">空氣溫度2</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_AIR_TEMPERATURE2"></div>
+              </div>
+
+              <div class="gauge" id="current_AIR_TEMPERATURE3_div">
+                  <center>
+                      <embed class="image_size" src="images/thermometer.svg"/>
+                      <div class="font_style" id="name">空氣溫度3</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_AIR_TEMPERATURE3"></div>
+              </div>
+              <!-- ------------------------------------------------------------------------- -->
+              <!-- 空氣濕度 -->
               <div class="gauge" id="current_AIR_HUMIDITY1_div">
                   <center>
                       <embed class="image_size" src="images/drop.svg"/>
-                      <div class="font_style" id="name">空氣濕度</div>
+                      <div class="font_style" id="name">空氣濕度1</div>
                       <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
                         <img class="edit" src="images/edit.png">
                       </a>
@@ -260,7 +286,31 @@
                   <div id="current_AIR_HUMIDITY1"></div>
               </div>
 
-              <!-- 土壤溫度1 -->
+              <div class="gauge" id="current_AIR_HUMIDITY2_div">
+                  <center>
+                      <embed class="image_size" src="images/drop.svg"/>
+                      <div class="font_style" id="name">空氣濕度2</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_AIR_HUMIDITY2"></div>
+              </div>
+
+              <div class="gauge" id="current_AIR_HUMIDITY3_div">
+                  <center>
+                      <embed class="image_size" src="images/drop.svg"/>
+                      <div class="font_style" id="name">空氣濕度3</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_AIR_HUMIDITY3"></div>
+              </div>
+              <!-- ------------------------------------------------------------------------- -->
+              <!-- 土壤溫度 -->
               <div class="gauge" id="current_SOIL_TEMPERATURE1_div">
                   <center>
                       <embed class="image_size" src="images/thermometer.svg"/>
@@ -630,13 +680,32 @@
             </div>
 
             <div class="x_content">
+                <!-- 空氣溫度 -->
                 <div class="diagram" id="AIR_TEMPERATURE1">
                     <div id="AIR_TEMPERATURE1_div"></div>
                 </div>
-        
+
+                <div class="diagram" id="AIR_TEMPERATURE2">
+                    <div id="AIR_TEMPERATURE2_div"></div>
+                </div>
+
+                <div class="diagram" id="AIR_TEMPERATURE3">
+                    <div id="AIR_TEMPERATURE3_div"></div>
+                </div>
+                <!-------------------------------------->
+                <!-- 空氣濕度 -->
                 <div class="diagram" id="AIR_HUMIDITY1">
                     <div id="AIR_HUMIDITY1_div"></div>
                 </div>
+
+                <div class="diagram" id="AIR_HUMIDITY2">
+                    <div id="AIR_HUMIDITY2_div"></div>
+                </div>
+
+                <div class="diagram" id="AIR_HUMIDITY3">
+                    <div id="AIR_HUMIDITY3_div"></div>
+                </div>
+                <!-------------------------------------->
         
                 <!-- 土壤濕度 -->
                 <div class="diagram" id="SOIL_HUMIDITY1">
@@ -754,8 +823,16 @@
 
       <script type="text/javascript">
         /* 目前數據儀表板 */
+        //空氣溫度
         $('#current_AIR_TEMPERATURE1_div').hide();
+        $('#current_AIR_TEMPERATURE2_div').hide();
+        $('#current_AIR_TEMPERATURE3_div').hide();
+        //------------------------------------------
+        //空氣濕度
         $('#current_AIR_HUMIDITY1_div').hide();
+        $('#current_AIR_HUMIDITY2_div').hide();
+        $('#current_AIR_HUMIDITY3_div').hide();
+        //------------------------------------------
         //土壤溫度
         $('#current_SOIL_TEMPERATURE1_div').hide();
         $('#current_SOIL_TEMPERATURE2_div').hide();
@@ -791,8 +868,16 @@
         $('#current_SWITCH1_div').hide();
 
         /* 歷史數據圖 */
+        //空氣溫度
         $('#AIR_TEMPERATURE1').hide();
+        $('#AIR_TEMPERATURE2').hide();
+        $('#AIR_TEMPERATURE3').hide();
+        //------------------------------------------
+        //空氣濕度
         $('#AIR_HUMIDITY1').hide();
+        $('#AIR_HUMIDITY2').hide();
+        $('#AIR_HUMIDITY3').hide();
+        //------------------------------------------
         $('#BATTERY_VOLTAGE1').hide();
         $('#LIGHT_INTENSITY1').hide();
         $('#REALTIME_WIND_SPEED1').hide();

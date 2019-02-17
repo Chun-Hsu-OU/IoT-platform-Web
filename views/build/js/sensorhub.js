@@ -655,6 +655,7 @@ function initial_current_chart(){
   document.addEventListener("DOMContentLoaded", function(event) {
     var sensors = {};
 
+    //空氣溫度
     sensors.air_temp1 = new JustGage({
       id: "current_AIR_TEMPERATURE1",
       label: "度",
@@ -678,6 +679,54 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
+    sensors.air_temp2 = new JustGage({
+      id: "current_AIR_TEMPERATURE2",
+      label: "度",
+      value: 0,
+      min: 0,
+      max: 40,
+      levelColors: [
+          "#2187ED",
+          "#EDDF1A",
+          "#E31251"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.air_temp3 = new JustGage({
+      id: "current_AIR_TEMPERATURE3",
+      label: "度",
+      value: 0,
+      min: 0,
+      max: 40,
+      levelColors: [
+          "#2187ED",
+          "#EDDF1A",
+          "#E31251"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+    //-----------------------------------
+
+    //空氣濕度
     sensors.air_hum1 = new JustGage({
         id: "current_AIR_HUMIDITY1",
         label: "%",
@@ -699,6 +748,51 @@ function initial_current_chart(){
         counter: true,
         relativeGaugeSize: true
     });
+
+    sensors.air_hum2 = new JustGage({
+      id: "current_AIR_HUMIDITY2",
+      label: "%",
+      value: 0,
+      min: 0,
+      max: 100,
+      levelColors: [
+          "#C8EDFA",
+          "#145CE0"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.air_hum3 = new JustGage({
+        id: "current_AIR_HUMIDITY3",
+        label: "%",
+        value: 0,
+        min: 0,
+        max: 100,
+        levelColors: [
+            "#C8EDFA",
+            "#145CE0"
+        ],
+        humanFriendly: true,
+        gaugeWidthScale: 0.7,
+        pointer: true,
+        pointerOptions: {
+            toplength: 10,
+            bottomlength: 10,
+            bottomwidth: 2
+        },
+        counter: true,
+        relativeGaugeSize: true
+    });
+    //-----------------------------------
 
     //土壤溫度
     sensors.soil_temp1 = new JustGage({
@@ -1383,10 +1477,24 @@ function initial_current_data(sensors){
             
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
               $('#current_AIR_TEMPERATURE' + body.Items[j].num + '_div').show();
-              sensors.air_temp1.refresh(val);
+              if(body.Items[j].num == "1"){
+                sensors.air_temp1.refresh(val);
+              }else if(body.Items[j].num == "2"){
+                sensors.air_temp2.refresh(val);
+              }else if(body.Items[j].num == "3"){
+                sensors.air_temp3.refresh(val);
+              }
+              
             } else if(body.Items[j].sensorType=="AIR_HUMIDITY"){
               $('#current_AIR_HUMIDITY' + body.Items[j].num + '_div').show();
-              sensors.air_hum1.refresh(val);
+              if(body.Items[j].num == "1"){
+                sensors.air_hum1.refresh(val);
+              }else if(body.Items[j].num == "2"){
+                sensors.air_hum2.refresh(val);
+              }else if(body.Items[j].num == "3"){
+                sensors.air_hum3.refresh(val);
+              }
+              
             } else if(body.Items[j].sensorType=="SOIL_TEMPERATURE"){
 
               $('#current_SOIL_TEMPERATURE' + body.Items[j].num + '_div').show();
@@ -1474,10 +1582,24 @@ function initial_current_data(sensors){
           } else{  /* 無數據 */
             if(body.Items[j].sensorType=="AIR_TEMPERATURE"){
               $('#current_AIR_TEMPERATURE' + body.Items[j].num + '_div').show();
-              sensors.air_temp1.refresh("無數據");
+              if(body.Items[j].num == "1"){
+                sensors.air_temp1.refresh("無數據");
+              }else if(body.Items[j].num == "2"){
+                sensors.air_temp2.refresh("無數據");
+              }else if(body.Items[j].num == "3"){
+                sensors.air_temp3.refresh("無數據");
+              }
+              
             } else if(body.Items[j].sensorType=="AIR_HUMIDITY"){
               $('#current_AIR_HUMIDITY' + body.Items[j].num + '_div').show();
-              sensors.air_hum1.refresh("無數據");
+              if(body.Items[j].num == "1"){
+                sensors.air_hum1.refresh("無數據");
+              }else if(body.Items[j].num == "2"){
+                sensors.air_hum2.refresh("無數據");
+              }else if(body.Items[j].num == "3"){
+                sensors.air_hum3.refresh("無數據");
+              }
+              
             } else if(body.Items[j].sensorType=="SOIL_TEMPERATURE"){
 
               $('#current_SOIL_TEMPERATURE' + body.Items[j].num + '_div').show();
