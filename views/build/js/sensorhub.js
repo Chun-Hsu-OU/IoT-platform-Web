@@ -145,22 +145,6 @@ function draw_sensor_data(data, type, num, title) {
     });
     var avg = (sum / dataset.length).toFixed(1);
 
-
-    // String.prototype.capitalize = function() {
-    //   return this.replace(/(?:^|\s)\S/g, function(a) {
-    //     return a.toUpperCase();
-    //   });
-    // };
-
-    // if (type == "CO2") {
-    //   var sensor_type = "CO2";
-    // } else if (type == "SOIL_EC") {
-    //   var sensor_type = "Soil EC";
-    // } else {
-    //   var sensor_type = type.replace("_", " ").toLowerCase();
-    //   var sensor_type = sensor_type.capitalize();
-    // }
-
     /*
       繪製圖表，分三類:
       1.一般數據(空氣溫濕、土壤溫濕、光照度、電導度、電池電壓...等)
@@ -458,7 +442,7 @@ function draw_sensor_data(data, type, num, title) {
     if(type == "METER"){
       var meter_once = [];
       //在做運算時，null會自動轉成0
-      //因為是前後兩個數據相減，最後會少一個，所以一開始要先補一個
+      //因為是前後兩個數據相減，最後會少一個，所以一開始要先補一個0
       meter_once.push(0);
       for(let i=0;i<dataset.length;i++){
         if(i != dataset.length-1){
@@ -1666,6 +1650,7 @@ function initial_current_data(sensors){
             } else if (body.Items[j].sensorType == "METER") {
               $('#current_METER' + body.Items[j].num + '_div').show();
               sensors.meter1.refresh("無數據");
+              sensors.meter_now.refresh("無數據");
             } else if (body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
               sensors.electric_meter1.refresh("無數據");
