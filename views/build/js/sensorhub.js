@@ -336,9 +336,9 @@ function draw_sensor_data(data, type, num, title) {
         }]
       });
     }else{  //一般數據
-      if(type == "METER"){
-        title = "累積用水量";
-      }
+      // if(type == "METER"){
+      //   title = "累積用水量";
+      // }
 
       var temp = Highcharts.chart(type + num + '_div', {
         chart: {
@@ -458,8 +458,8 @@ function draw_sensor_data(data, type, num, title) {
       console.log(meter_once);
 
       /* <歷史數據圖> */
-      $('#METER_NOW').show();
-      var temp = Highcharts.chart('meter_now_div', {
+      $('#METER_NOW' + num).show();
+      var temp = Highcharts.chart('meter_now' + num + '_div', {
         chart: {
           scrollablePlotArea: {
             minWidth: 700,
@@ -477,7 +477,7 @@ function draw_sensor_data(data, type, num, title) {
         },
 
         title: {
-          text: "每次用水量"
+          text: "每次用水量" + num
         },
 
         legend: {
@@ -515,45 +515,6 @@ function draw_sensor_data(data, type, num, title) {
           name: "本次用水量",
           data: meter_once
         }]
-      });
-
-      temp.yAxis[0].addPlotLine({
-        value: avg,
-        color: 'green',
-        dashStyle: 'shortdash',
-        width: 2,
-        label: {
-          text: '平均 : ' + avg,
-          style: {
-            color: 'white'
-          }
-        }
-      });
-
-      temp.yAxis[0].addPlotLine({
-        value: min,
-        color: 'red',
-        dashStyle: 'shortdash',
-        width: 2,
-        label: {
-          text: '最低 : ' + min,
-          style: {
-            color: 'white'
-          }
-        }
-      });
-
-      temp.yAxis[0].addPlotLine({
-        value: max,
-        color: 'red',
-        dashStyle: 'shortdash',
-        width: 2,
-        label: {
-          text: '最高 : ' + max,
-          style: {
-            color: 'white'
-          }
-        }
       });
       /* </歷史數據圖> */
     }
@@ -1318,9 +1279,52 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
-    //本次澆水量
-    sensors.meter_now = new JustGage({
-      id: "current_METER_now",
+    sensors.meter2 = new JustGage({
+      id: "current_METER2",
+      label: "公升",
+      value: 0,
+      min: 0,
+      max: 10000,
+      levelColors: [
+        "#C8EDFA",
+        "#145CE0"
+      ],
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    //每次澆水量
+    sensors.meter_now1 = new JustGage({
+      id: "current_METER_now1",
+      label: "公升",
+      value: 0,
+      min: 0,
+      max: 10,
+      levelColors: [
+        "#C8EDFA",
+        "#145CE0"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.meter_now2 = new JustGage({
+      id: "current_METER_now2",
       label: "公升",
       value: 0,
       min: 0,
@@ -1545,13 +1549,21 @@ function initial_current_data(sensors){
             } else if (body.Items[j].sensorType == "METER") {
               $('#current_METER' + body.Items[j].num + '_div').show();
               val = val * 1000;//改為公升
-              sensors.meter1.refresh(val);
-
+              if(body.Items[j].num == "1"){
+                sensors.meter1.refresh(val);
+              }else if(body.Items[j].num == "2"){
+                sensors.meter2.refresh(val);
+              }
+              
               //顯示即時水表數據
-              $('#current_METER_now_div').show();
+              $('#current_METER_now' + body.Items[j].num + '_div').show();
               $.get(api_url + 'api/meter/new/' + id + '?token=' + token, function(data) {
                 var amount = JSON.parse(data);
-                sensors.meter_now.refresh(amount.toFixed(2));
+                if(body.Items[j].num == "1"){
+                  sensors.meter_now1.refresh(amount.toFixed(2));
+                }else if(body.Items[j].num == "2"){
+                  sensors.meter_now2.refresh(amount.toFixed(2));
+                }
               });
             }else if(body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
@@ -1648,9 +1660,14 @@ function initial_current_data(sensors){
               $('#current_WIND_DIRECTION' + body.Items[j].num + '_div').show();
               sensors.weed_direction1.refresh(-1);
             } else if (body.Items[j].sensorType == "METER") {
+              
               $('#current_METER' + body.Items[j].num + '_div').show();
-              sensors.meter1.refresh("無數據");
-              sensors.meter_now.refresh("無數據");
+              if(body.Items[j].num == "1"){
+                sensors.meter1.refresh("無數據");
+              }else if(body.Items[j].num == "2"){
+                sensors.meter2.refresh("無數據");
+              }
+              
             } else if (body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
               sensors.electric_meter1.refresh("無數據");

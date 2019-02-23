@@ -580,9 +580,10 @@
                   <div id="current_WIND_DIRECTION1"></div>
               </div>
 
+              <!-- 水錶 -->
               <div class="gauge" id="current_METER1_div">
                   <center>
-                      <div class="font_style" id="name">累積用水量</div>
+                      <div class="font_style" id="name">累積用水量1</div>
                       <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
                         <img class="edit" src="images/edit.png">
                       </a>
@@ -591,16 +592,39 @@
                   <div id="current_METER1"></div>
               </div>
 
-              <div class="gauge" id="current_METER_now_div">
+              <div class="gauge" id="current_METER_now1_div">
                 <center>
-                    <div class="font_style" id="name">本次用水量</div>
+                    <div class="font_style" id="name">本次用水量1</div>
                     <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
                       <img class="edit" src="images/edit.png">
                     </a>
                 </center>
                 <br>
-                <div id="current_METER_now"></div>
+                <div id="current_METER_now1"></div>
               </div>
+
+              <div class="gauge" id="current_METER2_div">
+                  <center>
+                      <div class="font_style" id="name">累積用水量2</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_METER2"></div>
+              </div>
+
+              <div class="gauge" id="current_METER_now2_div">
+                <center>
+                    <div class="font_style" id="name">本次用水量2</div>
+                    <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                      <img class="edit" src="images/edit.png">
+                    </a>
+                </center>
+                <br>
+                <div id="current_METER_now2"></div>
+              </div>
+              <!-- ------------------------------------------------------------------------- -->
 
               <div class="gauge" id="current_ELECTRIC_METER1_div">
                 <center>
@@ -638,21 +662,6 @@
             </div>
           </div>
         </div>
-
-        <script>
-          // function timeConverter(UNIX_timestamp) {
-          //   var a = new Date(UNIX_timestamp);
-          //   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-          //   var year = a.getFullYear();
-          //   var month = months[a.getMonth()];
-          //   var date = a.getDate() < 10 ? '0' + a.getDate() : a.getDate();
-          //   var hour = a.getHours() < 10 ? '0' + a.getHours() : a.getHours();
-          //   var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes();
-          //   var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
-          //   var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-          //   return time;
-          // }
-        </script>
 
         <div class="row">
           <div class="x_panel">
@@ -801,13 +810,23 @@
                     <div id="WIND_DIRECTION1_div"></div>
                 </div>
 
+                <!-- 水錶 -->
                 <div class="diagram" id="METER1">
                   <div id="METER1_div"></div>
                 </div>
 
-                <div class="diagram" id="METER_NOW">
-                  <div id="meter_now_div"></div>
+                <div class="diagram" id="METER_NOW1">
+                  <div id="meter_now1_div"></div>
                 </div>
+
+                <div class="diagram" id="METER2">
+                  <div id="METER2_div"></div>
+                </div>
+
+                <div class="diagram" id="METER_NOW2">
+                  <div id="meter_now2_div"></div>
+                </div>
+                <!-------------------------------------->
 
                 <div class="diagram" id="ELECTRIC_METER1">
                   <div id="ELECTRIC_METER1_div"></div>
@@ -861,8 +880,12 @@
         $('#current_BATTERY_VOLTAGE1_div').hide();
         $('#current_REALTIME_WIND_SPEED1_div').hide();
         $('#current_WIND_DIRECTION1_div').hide();
+        //水錶
         $('#current_METER1_div').hide();
-        $('#current_METER_now_div').hide();
+        $('#current_METER_now1_div').hide();
+        $('#current_METER2_div').hide();
+        $('#current_METER_now2_div').hide();
+        //------------------------------------------
         $('#current_ELECTRIC_METER1_div').hide();
         $('#current_PM2_51_div').hide();
         $('#current_SWITCH1_div').hide();
@@ -906,8 +929,12 @@
         $('#SOIL_EC6').hide();
         //------------------------------------------
         $('#WIND_DIRECTION1').hide();
+        //水表
         $('#METER1').hide();
-        $('#METER_NOW').hide();
+        $('#METER_NOW1').hide();
+        $('#METER2').hide();
+        $('#METER_NOW2').hide();
+        //------------------------------------------
         $('#ELECTRIC_METER1').hide();
         $('#PM2_51').hide();
       </script>
