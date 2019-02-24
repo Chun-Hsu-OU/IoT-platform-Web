@@ -336,10 +336,6 @@ function draw_sensor_data(data, type, num, title) {
         }]
       });
     }else{  //一般數據
-      // if(type == "METER"){
-      //   title = "累積用水量";
-      // }
-
       var temp = Highcharts.chart(type + num + '_div', {
         chart: {
           scrollablePlotArea: {
