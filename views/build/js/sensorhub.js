@@ -1,8 +1,7 @@
-var uuid = getCookie("checker");
+var area = getCookie("area");
 var group_id = getCookie("group");
 
 var toDate = new Date();
-
 var toEpoch = toDate.getTime();
 var fromEpoch = toEpoch - 86400000;
 
@@ -66,6 +65,83 @@ function import_sensor_data() {
 
       $.get(api_url + 'api/sensors_in_timeinterval/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
         draw_sensor_data(data, sensor.sensorType, sensor.num, sensor.name);
+        if(sensor.sensorType == "METER"){
+          $.get(api_url + 'api/meter/interval/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
+            if(data != 'no data'){
+              var amounts = JSON.parse(data);
+              var date_and_amount = [];
+              for(let i=0; i<amounts.Count; i++){
+                var temp = [];
+                temp.push(amounts.Items[i].timestamp);
+                temp.push(amounts.Items[i].value);
+                date_and_amount.push(temp);
+              }
+
+              /* <每次澆水量 歷史數據圖> */
+              $('#METER_NOW' + sensor.num).show();
+              Highcharts.setOptions({
+                time: {
+                  useUTC: false
+                }
+              });
+
+              var temp = Highcharts.chart('meter_now' + sensor.num + '_div', {
+                chart: {
+                  scrollablePlotArea: {
+                    minWidth: 700,
+                    scrollPositionX: 0
+                  },
+                  height: 400
+                },
+
+                xAxis: {
+                  type: 'datetime',
+                  labels: {
+                    format: '{value:%m/%d/%Y<br>%H:%M}'
+                  }
+                },
+
+                title: {
+                  text: "每次用水量" + sensor.num
+                },
+
+                legend: {
+                  align: 'left',
+                  verticalAlign: 'top',
+                  borderWidth: 0
+                },
+
+                tooltip: {
+                  xDateFormat: '%m/%d/%Y<br>%H:%M',
+                },
+
+                plotOptions: {
+                  series: {
+                    cursor: 'pointer',
+                    label: {
+                      connectorAllowed: false
+                    },
+                    marker: {
+                      lineWidth: 1
+                    },
+                    label: {
+                      enabled: false,
+                    }
+                  }
+                },
+
+                exporting: false,
+
+                series: [{
+                  name: "本次用水量",
+                  data: date_and_amount
+                }]
+              });
+              /* </每次澆水量 歷史數據圖> */
+            }
+
+          });
+        }
       });
     });
     
@@ -80,11 +156,86 @@ function import_sensor_data() {
       $.get(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token, function(data) {
         var body = JSON.parse(data);
         for (let i = 0; i < body.Count; i++) {
-          if (body.Items[i].visible == 1) {
-            $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
-              draw_sensor_data(data, body.Items[i].sensorType, body.Items[i].num, body.Items[i].name);
-            });
-          }
+          $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
+            draw_sensor_data(data, body.Items[i].sensorType, body.Items[i].num, body.Items[i].name);
+            if(body.Items[i].sensorType == "METER"){
+              $.get(api_url + 'api/meter/interval/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
+                if(data != 'no data'){
+                  var amounts = JSON.parse(data);
+                  var date_and_amount = [];
+                  for(let j=0; j<amounts.Count; j++){
+                    var temp = [];
+                    temp.push(amounts.Items[j].timestamp);
+                    temp.push(amounts.Items[j].value);
+                    date_and_amount.push(temp);
+                  }
+    
+                  /* <每次澆水量 歷史數據圖> */
+                  $('#METER_NOW' + body.Items[i].num).show();
+                  Highcharts.setOptions({
+                    time: {
+                      useUTC: false
+                    }
+                  });
+    
+                  var temp = Highcharts.chart('meter_now' + body.Items[i].num + '_div', {
+                    chart: {
+                      scrollablePlotArea: {
+                        minWidth: 700,
+                        scrollPositionX: 0
+                      },
+                      height: 400
+                    },
+    
+                    xAxis: {
+                      type: 'datetime',
+                      labels: {
+                        format: '{value:%m/%d/%Y<br>%H:%M}'
+                      }
+                    },
+    
+                    title: {
+                      text: "每次用水量" + body.Items[i].num
+                    },
+    
+                    legend: {
+                      align: 'left',
+                      verticalAlign: 'top',
+                      borderWidth: 0
+                    },
+    
+                    tooltip: {
+                      xDateFormat: '%m/%d/%Y<br>%H:%M',
+                    },
+    
+                    plotOptions: {
+                      series: {
+                        cursor: 'pointer',
+                        label: {
+                          connectorAllowed: false
+                        },
+                        marker: {
+                          lineWidth: 1
+                        },
+                        label: {
+                          enabled: false,
+                        }
+                      }
+                    },
+    
+                    exporting: false,
+    
+                    series: [{
+                      name: "本次用水量",
+                      data: date_and_amount
+                    }]
+                  });
+                  /* </每次澆水量 歷史數據圖> */
+                }
+    
+              });
+            }
+          });
         }
       });
     });
@@ -432,87 +583,6 @@ function draw_sensor_data(data, type, num, title) {
           }
         }
       });
-    }
-
-    //計算並顯示每次用水量歷史數據圖
-    if(type == "METER"){
-      var meter_once = [];
-      //在做運算時，null會自動轉成0
-      //因為是前後兩個數據相減，最後會少一個，所以一開始要先補一個0
-      meter_once.push(0);
-      for(let i=0;i<dataset.length;i++){
-        if(i != dataset.length-1){
-            //前面和後面都不是null才計算，否則都是0
-            if(dataset[i]!=null && dataset[i+1]!=null){
-              var meter_read = dataset[i+1]-dataset[i];
-              meter_once.push( Number(meter_read.toFixed(2)) );
-            }else{
-              meter_once.push(0);
-            }
-        }
-      }
-      console.log(meter_once);
-
-      /* <歷史數據圖> */
-      $('#METER_NOW' + num).show();
-      var temp = Highcharts.chart('meter_now' + num + '_div', {
-        chart: {
-          scrollablePlotArea: {
-            minWidth: 700,
-            scrollPositionX: 0
-          },
-          height: 400
-        },
-
-        xAxis: {
-          tickInterval: Math.floor((date.length) / 6),
-          categories: date,
-          labels: {
-            enabled: true,
-          }
-        },
-
-        title: {
-          text: "每次用水量" + num
-        },
-
-        legend: {
-          align: 'left',
-          verticalAlign: 'top',
-          borderWidth: 0
-        },
-
-        tooltip: {
-          shared: true,
-          crosshairs: true,
-          style: {
-            fontSize: 15
-          }
-        },
-
-        plotOptions: {
-          series: {
-            cursor: 'pointer',
-            label: {
-              connectorAllowed: false
-            },
-            marker: {
-              lineWidth: 1
-            },
-            label: {
-              enabled: false,
-            }
-          }
-        },
-
-        exporting: false,
-
-        series: [{
-          name: "本次用水量",
-          data: meter_once
-        }]
-      });
-      /* </歷史數據圖> */
     }
   }
 }
