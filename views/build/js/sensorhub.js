@@ -1366,6 +1366,48 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
+    sensors.meter3 = new JustGage({
+      id: "current_METER3",
+      label: "公升",
+      value: 0,
+      min: 0,
+      max: 10000,
+      levelColors: [
+        "#C8EDFA",
+        "#145CE0"
+      ],
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.meter4 = new JustGage({
+      id: "current_METER4",
+      label: "公升",
+      value: 0,
+      min: 0,
+      max: 10000,
+      levelColors: [
+        "#C8EDFA",
+        "#145CE0"
+      ],
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
     //每次澆水量
     sensors.meter_now1 = new JustGage({
       id: "current_METER_now1",
@@ -1391,6 +1433,50 @@ function initial_current_chart(){
 
     sensors.meter_now2 = new JustGage({
       id: "current_METER_now2",
+      label: "公升",
+      value: 0,
+      min: 0,
+      max: 10,
+      levelColors: [
+        "#C8EDFA",
+        "#145CE0"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.meter_now3 = new JustGage({
+      id: "current_METER_now3",
+      label: "公升",
+      value: 0,
+      min: 0,
+      max: 10,
+      levelColors: [
+        "#C8EDFA",
+        "#145CE0"
+      ],
+      humanFriendly: true,
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
+    sensors.meter_now4 = new JustGage({
+      id: "current_METER_now4",
       label: "公升",
       value: 0,
       min: 0,
@@ -1619,6 +1705,10 @@ function initial_current_data(sensors){
                 sensors.meter1.refresh(val);
               }else if(body.Items[j].num == "2"){
                 sensors.meter2.refresh(val);
+              }else if(body.Items[j].num == "3"){
+                sensors.meter3.refresh(val);
+              }else if(body.Items[j].num == "4"){
+                sensors.meter4.refresh(val);
               }
               
               //顯示即時水表數據
@@ -1629,6 +1719,10 @@ function initial_current_data(sensors){
                   sensors.meter_now1.refresh(amount.toFixed(2));
                 }else if(body.Items[j].num == "2"){
                   sensors.meter_now2.refresh(amount.toFixed(2));
+                }else if(body.Items[j].num == "3"){
+                  sensors.meter_now3.refresh(amount.toFixed(2));
+                }else if(body.Items[j].num == "4"){
+                  sensors.meter_now4.refresh(amount.toFixed(2));
                 }
               });
             }else if(body.Items[j].sensorType == "ELECTRIC_METER"){
@@ -1732,6 +1826,10 @@ function initial_current_data(sensors){
                 sensors.meter1.refresh("無數據");
               }else if(body.Items[j].num == "2"){
                 sensors.meter2.refresh("無數據");
+              }else if(body.Items[j].num == "3"){
+                sensors.meter3.refresh("無數據");
+              }else if(body.Items[j].num == "4"){
+                sensors.meter4.refresh("無數據");
               }
               
             } else if (body.Items[j].sensorType == "ELECTRIC_METER"){

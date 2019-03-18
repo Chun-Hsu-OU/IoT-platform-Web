@@ -624,6 +624,50 @@
                 <br>
                 <div id="current_METER_now2"></div>
               </div>
+
+              <div class="gauge" id="current_METER3_div">
+                  <center>
+                      <div class="font_style" id="name">累積用水量3</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_METER3"></div>
+              </div>
+
+              <div class="gauge" id="current_METER_now3_div">
+                <center>
+                    <div class="font_style" id="name">本次用水量3</div>
+                    <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                      <img class="edit" src="images/edit.png">
+                    </a>
+                </center>
+                <br>
+                <div id="current_METER_now3"></div>
+              </div>
+
+              <div class="gauge" id="current_METER4_div">
+                  <center>
+                      <div class="font_style" id="name">累積用水量4</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_METER4"></div>
+              </div>
+
+              <div class="gauge" id="current_METER_now4_div">
+                <center>
+                    <div class="font_style" id="name">本次用水量4</div>
+                    <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                      <img class="edit" src="images/edit.png">
+                    </a>
+                </center>
+                <br>
+                <div id="current_METER_now4"></div>
+              </div>
               <!-- ------------------------------------------------------------------------- -->
 
               <div class="gauge" id="current_ELECTRIC_METER1_div">
@@ -826,6 +870,22 @@
                 <div class="diagram" id="METER_NOW2">
                   <div id="meter_now2_div"></div>
                 </div>
+
+                <div class="diagram" id="METER3">
+                  <div id="METER3_div"></div>
+                </div>
+
+                <div class="diagram" id="METER_NOW3">
+                  <div id="meter_now3_div"></div>
+                </div>
+
+                <div class="diagram" id="METER4">
+                  <div id="METER4_div"></div>
+                </div>
+
+                <div class="diagram" id="METER_NOW4">
+                  <div id="meter_now4_div"></div>
+                </div>
                 <!-------------------------------------->
 
                 <div class="diagram" id="ELECTRIC_METER1">
@@ -885,6 +945,10 @@
         $('#current_METER_now1_div').hide();
         $('#current_METER2_div').hide();
         $('#current_METER_now2_div').hide();
+        $('#current_METER3_div').hide();
+        $('#current_METER_now3_div').hide();
+        $('#current_METER4_div').hide();
+        $('#current_METER_now4_div').hide();
         //------------------------------------------
         $('#current_ELECTRIC_METER1_div').hide();
         $('#current_PM2_51_div').hide();
@@ -934,6 +998,10 @@
         $('#METER_NOW1').hide();
         $('#METER2').hide();
         $('#METER_NOW2').hide();
+        $('#METER3').hide();
+        $('#METER_NOW3').hide();
+        $('#METER4').hide();
+        $('#METER_NOW4').hide();
         //------------------------------------------
         $('#ELECTRIC_METER1').hide();
         $('#PM2_51').hide();
