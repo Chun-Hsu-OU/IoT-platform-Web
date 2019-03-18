@@ -345,16 +345,16 @@ function submit_clock(){
 //------ 手動 ------
 function submit_duration(){
   console.log(document.getElementById("manual_items").children[0].value);
-  $.post(api_url + 'api/control/mode' + '?token=' + token, {
-    "controllerId": getCookie("controller"),
-    "status": "power"
-  });
-
   $.post(api_url + 'api/control/work_cycle' + '?token=' + token, {
     "controllerId": getCookie("controller"),
     "status": document.getElementById("manual_items").children[0].value
   },function(){
     alert("手動啟動時間設定完成！");
+  });
+  
+  $.post(api_url + 'api/control/mode' + '?token=' + token, {
+    "controllerId": getCookie("controller"),
+    "status": "power"
   });
 }
 //------ 手動 ------
