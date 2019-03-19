@@ -251,41 +251,12 @@
                 <div class="col-xs-9">
                   <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade" id="control-tab-1" aria-labelledby="home-tab">
-                      <!-- <div id="rule_block_1">
-                        <div style="border-width:3px;border-style:dashed;border-color:#339933;padding:5px;">
-                          <div class="btn-group" id="add_rule_block_1">
-                            <button type="button" class="btn btn-success">新增規則</button>
-                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                          </button>
-                            <ul class="dropdown-menu" role="menu">
-                              <li><a href="#" onclick="add_rules('AIR_TEMPERATURE', '1')">空氣溫度</a>
-                              </li>
-                              <li><a href="#" onclick="add_rules('AIR_HUMIDITY', '1')">空氣濕度</a>
-                              </li>
-                              <li class="divider"></li>
-                              <li><a href="#" onclick="add_rules('SOIL_TEMPERATURE', '1')">土壤溫度</a>
-                              </li>
-                              <li><a href="#" onclick="add_rules('SOIL_HUMIDITY', '1')">土壤濕度</a>
-                              </li>
-                              <li><a href="#" onclick="add_rules('SOIL_EC', '1')">土壤電導度</a>
-                              </li>
-                              <li class="divider"></li>
-                              <li><a href="#" onclick="add_rules('LIGHT_INTENSITY', '1')">光照程度</a>
-                              </li>
-                              <li><a href="#" onclick="add_rules('CO2', '1')">二氧化碳濃度</a>
-                              </li>
-                            </ul>
-                          </div>
-                          
-                        </div>
-                      </div><br> -->
                       <button id="submit_change_rule" type="button" class="btn btn-primary" onclick="change_rules()" style="float:right">確定</button>
                       <button type="button" class="btn btn-success" onclick="add_rule_block()" style="float:right">新增規則組</button>
                     </div>
                     <div role="tabpanel" class="tab-pane fade active in" id="control-tab-2" aria-labelledby="profile-tab-2">
                       <div class="row">
+                        <button type="button" class="btn btn-primary" onclick="forcast_time()">預測澆水量</button>
                         <form id="control_by_rule">
                           <p style="font-size: 16px"><b> 自動控制開關 (搭配規則設定) </b></p>
                           <label class="switch">
