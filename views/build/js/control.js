@@ -352,10 +352,12 @@ function submit_duration(){
     alert("手動啟動時間設定完成！");
   });
   
-  $.post(api_url + 'api/control/mode' + '?token=' + token, {
-    "controllerId": getCookie("controller"),
-    "status": "power"
-  });
+  setTimeout(function(){ 
+    $.post(api_url + 'api/control/mode' + '?token=' + token, {
+      "controllerId": getCookie("controller"),
+      "status": "power"
+    });
+  }, 1000);
 }
 //------ 手動 ------
 
