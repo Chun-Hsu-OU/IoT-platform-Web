@@ -16,31 +16,11 @@ function getCookie(cname) {
 
 
 function add_rules(TYPE, block_num, name, sensorId, value = '數值', symbol = 'greater') {
-  // if (TYPE == 'AIR_TEMPERATURE') {
-  //   var type = '空氣溫度&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-  // } else if (TYPE == 'AIR_HUMIDITY') {
-  //   var type = '空氣濕度&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-  // } else if (TYPE == 'SOIL_TEMPERATURE') {
-  //   var type = '土壤溫度&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-  // } else if (TYPE == 'SOIL_HUMIDITY') {
-  //   var type = '土壤濕度&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-  // } else if (TYPE == 'SOIL_EC') {
-  //   var type = '土壤電導度&nbsp;&nbsp;&nbsp;&nbsp;'
-  // } else if (TYPE == 'LIGHT_INTENSITY') {
-  //   var type = '光照程度&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-  // } else if (TYPE == 'CO2') {
-  //   var type = '二氧化碳濃度 '
-  // }
-
   /*
     取得選定的sensorhub名稱，因為可能sensor會有相同名稱，
     用來顯示讓使用者區分是哪個sensorhub下的sensor
   */
   var group_name = $("#show_groups_block_"+ block_num +" option:selected").text();
-  //直接新增規則才要加sensorhub名稱，從資料庫抓下來本來就有sensorhub名稱
-  if(value == '數值'){
-    name = name + '&nbsp;&nbsp;(&nbsp;' + group_name + '&nbsp;)'; 
-  }
 
   $('#add_rule_block_' + block_num).before('<div id="rule' + TYPE + '_block_' + block_num + '_' + sensorId + '">' + name + '<span id="' + TYPE + ';' + name + ';' + sensorId + '"></span>' + 
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;設定：' +
@@ -52,7 +32,6 @@ function add_rules(TYPE, block_num, name, sensorId, value = '數值', symbol = '
 }
 
 function change_rules() {
-  //var block = 0;
   var block_array = [];
   var controller = getCookie("controller");
   var rules = [];
@@ -72,8 +51,6 @@ function change_rules() {
       var value = $('#rule' + type + '_block_' + block_array[block_num].toString() + '_' + sensorId).children('#value').val();
       var symbol = $('#rule' + type + '_block_' + block_array[block_num].toString() + '_' + sensorId).children('#symbol').val();
       var duration = $('#add_rule_block_' + block_array[block_num].toString()).children('#duration').val();
-      //console.log(document.getElementById(type + '_bot_' + block_array[block_num].toString()).value);
-      //console.log(type);
       var new_rule = {
         "block": parseInt(block_array[block_num]),
         "name": name,
@@ -93,12 +70,6 @@ function change_rules() {
   }, function(){
       alert("規則設定完成！");
   });
-
-  // $.post(api_url + 'api/control/rule/length', {
-  //   "controllerId": controller,
-  //   "status": rules.length
-  // });
-  //console.log(rules);
 }
 
 function delete_rule(type, block_num, sensorId) {
@@ -153,15 +124,6 @@ function add_rule_block(block_num = 0, duration = 0) {
         '</button>' +
         '<button type="button" class="btn btn-danger" onclick="delete_rule_block(\'' + id_name + '\')" style="float:right">刪除規則組</button>' +
         '<ul class="dropdown-menu" role="menu" id="show_sensors_block_' + block_num + '">' +
-          // '<li><a href="#" onclick="add_rules(\'AIR_TEMPERATURE\', \'' + block_num + '\')">空氣溫度</a></li>' +
-          // '<li><a href="#" onclick="add_rules(\'AIR_HUMIDITY\', \'' + block_num + '\')">空氣濕度</a></li>' +
-          // '<li class="divider"></li>' +
-          // '<li><a href="#" onclick="add_rules(\'SOIL_TEMPERATURE\', \'' + block_num + '\')">土壤溫度</a></li>' +
-          // '<li><a href="#" onclick="add_rules(\'SOIL_HUMIDITY\', \'' + block_num + '\')">土壤濕度</a></li>' +
-          // '<li><a href="#" onclick="add_rules(\'SOIL_EC\', \'' + block_num + '\')">土壤電導度</a></li>' +
-          // '<li class="divider"></li>' +
-          // '<li><a href="#" onclick="add_rules(\'LIGHT_INTENSITY\', \'' + block_num + '\')">光照程度</a></li>' +
-          // '<li><a href="#" onclick="add_rules(\'CO2\', \'' + block_num + '\')">二氧化碳濃度</a></li>' +
         '</ul>' +
       '</div>' + 
     '</div>' +
@@ -175,7 +137,6 @@ function add_rule_block(block_num = 0, duration = 0) {
   }
 
   load_groups_in_select_rule(block_num);
-  // load_sensors_in_select_rule(block_num);
 }
 
 function load_groups_in_select_rule(block_num){
@@ -215,10 +176,6 @@ function group_select_change(block_num){
 function delete_rule_block(id_name) {
   $("#" + id_name).remove();
 }
-
-// $("#show_groups_block_2").children().children().click(function(){
-//   console.log(this.value);
-// });
 
 function check_children(check) {
   var children = document.getElementById("control-tab-1").children;
