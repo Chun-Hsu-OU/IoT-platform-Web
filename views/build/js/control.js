@@ -321,7 +321,11 @@ function submit_duration(){
 //大平窩預測澆水時間
 function forcast_time(){
   $.get(api_url + 'api/forecast_time/e0c97039-5f58-4453-942e-a008fc4bec9c/9b746d04-20f6-454e-8f0b-ed8d3f3114b6?token=' + token, function(data) {
-    alert("預測澆水時間: "+data+"秒");
+    if(data != "No data"){
+      alert("預測澆水時間: "+data+"秒");
+    }else{
+      alert("目前無法預測澆水時間");
+    }
   });
 }
 
