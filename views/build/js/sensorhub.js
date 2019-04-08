@@ -102,7 +102,7 @@ function import_sensor_data() {
                 },
 
                 title: {
-                  text: "每次用水量" + sensor.num
+                  text: sensor.name + ": 每次用水量"
                 },
 
                 legend: {
@@ -1414,7 +1414,7 @@ function initial_current_chart(){
       label: "公升",
       value: 0,
       min: 0,
-      max: 10,
+      max: 50,
       levelColors: [
         "#C8EDFA",
         "#145CE0"
@@ -1436,7 +1436,7 @@ function initial_current_chart(){
       label: "公升",
       value: 0,
       min: 0,
-      max: 10,
+      max: 50,
       levelColors: [
         "#C8EDFA",
         "#145CE0"
@@ -1458,7 +1458,7 @@ function initial_current_chart(){
       label: "公升",
       value: 0,
       min: 0,
-      max: 10,
+      max: 50,
       levelColors: [
         "#C8EDFA",
         "#145CE0"
@@ -1480,7 +1480,7 @@ function initial_current_chart(){
       label: "公升",
       value: 0,
       min: 0,
-      max: 10,
+      max: 50,
       levelColors: [
         "#C8EDFA",
         "#145CE0"
@@ -1713,7 +1713,10 @@ function initial_current_data(sensors){
               
               //顯示即時水表數據
               $('#current_METER_now' + body.Items[j].num + '_div').show();
-              $.get(api_url + 'api/meter/new/' + id + '?token=' + token, function(data) {
+              //改即時水表名稱
+              $("#current_METER_now" + body.Items[j].num + "_div").find("#name").text(body.Items[j].name + ": 本次用水量");
+
+              $.get(api_url + 'api/meter/new/' + body.Items[j].sensorId + '?token=' + token, function(data) {
                 var amount = JSON.parse(data);
                 if(body.Items[j].num == "1"){
                   sensors.meter_now1.refresh(amount.toFixed(2));
