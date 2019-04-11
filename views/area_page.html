@@ -451,6 +451,13 @@
                   LoRa 模組 MacAddress：<br>
                   <input type="text" id="update_macAddr" value="">
                   <br><br>
+                  <input type="hidden" id="mac_has_change" value="0">
+                  <!-- 監聽是否macAddr有改，改到就設 mac_has_change = 1  -->
+                  <script>
+                    $("#update_macAddr").on("input", function() {
+                        $("#mac_has_change").val("1");
+                    });
+                  </script>
                 </form>
               </div>
               <div class="modal-footer">

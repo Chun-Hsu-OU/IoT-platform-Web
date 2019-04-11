@@ -78,6 +78,26 @@ function update_sensorgroup_item() {
   }, function() {
     window.location.replace('area_page.html');
   });
+
+  //如果macAddr有改過，sensorhub下面所有sensor的macAddr都要改
+  if($("#mac_has_change").val() == "1"){
+
+    $.get(api_url + 'api/sensors_in_group/' + getCookie("group") + '?token=' + token, function(data) {
+    
+      var body = JSON.parse(data);
+      for (group_num = 0; group_num < body.Count; group_num++) {
+        $.post(api_url + 'api/update/sensor/macAddr' + '?token=' + token, {
+          "groupId": getCookie("group"),
+          "sensorId": body.Items[group_num].sensorId,
+          "macAddr": $("#update_macAddr").val()
+        }, function() {
+
+        });
+      }
+      
+    });
+  }
+  
 }
 
 function update_area_item() {
