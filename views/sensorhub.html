@@ -658,6 +658,20 @@
               </div>
               <!-- ------------------------------------------------------------------------- -->
 
+              <!-- CO2 -->
+              <div class="gauge" id="current_CO21_div">
+                  <center>
+                      <embed class="image_size" src="images/co2.svg"/>
+                      <div class="font_style" id="name">CO2濃度</div>
+                      <a href="#" id="edit" data-toggle="modal" data-target="#set_sensor_modal">
+                        <img class="edit" src="images/edit.png">
+                      </a>
+                  </center>
+                  <br>
+                  <div id="current_CO21"></div>
+              </div>
+              <!-------------------------------------->
+
               <div class="gauge" id="current_ELECTRIC_METER1_div">
                 <center>
                     <div class="font_style" id="name">累積用電量</div>
@@ -876,6 +890,12 @@
                 </div>
                 <!-------------------------------------->
 
+                <!-- CO2 -->
+                <div class="diagram" id="CO21">
+                  <div id="CO21_div"></div>
+                </div>
+                <!-------------------------------------->
+
                 <div class="diagram" id="ELECTRIC_METER1">
                   <div id="ELECTRIC_METER1_div"></div>
                 </div>
@@ -937,10 +957,13 @@
         $('#current_METER_now3_div').hide();
         $('#current_METER4_div').hide();
         $('#current_METER_now4_div').hide();
+        //CO2
+        $('#current_CO21_div').hide();
         //------------------------------------------
         $('#current_ELECTRIC_METER1_div').hide();
         $('#current_PM2_51_div').hide();
         $('#current_SWITCH1_div').hide();
+        
 
         /* 歷史數據圖 */
         //空氣溫度
@@ -990,6 +1013,8 @@
         $('#METER_NOW3').hide();
         $('#METER4').hide();
         $('#METER_NOW4').hide();
+        //CO2
+        $('#CO21').hide();
         //------------------------------------------
         $('#ELECTRIC_METER1').hide();
         $('#PM2_51').hide();
@@ -1229,6 +1254,7 @@
                       <option value="REALTIME_WIND_SPEED">即時風速</option>
                       <option value="WIND_DIRECTION">風向</option>
                       <option value="METER">水錶</option>
+                      <option value="CO2">CO2濃度</option>
                       <option value="ELECTRIC_METER">電錶</option>
                       <option value="PM2_5">PM2.5</option>
                       <option value="SWITCH">開關</option>

@@ -1497,6 +1497,28 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
+    //CO2濃度
+    sensors.co21 = new JustGage({
+      id: "current_CO21",
+      label: "ppm",
+      value: 0,
+      min: 0,
+      max: 5000,
+      levelColors: [
+        "#F1CA5E",
+        "#D52D15"
+      ],
+      gaugeWidthScale: 0.7,
+      pointer: true,
+      pointerOptions: {
+          toplength: 10,
+          bottomlength: 10,
+          bottomwidth: 2
+      },
+      counter: true,
+      relativeGaugeSize: true
+    });
+
     //累積用電量
     sensors.electric_meter1 = new JustGage({
       id: "current_ELECTRIC_METER1",
@@ -1728,13 +1750,16 @@ function initial_current_data(sensors){
                   sensors.meter_now4.refresh(amount.toFixed(2));
                 }
               });
-            }else if(body.Items[j].sensorType == "ELECTRIC_METER"){
+            } else if(body.Items[j].sensorType == "CO2"){
+              $('#current_CO2' + body.Items[j].num + '_div').show();
+              sensors.co21.refresh(val);
+            } else if(body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
               sensors.electric_meter1.refresh(val);
-            }else if(body.Items[j].sensorType == "PM2_5"){
+            } else if(body.Items[j].sensorType == "PM2_5"){
               $('#current_PM2_5' + body.Items[j].num + '_div').show();
               sensors.pm2_51.refresh(val);
-            }else if(body.Items[j].sensorType == "SWITCH"){
+            } else if(body.Items[j].sensorType == "SWITCH"){
               $('#current_SWITCH' + body.Items[j].num + '_div').show();
               sensors.switch1.refresh(val);
             }
@@ -1835,6 +1860,9 @@ function initial_current_data(sensors){
                 sensors.meter4.refresh("無數據");
               }
               
+            } else if (body.Items[j].sensorType == "CO2"){
+              $('#current_CO2' + body.Items[j].num + '_div').show();
+              sensors.electric_meter1.refresh("無數據");
             } else if (body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
               sensors.electric_meter1.refresh("無數據");
