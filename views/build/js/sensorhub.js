@@ -1862,7 +1862,7 @@ function initial_current_data(sensors){
               
             } else if (body.Items[j].sensorType == "CO2"){
               $('#current_CO2' + body.Items[j].num + '_div').show();
-              sensors.electric_meter1.refresh("無數據");
+              sensors.co21.refresh("無數據");
             } else if (body.Items[j].sensorType == "ELECTRIC_METER"){
               $('#current_ELECTRIC_METER' + body.Items[j].num + '_div').show();
               sensors.electric_meter1.refresh("無數據");
