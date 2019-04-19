@@ -1,0 +1,32 @@
+.select_box{
+    border: solid 3px black;
+    text-align: center;
+    padding: 10px 0px;
+    border-radius: 10px;
+    transition-duration: 0.5s;
+    font-size: 30px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.select_box:hover{
+    border-color: white;
+    background-color: #969798;
+    color: white;
+    transform:scale(1.2, 1.2);
+}
+
+@media screen and (max-width: 768px){
+    body{
+        height: 800px;
+    }
+
+    .select_box:hover{
+        transform:scale(1, 1);
+    }
+}
+
+img.select_pic{
+    width: 60%;
+}

@@ -1,25 +1,3 @@
-/* .type_box{
-    border: solid 2px #CACBCC;
-    text-align: center;
-    padding: 10px 0px;
-    border-radius: 10px;
-    transition-duration: 0.5s;
-    font-size: 30px;
-    color: #0B6280;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.type_box:hover{
-    background-color: #CACBCC;
-    border: solid 2px #000;
-}
-
-.title_left{
-    margin-bottom: 10px;
-} */
-
 a[role=button]{
     float: right;
 }
