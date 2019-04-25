@@ -86,9 +86,13 @@ $(function(){
     }
     /*-------------------設定highchart參數-------------------*/
 
-    /*-------------------初始化(預設一天)-------------------*/
+    /*-------------------初始化(預設一天，包含水錶則是一個禮拜)-------------------*/
 
     var chart = Highcharts.chart("chart", options);
+
+    if(select_type.includes('METER')){
+        fromEpoch = toEpoch - 86400000*7;
+    }
 
     for(let i=0; i<select_type.length; i++){
 
@@ -105,9 +109,15 @@ $(function(){
                     var id = sensor.sensorId;
                     var type = sensor.sensorType;
 
-                    $.get(api_url + 'api/sensors_in_timeinterval/' + type + '/' + id + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
-                        draw_sensor_data(data, chart, i, group_num, sensor.num);
-                    });
+                    if(type == "METER"){
+                        $.get(api_url + 'api/meter/interval/' + id + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
+                            draw_sensor_data(data, chart, i, group_num, sensor.num);
+                        });
+                    }else{
+                        $.get(api_url + 'api/sensors_in_timeinterval/' + type + '/' + id + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
+                            draw_sensor_data(data, chart, i, group_num, sensor.num);
+                        });
+                    }
                 }
             });
         }
@@ -226,6 +236,8 @@ function Convert_type_to_Ch(type){
         ch = "光照度";
     }else if(type == "BATTERY_VOLTAGE"){
         ch = "電池電壓";
+    }else if(type == "METER"){
+        ch = "水錶";
     }
 
     return ch;
