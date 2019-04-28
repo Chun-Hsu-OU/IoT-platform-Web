@@ -70,6 +70,7 @@
   window.onload = load_area_in_modal();
   window.onload = load_group_in_modal();
   window.onload = load_sensor_in_modal();
+  window.onload = show_control_log();
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -186,37 +187,6 @@
           </nav>
         </div>
       </div>
-
-      <script>
-        // $.get(api_url + 'api/sensors_owned/' + uuid, function(data) {
-        //   var body = JSON.parse(data);
-
-        //   for (sensor_num = 0; sensor_num < body.Count; sensor_num++) {
-        //     load_warnings();
-
-        //     async function load_warnings() {
-        //       var name = body.Items[sensor_num].name;
-        //       try {
-        //         $.get(api_url + 'api/sensors/' + body.Items[sensor_num].sensorType + '/' + body.Items[sensor_num].sensorId, function(res) {
-        //           if (res == "No data") {
-        //             $('#top_warning').prepend('<li><a>' +
-        //               '<span class="image"><img src="images/Apple_User.png" alt="Profile Image" /></span>' +
-        //               '<span>' +
-        //               '<span><strong>' + name + '</strong></span>' +
-        //               '</span>' +
-        //               '<span class="message">' +
-        //               'No signal for atleast 1 hour' +
-        //               '</span>' +
-        //               '</a></li>');
-        //           }
-        //         });
-        //       } catch (err) {
-        //         console.error(err);
-        //       }
-        //     }
-        //   }
-        // });
-      </script>
       <!-- /top navigation -->
 
       <!-- page content -->
@@ -254,6 +224,7 @@
                       <button id="submit_change_rule" type="button" class="btn btn-primary" onclick="change_rules()" style="float:right">確定</button>
                       <button type="button" class="btn btn-success" onclick="add_rule_block()" style="float:right">新增規則組</button>
                     </div>
+
                     <div role="tabpanel" class="tab-pane fade active in" id="control-tab-2" aria-labelledby="profile-tab-2">
                       <div class="row">
                         <button type="button" class="btn btn-primary" onclick="forcast_time()">預測澆水量</button>
@@ -293,6 +264,21 @@
                         </div>
                       </div>
                     </div>
+
+                    <div role="tabpanel" class="tab-pane fade" id="control-tab-3" aria-labelledby="home-tab">
+                      <table class="table table-striped" style="font-size: 15px">
+                        <thead style="background-color: #A8D1F4">
+                          <tr>
+                            <th>開始時間</th>
+                            <th>模式</th>
+                            <th>控制器觸發描述</th>
+                            <th>啟動時間長度</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
                 <div class="col-xs-3">
@@ -301,7 +287,8 @@
                     </li>
                     <li role="presentation" class=""><a href="#control-tab-1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">規則設定</a>
                     </li>
-                    
+                    <li role="presentation" class=""><a href="#control-tab-3" role="tab" id="profile-tab-2" data-toggle="tab" aria-expanded="false">查看歷史紀錄</a>
+                    </li>
                   </ul>
                 </div>
                 <!-- panel-->

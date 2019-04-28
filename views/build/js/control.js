@@ -327,3 +327,41 @@ function forcast_time(){
   });
 }
 
+
+
+function show_control_log(){
+  $.get(api_url + 'api/view/control/log/' + getCookie('controller') + '?token=' + token, function(data) {
+    var body = JSON.parse(data);
+    body.Items.forEach(function make(log){
+      var mode="無";
+      if(log.mode=="auto"){
+        mode = "自動控制";
+      }else if(log.mode=="power"){
+        mode = "手動控制";
+      }else if(log.mode=="clock"){
+        mode = "時間控制";
+      }
+
+      $("#control-tab-3").find("tbody")
+      .append("<tr>"+
+                "<td>"+timeConverter(log.start_time)+"</td>"+
+                "<td>"+mode+"</td>"+
+                "<td>"+log.start_condition+"</td>"+
+                "<td>"+log.duration+" s"+"</td>"+
+              "</tr>");
+    });
+  });
+}
+
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp);
+  var year = a.getFullYear();
+  var month = "0" + (a.getMonth()+1);
+  var date = "0" + a.getDate();
+  var hours = "0" + a.getHours();
+  var minutes = "0" + a.getMinutes();
+  var seconds = "0" + a.getSeconds();
+  var time = year + '/' + month.substr(-2) + '/' + date.substr(-2) + ' ' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+  return time;
+}
+
