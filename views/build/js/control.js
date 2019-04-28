@@ -56,7 +56,7 @@ function change_rules() {
         "name": name,
         "type": type,
         "sensorId": sensorId,
-        "value": parseInt(value),
+        "value": parseFloat(value),
         "symbol": symbol,
         "duration": parseInt(duration)
       };
@@ -93,7 +93,6 @@ function add_rule_block(block_num = 0, duration = 0) {
     block_num ++;
   }
 
-  console.log(block_num);
   var id_name = "rule_block_" + block_num.toString();
 
   $('#submit_change_rule').before('<div id="temp_id">' +
@@ -157,7 +156,6 @@ function load_sensors_in_select_rule(block_num, groupId){
   $.get(api_url + 'api/sensors_in_group/' + groupId + '?token=' + token, function(data) {
     var sensors = JSON.parse(data);
     for (let sensor_num = 0; sensor_num < sensors.Count; sensor_num++) {
-      console.log(sensors.Items[sensor_num].sensorId);
       var type = sensors.Items[sensor_num].sensorType;
       var name = sensors.Items[sensor_num].name;
       var sensorId = sensors.Items[sensor_num].sensorId;
