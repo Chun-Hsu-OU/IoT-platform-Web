@@ -333,7 +333,8 @@ function show_control_log(){
   $.get(api_url + 'api/view/control/log/' + getCookie('controller') + '?token=' + token, function(data) {
     var body = JSON.parse(data);
     body.Items.forEach(function make(log){
-      var mode="無";
+      var mode = "無";
+      var start_condition = "無";
       if(log.mode=="auto"){
         mode = "自動控制";
       }else if(log.mode=="power"){
@@ -342,13 +343,29 @@ function show_control_log(){
         mode = "時間控制";
       }
 
-      $("#control-tab-3").find("tbody")
-      .append("<tr>"+
-                "<td>"+timeConverter(log.start_time)+"</td>"+
-                "<td>"+mode+"</td>"+
-                "<td>"+log.start_condition+"</td>"+
-                "<td>"+log.duration+" s"+"</td>"+
-              "</tr>");
+      if(typeof log.start_condition != "undefined"){
+        start_condition = log.start_condition;
+      }
+
+      if(log.state == "on"){
+        $("#control-tab-3").find("tbody")
+        .append("<tr>"+
+                  "<td>"+timeConverter(log.start_time)+"</td>"+
+                  "<td>"+mode+"</td>"+
+                  "<td>"+start_condition+"</td>"+
+                  "<td>"+log.duration+" s"+"</td>"+
+                  "<td>"+log.state+"</td>"+
+                "</tr>");
+      }else{
+        $("#control-tab-3").find("tbody")
+        .append("<tr>"+
+                  "<td>"+timeConverter(log.start_time)+"</td>"+
+                  "<td>"+mode+"</td>"+
+                  "<td>無</td>"+
+                  "<td>無</td>"+
+                  "<td>"+log.state+"</td>"+
+                "</tr>");
+      }
     });
   });
 }
