@@ -5,6 +5,11 @@ var toDate = new Date();
 var toEpoch = toDate.getTime();
 var fromEpoch = toEpoch - 86400000;
 
+//每隔12分鐘刷新一次頁面
+setTimeout(function(){ 
+  window.location.reload();
+}, 12*60*1000);
+
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
