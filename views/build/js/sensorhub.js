@@ -70,83 +70,83 @@ function import_sensor_data() {
 
       $.get(api_url + 'api/sensors_in_timeinterval/' + sensor.sensorType + '/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
         draw_sensor_data(data, sensor.sensorType, sensor.num, sensor.name);
-        if(sensor.sensorType == "METER"){
-          $.get(api_url + 'api/meter/interval/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
-            if(data != 'no data'){
-              var amounts = JSON.parse(data);
-              var date_and_amount = [];
-              for(let i=0; i<amounts.Count; i++){
-                var temp = [];
-                temp.push(amounts.Items[i].timestamp);
-                temp.push(amounts.Items[i].value);
-                date_and_amount.push(temp);
-              }
+        // if(sensor.sensorType == "METER"){
+        //   $.get(api_url + 'api/meter/interval/' + sensor.sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
+        //     if(data != 'no data'){
+        //       var amounts = JSON.parse(data);
+        //       var date_and_amount = [];
+        //       for(let i=0; i<amounts.Count; i++){
+        //         var temp = [];
+        //         temp.push(amounts.Items[i].timestamp);
+        //         temp.push(amounts.Items[i].value);
+        //         date_and_amount.push(temp);
+        //       }
 
-              /* <每次澆水量 歷史數據圖> */
-              $('#METER_NOW' + sensor.num).show();
-              Highcharts.setOptions({
-                time: {
-                  useUTC: false
-                }
-              });
+        //       /* <每次澆水量 歷史數據圖> */
+        //       $('#METER_NOW' + sensor.num).show();
+        //       Highcharts.setOptions({
+        //         time: {
+        //           useUTC: false
+        //         }
+        //       });
 
-              var temp = Highcharts.chart('meter_now' + sensor.num + '_div', {
-                chart: {
-                  scrollablePlotArea: {
-                    minWidth: 700,
-                    scrollPositionX: 0
-                  },
-                  height: 400
-                },
+        //       var temp = Highcharts.chart('meter_now' + sensor.num + '_div', {
+        //         chart: {
+        //           scrollablePlotArea: {
+        //             minWidth: 700,
+        //             scrollPositionX: 0
+        //           },
+        //           height: 400
+        //         },
 
-                xAxis: {
-                  type: 'datetime',
-                  labels: {
-                    format: '{value:%m/%d/%Y<br>%H:%M}'
-                  }
-                },
+        //         xAxis: {
+        //           type: 'datetime',
+        //           labels: {
+        //             format: '{value:%m/%d/%Y<br>%H:%M}'
+        //           }
+        //         },
 
-                title: {
-                  text: sensor.name + ": 每次用水量"
-                },
+        //         title: {
+        //           text: sensor.name + ": 每次用水量"
+        //         },
 
-                legend: {
-                  align: 'left',
-                  verticalAlign: 'top',
-                  borderWidth: 0
-                },
+        //         legend: {
+        //           align: 'left',
+        //           verticalAlign: 'top',
+        //           borderWidth: 0
+        //         },
 
-                tooltip: {
-                  xDateFormat: '%m/%d/%Y<br>%H:%M',
-                },
+        //         tooltip: {
+        //           xDateFormat: '%m/%d/%Y<br>%H:%M',
+        //         },
 
-                plotOptions: {
-                  series: {
-                    cursor: 'pointer',
-                    label: {
-                      connectorAllowed: false
-                    },
-                    marker: {
-                      lineWidth: 1
-                    },
-                    label: {
-                      enabled: false,
-                    }
-                  }
-                },
+        //         plotOptions: {
+        //           series: {
+        //             cursor: 'pointer',
+        //             label: {
+        //               connectorAllowed: false
+        //             },
+        //             marker: {
+        //               lineWidth: 1
+        //             },
+        //             label: {
+        //               enabled: false,
+        //             }
+        //           }
+        //         },
 
-                exporting: false,
+        //         exporting: false,
 
-                series: [{
-                  name: "本次用水量",
-                  data: date_and_amount
-                }]
-              });
-              /* </每次澆水量 歷史數據圖> */
-            }
+        //         series: [{
+        //           name: "本次用水量",
+        //           data: date_and_amount
+        //         }]
+        //       });
+        //       /* </每次澆水量 歷史數據圖> */
+        //     }
 
-          });
-        }
+        //   });
+        // }
       });
     });
     
@@ -163,83 +163,83 @@ function import_sensor_data() {
         for (let i = 0; i < body.Count; i++) {
           $.get(api_url + 'api/sensors_in_timeinterval/' + body.Items[i].sensorType + '/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
             draw_sensor_data(data, body.Items[i].sensorType, body.Items[i].num, body.Items[i].name);
-            if(body.Items[i].sensorType == "METER"){
-              $.get(api_url + 'api/meter/interval/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
-                if(data != 'no data'){
-                  var amounts = JSON.parse(data);
-                  var date_and_amount = [];
-                  for(let j=0; j<amounts.Count; j++){
-                    var temp = [];
-                    temp.push(amounts.Items[j].timestamp);
-                    temp.push(amounts.Items[j].value);
-                    date_and_amount.push(temp);
-                  }
+            // if(body.Items[i].sensorType == "METER"){
+            //   $.get(api_url + 'api/meter/interval/' + body.Items[i].sensorId + '/' + fromEpoch + '/' + toEpoch + '?token=' + token, function(data) {
+            //     if(data != 'no data'){
+            //       var amounts = JSON.parse(data);
+            //       var date_and_amount = [];
+            //       for(let j=0; j<amounts.Count; j++){
+            //         var temp = [];
+            //         temp.push(amounts.Items[j].timestamp);
+            //         temp.push(amounts.Items[j].value);
+            //         date_and_amount.push(temp);
+            //       }
     
-                  /* <每次澆水量 歷史數據圖> */
-                  $('#METER_NOW' + body.Items[i].num).show();
-                  Highcharts.setOptions({
-                    time: {
-                      useUTC: false
-                    }
-                  });
+            //       /* <每次澆水量 歷史數據圖> */
+            //       $('#METER_NOW' + body.Items[i].num).show();
+            //       Highcharts.setOptions({
+            //         time: {
+            //           useUTC: false
+            //         }
+            //       });
     
-                  var temp = Highcharts.chart('meter_now' + body.Items[i].num + '_div', {
-                    chart: {
-                      scrollablePlotArea: {
-                        minWidth: 700,
-                        scrollPositionX: 0
-                      },
-                      height: 400
-                    },
+            //       var temp = Highcharts.chart('meter_now' + body.Items[i].num + '_div', {
+            //         chart: {
+            //           scrollablePlotArea: {
+            //             minWidth: 700,
+            //             scrollPositionX: 0
+            //           },
+            //           height: 400
+            //         },
     
-                    xAxis: {
-                      type: 'datetime',
-                      labels: {
-                        format: '{value:%m/%d/%Y<br>%H:%M}'
-                      }
-                    },
+            //         xAxis: {
+            //           type: 'datetime',
+            //           labels: {
+            //             format: '{value:%m/%d/%Y<br>%H:%M}'
+            //           }
+            //         },
     
-                    title: {
-                      text: "每次用水量" + body.Items[i].num
-                    },
+            //         title: {
+            //           text: "每次用水量" + body.Items[i].num
+            //         },
     
-                    legend: {
-                      align: 'left',
-                      verticalAlign: 'top',
-                      borderWidth: 0
-                    },
+            //         legend: {
+            //           align: 'left',
+            //           verticalAlign: 'top',
+            //           borderWidth: 0
+            //         },
     
-                    tooltip: {
-                      xDateFormat: '%m/%d/%Y<br>%H:%M',
-                    },
+            //         tooltip: {
+            //           xDateFormat: '%m/%d/%Y<br>%H:%M',
+            //         },
     
-                    plotOptions: {
-                      series: {
-                        cursor: 'pointer',
-                        label: {
-                          connectorAllowed: false
-                        },
-                        marker: {
-                          lineWidth: 1
-                        },
-                        label: {
-                          enabled: false,
-                        }
-                      }
-                    },
+            //         plotOptions: {
+            //           series: {
+            //             cursor: 'pointer',
+            //             label: {
+            //               connectorAllowed: false
+            //             },
+            //             marker: {
+            //               lineWidth: 1
+            //             },
+            //             label: {
+            //               enabled: false,
+            //             }
+            //           }
+            //         },
     
-                    exporting: false,
+            //         exporting: false,
     
-                    series: [{
-                      name: "本次用水量",
-                      data: date_and_amount
-                    }]
-                  });
-                  /* </每次澆水量 歷史數據圖> */
-                }
+            //         series: [{
+            //           name: "本次用水量",
+            //           data: date_and_amount
+            //         }]
+            //       });
+            //       /* </每次澆水量 歷史數據圖> */
+            //     }
     
-              });
-            }
+            //   });
+            // }
           });
         }
       });
@@ -272,12 +272,12 @@ function draw_sensor_data(data, type, num, title) {
   async function parseData(data) {
     return Promise.all(data.Items.map(function(set) {
       if(set.value != null){
-        if(type == "METER"){
-          var value = set.value * 1000;
-          return value;
-        }else{
+        // if(type == "METER"){
+        //   var value = set.value * 1000;
+        //   return value;
+        // }else{
           return Number(set.value.toFixed(1));
-        }
+        // }
       }else{
         return null;
       }
@@ -1328,7 +1328,7 @@ function initial_current_chart(){
       relativeGaugeSize: true
     });
 
-    //累積澆水量
+    //水錶(每次用水量)
     sensors.meter1 = new JustGage({
       id: "current_METER1",
       label: "公升",
@@ -1414,93 +1414,93 @@ function initial_current_chart(){
     });
 
     //每次澆水量
-    sensors.meter_now1 = new JustGage({
-      id: "current_METER_now1",
-      label: "公升",
-      value: 0,
-      min: 0,
-      max: 50,
-      levelColors: [
-        "#C8EDFA",
-        "#145CE0"
-      ],
-      humanFriendly: true,
-      gaugeWidthScale: 0.7,
-      pointer: true,
-      pointerOptions: {
-          toplength: 10,
-          bottomlength: 10,
-          bottomwidth: 2
-      },
-      counter: true,
-      relativeGaugeSize: true
-    });
+    // sensors.meter_now1 = new JustGage({
+    //   id: "current_METER_now1",
+    //   label: "公升",
+    //   value: 0,
+    //   min: 0,
+    //   max: 50,
+    //   levelColors: [
+    //     "#C8EDFA",
+    //     "#145CE0"
+    //   ],
+    //   humanFriendly: true,
+    //   gaugeWidthScale: 0.7,
+    //   pointer: true,
+    //   pointerOptions: {
+    //       toplength: 10,
+    //       bottomlength: 10,
+    //       bottomwidth: 2
+    //   },
+    //   counter: true,
+    //   relativeGaugeSize: true
+    // });
 
-    sensors.meter_now2 = new JustGage({
-      id: "current_METER_now2",
-      label: "公升",
-      value: 0,
-      min: 0,
-      max: 50,
-      levelColors: [
-        "#C8EDFA",
-        "#145CE0"
-      ],
-      humanFriendly: true,
-      gaugeWidthScale: 0.7,
-      pointer: true,
-      pointerOptions: {
-          toplength: 10,
-          bottomlength: 10,
-          bottomwidth: 2
-      },
-      counter: true,
-      relativeGaugeSize: true
-    });
+    // sensors.meter_now2 = new JustGage({
+    //   id: "current_METER_now2",
+    //   label: "公升",
+    //   value: 0,
+    //   min: 0,
+    //   max: 50,
+    //   levelColors: [
+    //     "#C8EDFA",
+    //     "#145CE0"
+    //   ],
+    //   humanFriendly: true,
+    //   gaugeWidthScale: 0.7,
+    //   pointer: true,
+    //   pointerOptions: {
+    //       toplength: 10,
+    //       bottomlength: 10,
+    //       bottomwidth: 2
+    //   },
+    //   counter: true,
+    //   relativeGaugeSize: true
+    // });
 
-    sensors.meter_now3 = new JustGage({
-      id: "current_METER_now3",
-      label: "公升",
-      value: 0,
-      min: 0,
-      max: 50,
-      levelColors: [
-        "#C8EDFA",
-        "#145CE0"
-      ],
-      humanFriendly: true,
-      gaugeWidthScale: 0.7,
-      pointer: true,
-      pointerOptions: {
-          toplength: 10,
-          bottomlength: 10,
-          bottomwidth: 2
-      },
-      counter: true,
-      relativeGaugeSize: true
-    });
+    // sensors.meter_now3 = new JustGage({
+    //   id: "current_METER_now3",
+    //   label: "公升",
+    //   value: 0,
+    //   min: 0,
+    //   max: 50,
+    //   levelColors: [
+    //     "#C8EDFA",
+    //     "#145CE0"
+    //   ],
+    //   humanFriendly: true,
+    //   gaugeWidthScale: 0.7,
+    //   pointer: true,
+    //   pointerOptions: {
+    //       toplength: 10,
+    //       bottomlength: 10,
+    //       bottomwidth: 2
+    //   },
+    //   counter: true,
+    //   relativeGaugeSize: true
+    // });
 
-    sensors.meter_now4 = new JustGage({
-      id: "current_METER_now4",
-      label: "公升",
-      value: 0,
-      min: 0,
-      max: 50,
-      levelColors: [
-        "#C8EDFA",
-        "#145CE0"
-      ],
-      humanFriendly: true,
-      gaugeWidthScale: 0.7,
-      pointer: true,
-      pointerOptions: {
-          toplength: 10,
-          bottomlength: 10,
-          bottomwidth: 2
-      },
-      counter: true,
-      relativeGaugeSize: true
-    });
+    // sensors.meter_now4 = new JustGage({
+    //   id: "current_METER_now4",
+    //   label: "公升",
+    //   value: 0,
+    //   min: 0,
+    //   max: 50,
+    //   levelColors: [
+    //     "#C8EDFA",
+    //     "#145CE0"
+    //   ],
+    //   humanFriendly: true,
+    //   gaugeWidthScale: 0.7,
+    //   pointer: true,
+    //   pointerOptions: {
+    //       toplength: 10,
+    //       bottomlength: 10,
+    //       bottomwidth: 2
+    //   },
+    //   counter: true,
+    //   relativeGaugeSize: true
+    // });
 
     //CO2濃度
     sensors.co21 = new JustGage({
@@ -1727,32 +1727,32 @@ function initial_current_data(sensors){
               sensors.weed_direction1.refresh(val);
             } else if (body.Items[j].sensorType == "METER") {
               $('#current_METER' + body.Items[j].num + '_div').show();
-              val = val * 1000;//改為公升
-              if(body.Items[j].num == "1"){
-                sensors.meter1.refresh(val);
-              }else if(body.Items[j].num == "2"){
-                sensors.meter2.refresh(val);
-              }else if(body.Items[j].num == "3"){
-                sensors.meter3.refresh(val);
-              }else if(body.Items[j].num == "4"){
-                sensors.meter4.refresh(val);
-              }
+              // val = val * 1000;//改為公升
+              // if(body.Items[j].num == "1"){
+              //   sensors.meter1.refresh(val);
+              // }else if(body.Items[j].num == "2"){
+              //   sensors.meter2.refresh(val);
+              // }else if(body.Items[j].num == "3"){
+              //   sensors.meter3.refresh(val);
+              // }else if(body.Items[j].num == "4"){
+              //   sensors.meter4.refresh(val);
+              // }
               
-              //顯示即時水表數據
-              $('#current_METER_now' + body.Items[j].num + '_div').show();
-              //改即時水表名稱
-              $("#current_METER_now" + body.Items[j].num + "_div").find("#name").text(body.Items[j].name + ": 本次用水量");
+              // //顯示即時水表數據
+              // $('#current_METER_now' + body.Items[j].num + '_div').show();
+              // //改即時水表名稱
+              // $("#current_METER_now" + body.Items[j].num + "_div").find("#name").text(body.Items[j].name + ": 本次用水量");
 
               $.get(api_url + 'api/meter/new/' + body.Items[j].sensorId + '?token=' + token, function(data) {
                 var amount = JSON.parse(data);
                 if(body.Items[j].num == "1"){
-                  sensors.meter_now1.refresh(amount.toFixed(2));
+                  sensors.meter1.refresh(amount.toFixed(2));
                 }else if(body.Items[j].num == "2"){
-                  sensors.meter_now2.refresh(amount.toFixed(2));
+                  sensors.meter2.refresh(amount.toFixed(2));
                 }else if(body.Items[j].num == "3"){
-                  sensors.meter_now3.refresh(amount.toFixed(2));
+                  sensors.meter3.refresh(amount.toFixed(2));
                 }else if(body.Items[j].num == "4"){
-                  sensors.meter_now4.refresh(amount.toFixed(2));
+                  sensors.meter4.refresh(amount.toFixed(2));
                 }
               });
             } else if(body.Items[j].sensorType == "CO2"){
