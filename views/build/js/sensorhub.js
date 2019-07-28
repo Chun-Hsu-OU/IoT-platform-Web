@@ -557,7 +557,7 @@ function choose_dashboard_type(id, type){
   }else if(type=="AIR_HUMIDITY" || type=="SOIL_HUMIDITY"){
     return create_dashboard(id, "%", 100, ["#C8EDFA","#145CE0"]);
   }else if(type == "LIGHT_INTENSITY"){
-    
+    return create_dashboard(id, "lux", 70000, ["#000000","#FFF700"]);
   }else if(type == "SOIL_EC"){
     return create_dashboard(id, "μS/cm", 1000, ["#CCF7CB","#098205"]);
   }else if(type == "BATTERY_VOLTAGE"){
