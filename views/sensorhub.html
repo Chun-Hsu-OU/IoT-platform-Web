@@ -86,6 +86,7 @@
   window.onload = load_sensor_in_modal();
   window.onload = load_sensorhub_descriptions();
   window.onload = initial_sensor();
+  window.onload = load_all_sensortype();
 </script>
 
 <body class="nav-md" onload="checkCookie()">
@@ -496,21 +497,7 @@
                     <br><br>
                     <span style="color: red">*&nbsp;</span>感應器種類：<br>
                     <select required="required" id="add_sensorType" onchange="initial_sensor_name()">
-                      <option value="AIR_TEMPERATURE">空氣溫度</option>
-                      <option value="AIR_HUMIDITY">空氣濕度</option>
-                      <option value="SOIL_TEMPERATURE">土壤溫度</option>
-                      <option value="SOIL_HUMIDITY">土壤濕度</option>
-                      <option value="SOIL_EC">土壤電導度</option>
-                      <option value="BATTERY_VOLTAGE">電池電壓</option>
-                      <option value="LIGHT_INTENSITY">光照度</option>
-                      <option value="REALTIME_WIND_SPEED">即時風速</option>
-                      <option value="WIND_DIRECTION">風向</option>
-                      <option value="METER">水錶</option>
-                      <option value="CO2">CO2濃度</option>
-                      <option value="PH_VAL">PH值</option>
-                      <option value="ELECTRIC_METER">電錶</option>
-                      <option value="PM2_5">PM2.5</option>
-                      <option value="SWITCH">開關</option>
+                      <!-- 載入所有在用的sensor types -->
                     </select>
                   </form>
                 </div>

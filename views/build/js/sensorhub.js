@@ -46,6 +46,16 @@ function load_sensorhub_descriptions() {
   });
 }
 
+function load_all_sensortype(){
+  $.get(api_url + 'api/sensortype/all?token=' + token, function(data) {
+    var body = JSON.parse(data);
+    body.Items.forEach(function(type) {
+        $("#add_sensorType").append("<option value='"+ type.type +
+                                    "'>"+ type.name +"</option>");
+    });
+  });
+}
+
 function import_sensor_data() {
 
   $.get(api_url + 'api/sensors_in_group/' + group_id + '?token=' + token, function(data) {
